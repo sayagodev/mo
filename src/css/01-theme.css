@@ -6,10 +6,10 @@
     --foreground: light-dark(#09090b, #fafafa);
     --card: light-dark(#fff, #18181b);
     --card-foreground: light-dark(#09090b, #fafafa);
-    --primary: light-dark(#574747, #fafafa);
+    --primary: light-dark(#18181b, #fafafa);
     --primary-foreground: light-dark(#fafafa, #18181b);
     --secondary: light-dark(#f4f4f5, #27272a);
-    --secondary-foreground: light-dark(#574747, #fafafa);
+    --secondary-foreground: light-dark(#18181b, #fafafa);
     --muted: light-dark(#f4f4f5, #27272a);
     --muted-foreground: light-dark(#71717a, #a1a1aa);
     --faint: light-dark(#fafafa, #1e1e21);
@@ -21,9 +21,9 @@
     --success-foreground: light-dark(#fafafa, #18181b);
     --warning: light-dark(#a65b00, #f0a030);
     --warning-foreground: #09090b;
-    --border: light-dark(#d4d4d8, #52525b);
-    --input: light-dark(#d4d4d8, #52525b);
-    --ring: light-dark(#574747, #d4d4d8);
+    --border: light-dark(#e4e4e7, #3f3f46);
+    --input: light-dark(#e4e4e7, #3f3f46);
+    --ring: light-dark(#18181b, #d4d4d8);
 
     /* ==================== */
     --space-1: 0.25rem;

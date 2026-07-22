@@ -1,22 +1,25 @@
 {
-  "name": "@knadh/oat",
-  "version": "version-0.0.0",
+  "name": "@sayagodev/oat",
+  "version": "0.7.1",
   "license": "MIT",
-  "author": "Kailash Nadh",
-  "homepage": "https://oat.ink",
-  "description": " Ultra-lightweight, zero dependency, semantic HTML/CSS/JS UI library",
+  "author": "sayagodev",
+  "homepage": "https://github.com/sayagodev/oat",
+  "description": " Neautral, semantic HTML/CSS/JS UI library (fork of @knadh/oat)",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/knadh/oat.git"
+    "url": "git+https://github.com/sayagodev/oat.git"
   },
   "keywords": ["ui", "components", "component-library"],
 
   "files": [
     "oat.min.css",
     "oat.min.js",
+    "oat.d.ts",
     "css",
     "js"
   ],
+
+  "types": "oat.d.ts",
 
   "main": "oat.min.js",
   "style": "oat.min.css",

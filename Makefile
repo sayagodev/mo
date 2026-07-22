@@ -63,6 +63,7 @@ size:
 publish: clean dist
 	@cp -r src/css dist/css
 	@cp -r src/js dist/js
+	@cp src/oat.d.ts dist/oat.d.ts
 	@cp README.md dist/README.md
 	@cp LICENSE dist/LICENSE
 	@VERSION=$$(git describe --tags --abbrev=0 | sed 's/^v//') && \
