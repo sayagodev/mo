@@ -1,0 +1,259 @@
+{
+  "$schema": "https://mo.ink/registry.json",
+  "name": "mo",
+  "components": {
+    "accordion": {
+      "description": "Accordion — details/summary with keyboard nav",
+      "css": ["accordion.css"],
+      "js": ["accordion.js"],
+      "deps": ["shared.css"]
+    },
+    "alert": {
+      "description": "Alert — role=alert grid with data-variant",
+      "css": ["alert.css"],
+      "js": []
+    },
+    "aspect-ratio": {
+      "description": "Aspect Ratio — data-aspect-ratio pure CSS",
+      "css": ["aspect-ratio.css"],
+      "js": []
+    },
+    "attachment": {
+      "description": "Attachment — file chip list",
+      "css": ["attachment.css"],
+      "js": []
+    },
+    "avatar": {
+      "description": "Avatar — figure[data-variant=avatar] with fallback",
+      "css": ["avatar.css"],
+      "js": []
+    },
+    "badge": {
+      "description": "Badge — .badge with data-variant",
+      "css": ["badge.css"],
+      "js": []
+    },
+    "breadcrumb": {
+      "description": "Breadcrumb — nav > ol > li with separators",
+      "css": ["breadcrumb.css"],
+      "js": []
+    },
+    "button": {
+      "description": "Button — variants + sizes, icon support",
+      "css": ["button.css", "shared.css"],
+      "js": []
+    },
+    "button-group": {
+      "description": "Button Group — joined segments",
+      "css": ["button-group.css"],
+      "js": []
+    },
+    "card": {
+      "description": "Card — .card + header/footer",
+      "css": ["card.css"],
+      "js": []
+    },
+    "carousel": {
+      "description": "Carousel — mo-carousel scroll-snap",
+      "css": ["carousel.css"],
+      "js": ["carousel.js"]
+    },
+    "combobox": {
+      "description": "Combobox — mo-combobox filterable listbox",
+      "css": ["combobox.css"],
+      "js": ["combobox.js"],
+      "deps": ["shared.css"]
+    },
+    "command": {
+      "description": "Command — mo-command palette/inline",
+      "css": ["command.css"],
+      "js": ["command.js"],
+      "deps": ["shared.css"]
+    },
+    "context-menu": {
+      "description": "Context Menu — [data-context-menu] pointer menu",
+      "css": ["context-menu.css"],
+      "js": ["context-menu.js"],
+      "deps": ["shared.css"]
+    },
+    "dialog": {
+      "description": "Dialog — <dialog> + commandfor polyfill",
+      "css": ["dialog.css"],
+      "js": ["base.js"]
+    },
+    "dropdown": {
+      "description": "Dropdown — mo-dropdown full keyboard model",
+      "css": ["dropdown.css", "shared.css"],
+      "js": ["dropdown.js"]
+    },
+    "empty": {
+      "description": "Empty — [data-empty] anatomy",
+      "css": ["empty.css"],
+      "js": []
+    },
+    "form": {
+      "description": "Form — inputs, checkbox, radio, switch, field",
+      "css": ["form.css"],
+      "js": []
+    },
+    "grid": {
+      "description": "Grid — .container / .row / .col utilities",
+      "css": ["grid.css"],
+      "js": []
+    },
+    "hover-card": {
+      "description": "Hover Card — mo-hovercard hover intent",
+      "css": ["hover-card.css"],
+      "js": ["hover-card.js"]
+    },
+    "input-group": {
+      "description": "Input Group — [data-input-group] + [data-addon]",
+      "css": ["input-group.css"],
+      "js": []
+    },
+    "input-otp": {
+      "description": "Input OTP — mo-otp auto-advance",
+      "css": ["input-otp.css"],
+      "js": ["input-otp.js"]
+    },
+    "item": {
+      "description": "Item — [data-item] + media/content/actions",
+      "css": ["item.css"],
+      "js": []
+    },
+    "kbd": {
+      "description": "Kbd — semantic <kbd>",
+      "css": ["kbd.css"],
+      "js": []
+    },
+    "marker": {
+      "description": "Marker — <mark> highlight + border/shimmer",
+      "css": ["marker.css"],
+      "js": []
+    },
+    "menubar": {
+      "description": "Menubar — mo-menubar arrows between menus",
+      "css": ["menubar.css", "shared.css"],
+      "js": ["menubar.js"]
+    },
+    "navigation-menu": {
+      "description": "Navigation Menu — [data-navigation-menu] popovers",
+      "css": ["navigation-menu.css"],
+      "js": []
+    },
+    "pagination": {
+      "description": "Pagination — .pagination + aria-current",
+      "css": ["pagination.css"],
+      "js": []
+    },
+    "popover": {
+      "description": "Popover — .popover over native Popover API",
+      "css": ["popover.css"],
+      "js": []
+    },
+    "progress": {
+      "description": "Progress — <progress> + meter",
+      "css": ["progress.css"],
+      "js": []
+    },
+    "prose": {
+      "description": "Prose — .prose opt-in typography",
+      "css": ["prose.css"],
+      "js": []
+    },
+    "questionnaire": {
+      "description": "Questionnaire — mo-questionnaire multi-step wizard",
+      "css": ["questionnaire.css"],
+      "js": ["questionnaire.js"]
+    },
+    "resizable": {
+      "description": "Resizable — mo-resizable split panes",
+      "css": ["resizable.css"],
+      "js": ["resizable.js"]
+    },
+    "scroll-area": {
+      "description": "Scroll Area — custom scrollbar + fades",
+      "css": ["scroll-area.css"],
+      "js": ["scroll-area.js"]
+    },
+    "select": {
+      "description": "Select — mo-select custom listbox",
+      "css": ["select.css", "shared.css"],
+      "js": ["select.js"]
+    },
+    "separator": {
+      "description": "Separator — hr + data-orientation=vertical",
+      "css": ["separator.css"],
+      "js": []
+    },
+    "sheet": {
+      "description": "Sheet — dialog.sheet[data-side] drawer",
+      "css": ["sheet.css"],
+      "js": ["sheet.js"]
+    },
+    "sidebar": {
+      "description": "Sidebar — aside[data-sidebar] layout",
+      "css": ["sidebar.css"],
+      "js": ["sidebar.js"]
+    },
+    "skeleton": {
+      "description": "Skeleton — .skeleton pulse",
+      "css": ["skeleton.css"],
+      "js": []
+    },
+    "slider": {
+      "description": "Slider — mo-slider + native range",
+      "css": ["slider.css"],
+      "js": ["slider.js"]
+    },
+    "spinner": {
+      "description": "Spinner — [aria-busy] + animation",
+      "css": ["spinner.css"],
+      "js": []
+    },
+    "table": {
+      "description": "Table — table + mo-data-table sortable",
+      "css": ["table.css"],
+      "js": ["data-table.js"]
+    },
+    "tabs": {
+      "description": "Tabs — mo-tabs roving tabindex",
+      "css": ["tabs.css"],
+      "js": ["tabs.js"]
+    },
+    "taginput": {
+      "description": "Tag Input — mo-taginput chips + datalist",
+      "css": ["taginput.css"],
+      "js": ["taginput.js"]
+    },
+    "toast": {
+      "description": "Toast — mo.toast() + [data-toast] declarative",
+      "css": ["toast.css"],
+      "js": ["toast.js"]
+    },
+    "toggle": {
+      "description": "Toggle — button[aria-pressed]",
+      "css": ["toggle.css"],
+      "js": []
+    },
+    "toggle-group": {
+      "description": "Toggle Group — mo-toggle-group type single/multiple",
+      "css": ["toggle-group.css"],
+      "js": ["toggle-group.js"]
+    },
+    "tooltip": {
+      "description": "Tooltip — title → data-tooltip auto-convert",
+      "css": ["tooltip.css"],
+      "js": ["tooltip.js"]
+    },
+    "upload": {
+      "description": "Upload — mo-upload drag + preview",
+      "css": ["upload.css"],
+      "js": ["upload.js"]
+    }
+  },
+  "base": {
+    "css": ["00-base.css", "01-theme.css", "animations.css", "shared.css", "utilities.css"],
+    "js": ["base.js"]
+  }
+}

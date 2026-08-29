@@ -1,0 +1,114 @@
+@layer components {
+  /* shadcn/ui Slider — supports single, range (2 thumbs), multiple thumbs, vertical, controlled.
+     Anatomy: <mo-slider min max step value> renders a track with a filled range and one thumb per value.
+     The native <input type="range"> remains styled via form.css for simple single-thumb cases. */
+  mo-slider {
+    --_track-size: var(--bar-height, 0.5rem);
+    --_thumb-size: 1.25rem;
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: var(--_thumb-size);
+    touch-action: none;
+    user-select: none;
+  }
+
+  mo-slider[data-orientation="vertical"] {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: var(--_track-size);
+    height: var(--mo-slider-vertical-height, 12rem);
+  }
+
+  [data-slider-track] {
+    position: relative;
+    flex: 1;
+    width: 100%;
+    height: var(--_track-size);
+    background-color: color-mix(in srgb, var(--primary) 20%, transparent);
+    border-radius: var(--radius-full);
+    overflow: visible;
+  }
+
+  mo-slider[data-orientation="vertical"] [data-slider-track] {
+    width: var(--_track-size);
+    height: 100%;
+  }
+
+  [data-slider-range] {
+    position: absolute;
+    background-color: var(--primary);
+    border-radius: var(--radius-full);
+  }
+
+  /* Horizontal range: left + width; vertical: bottom + height */
+  mo-slider:not([data-orientation="vertical"]) [data-slider-range] {
+    top: 0;
+    bottom: 0;
+  }
+
+  mo-slider[data-orientation="vertical"] [data-slider-range] {
+    left: 0;
+    right: 0;
+  }
+
+  [data-slider-thumb] {
+    position: absolute;
+    width: var(--_thumb-size);
+    height: var(--_thumb-size);
+    background-color: var(--mo-slider-thumb-bg, #fff);
+    border: 1px solid var(--primary);
+    border-radius: var(--radius-full);
+    box-shadow: var(--shadow-sm);
+    cursor: grab;
+    touch-action: none;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    /* Center on track */
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  mo-slider[data-orientation="vertical"] [data-slider-thumb] {
+    left: 50%;
+    top: auto;
+    bottom: 0;
+    transform: translate(-50%, 50%);
+  }
+
+  [data-slider-thumb]:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+
+  mo-slider[data-orientation="vertical"] [data-slider-thumb]:hover {
+    transform: translate(-50%, 50%) scale(1.1);
+  }
+
+  [data-slider-thumb]:active {
+    cursor: grabbing;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+
+  mo-slider[data-orientation="vertical"] [data-slider-thumb]:active {
+    transform: translate(-50%, 50%) scale(1.1);
+  }
+
+  [data-slider-thumb]:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 50%, transparent);
+  }
+
+  mo-slider[disabled] {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  /* Value display for controlled examples */
+  [data-slider-value] {
+    font-size: var(--text-7);
+    color: var(--muted-foreground);
+    font-variant-numeric: tabular-nums;
+  }
+}

@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Acc Visual</title>
+<link rel="stylesheet" href="/dist/mo.min.css" />
+<script src="/dist/mo.min.js"></script>
+<style>body { padding: 2rem; max-width: 600px; margin: 0 auto; } section { margin-bottom: 2rem; } h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: #666; margin-bottom: .5rem; }</style>
+</head>
+<body>
+
+<section>
+<h2>Single collapsible</h2>
+<mo-accordion type="single" collapsible class="w-100">
+  <details open><summary>How do I reset my password?</summary><p>Click forgot ... 24 hours.</p></details>
+  <details><summary>Can I change my subscription plan?</summary><p>Yes you can upgrade...</p></details>
+  <details><summary>What payment methods do you accept?</summary><p>We accept all major...</p></details>
+</mo-accordion>
+</section>
+
+<section>
+<h2>Single non-collapsible (must keep one open)</h2>
+<mo-accordion type="single" class="w-100" id="single-nc">
+  <details open><summary>Item A</summary><p>Content A</p></details>
+  <details><summary>Item B</summary><p>Content B</p></details>
+  <details><summary>Item C</summary><p>Content C</p></details>
+</mo-accordion>
+</section>
+
+<section>
+<h2>Multiple</h2>
+<mo-accordion type="multiple" class="w-100" id="multiple">
+  <details open><summary>Notification Settings</summary><p>Manage how you receive...</p></details>
+  <details><summary>Privacy & Security</summary><p>Control your privacy...</p></details>
+  <details><summary>Billing & Subscription</summary><p>View your current plan...</p></details>
+</mo-accordion>
+</section>
+
+<section>
+<h2>Disabled</h2>
+<mo-accordion type="single" collapsible class="w-100" id="disabled">
+  <details><summary>Can I access my account history?</summary><p>Yes...</p></details>
+  <details disabled><summary>Premium feature information</summary><p>This section contains...</p></details>
+  <details><summary>How do I update my email address?</summary><p>You can update...</p></details>
+</mo-accordion>
+</section>
+
+<section>
+<h2>Bordered</h2>
+<mo-accordion type="single" collapsible class="bordered" id="bordered">
+  <details open><summary>How does billing work?</summary><p>We offer monthly...</p></details>
+  <details><summary>Is my data secure?</summary><p>Yes...</p></details>
+  <details><summary>What integrations do you support?</summary><p>We integrate...</p></details>
+</mo-accordion>
+</section>
+
+<section>
+<h2>Card</h2>
+<article class="card" id="card">
+  <header><h3>Subscription & Billing</h3><p>Common questions</p></header>
+  <mo-accordion type="single" collapsible>
+    <details open><summary>What subscription plans do you offer?</summary><p>We offer three tiers...</p></details>
+    <details><summary>How does billing work?</summary><p>Billing occurs...</p></details>
+    <details><summary>How do I cancel?</summary><p>You can cancel...</p></details>
+  </mo-accordion>
+</article>
+</section>
+
+<section dir="rtl">
+<h2>RTL</h2>
+<mo-accordion type="single" collapsible class="w-100" id="rtl">
+  <details open><summary>How do I reset my password?</summary><p>Click forgot...</p></details>
+  <details><summary>Can I change my subscription plan?</summary><p>Yes...</p></details>
+</mo-accordion>
+</section>
+
+<section>
+<h2>Bare details (no wrapper)</h2>
+<details open id="bare1"><summary>Bare First</summary><p>Content one</p></details>
+<details id="bare2"><summary>Bare Second</summary><p>Content two</p></details>
+</section>
+
+</body>
+</html>

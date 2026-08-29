@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Mo test</title>
+<link rel="stylesheet" href="/dist/mo.min.css" />
+<script src="/dist/mo.min.js"></script>
+<style>body { padding: 2rem }</style>
+</head>
+<body>
+
+<button command="show-modal" commandfor="dlg" id="open-dlg">Open</button>
+<dialog id="dlg" aria-labelledby="dlg-title">
+  <form method="dialog">
+    <header><h3 id="dlg-title">Edit profile</h3></header>
+    <div data-field>
+      <label for="dlg-input">Name</label>
+      <input id="dlg-input" />
+    </div>
+    <footer>
+      <button type="submit" value="cancel" id="cancel-btn">Cancel</button>
+      <button type="submit" value="ok">OK</button>
+    </footer>
+  </form>
+</dialog>
+
+</body>
+</html>

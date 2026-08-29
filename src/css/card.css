@@ -1,10 +1,111 @@
 @layer components {
   .card {
-    background-color: var(--card);
+    background-color: var(--mo-card-bg, var(--card));
     color: var(--card-foreground);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-medium);
-    box-shadow: var(--shadow-small);
-    padding: var(--space-6);
+    border: none;
+    border-radius: var(--mo-card-radius, var(--radius-large));
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--foreground) 5%, transparent), var(--shadow-sm);
+    padding: var(--mo-card-padding, var(--space-5));
+    overflow: hidden;
+  }
+
+  /* Composed anatomy — shadcn Card parts as semantic descendants.
+
+     <article class="card">
+       <header>              → CardHeader
+         <h3>Title</h3>      → CardTitle
+         <p>Description</p>  → CardDescription
+         <div data-action>   → CardAction
+       </header>
+       …content              → CardContent
+       <footer>…</footer>    → CardFooter
+     </article> */
+  .card > header {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: var(--space-1);
+
+    & > :is(h1, h2, h3, h4, h5, h6) {
+      font-size: var(--text-regular);
+      font-weight: var(--font-semibold);
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+    }
+
+    & > p {
+      font-size: var(--text-7);
+      color: var(--muted-foreground);
+    }
+
+    /* CardAction: floats top-right beside title+description */
+    &:has(> [data-action]) {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: start;
+
+      & > [data-action] {
+        grid-column: 2;
+        grid-row: 1 / span 2;
+        justify-self: end;
+      }
+    }
+  }
+
+  .card > footer {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  /* Image cover — keep previous fix but contained.
+     Shadcn: image full-bleed when first/last child, flush removes padding.
+     Contain height so example doesn't explode (user: image no tan grande). */
+  .card > img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    display: block;
+  }
+  .card:not(.flush):has(> img:first-child) > img:first-child {
+    margin: calc(var(--mo-card-padding, var(--space-5)) * -1);
+    margin-block-end: var(--space-4);
+    width: calc(100% + var(--mo-card-padding, var(--space-5)) * 2);
+    max-width: none;
+    border-start-start-radius: var(--mo-card-radius, var(--radius-large));
+    border-start-end-radius: var(--mo-card-radius, var(--radius-large));
+    overflow: hidden;
+    max-height: 12rem;
+  }
+  .card.flush:has(> img:first-child) > img:first-child {
+    margin: 0;
+    width: 100%;
+    max-width: 100%;
+    max-height: none;
+    aspect-ratio: 16/9;
+    border-start-start-radius: inherit;
+    border-start-end-radius: inherit;
+  }
+
+  /* Full-bleed content variant: tables, media, lists */
+  .card.flush {
+    padding: 0;
+
+    & > :first-child {
+      border-start-start-radius: inherit;
+      border-start-end-radius: inherit;
+      overflow: hidden;
+    }
+  }
+
+  /* Optional hairline separators, shadcn [.border-b]/[.border-t] pattern */
+  .card > header.bordered {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: var(--space-6);
+  }
+
+  .card > footer.bordered {
+    border-top: 1px solid var(--border);
+    padding-top: var(--space-6);
   }
 }

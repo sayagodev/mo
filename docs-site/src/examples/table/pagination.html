@@ -1,0 +1,68 @@
+<article class="card flush">
+  <mo-data-table data-page-size="8">
+    <div class="table">
+      <table>
+        <caption>Your recent payments across all workspaces.</caption>
+        <thead>
+          <tr>
+            <th>Invoice</th>
+            <th>Status</th>
+            <th>Method</th>
+            <th class="align-right">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>INV001</td><td><span class="badge" data-variant="success">Paid</span></td><td>Credit Card</td><td>$250.00</td></tr>
+          <tr><td>INV002</td><td><span class="badge" data-variant="secondary">Pending</span></td><td>PayPal</td><td>$150.00</td></tr>
+          <tr><td>INV003</td><td><span class="badge outline" data-variant="danger">Unpaid</span></td><td>Bank Transfer</td><td>$350.00</td></tr>
+          <tr><td>INV004</td><td><span class="badge" data-variant="success">Paid</span></td><td>Credit Card</td><td>$450.00</td></tr>
+          <tr><td>INV005</td><td><span class="badge" data-variant="success">Paid</span></td><td>PayPal</td><td>$550.00</td></tr>
+          <tr><td>INV006</td><td><span class="badge" data-variant="secondary">Pending</span></td><td>Bank Transfer</td><td>$200.00</td></tr>
+          <tr><td>INV007</td><td><span class="badge outline" data-variant="danger">Unpaid</span></td><td>Credit Card</td><td>$50.00</td></tr>
+          <tr><td>INV008</td><td><span class="badge" data-variant="success">Paid</span></td><td>PayPal</td><td>$100.00</td></tr>
+          <tr><td>INV009</td><td><span class="badge" data-variant="success">Paid</span></td><td>Credit Card</td><td>$800.00</td></tr>
+          <tr><td>INV010</td><td><span class="badge outline" data-variant="danger">Unpaid</span></td><td>Bank Transfer</td><td>$300.00</td></tr>
+          <tr><td>INV011</td><td><span class="badge" data-variant="success">Paid</span></td><td>PayPal</td><td>$120.00</td></tr>
+          <tr><td>INV012</td><td><span class="badge" data-variant="secondary">Pending</span></td><td>Credit Card</td><td>$640.00</td></tr>
+          <tr><td>INV013</td><td><span class="badge" data-variant="success">Paid</span></td><td>Bank Transfer</td><td>$75.00</td></tr>
+          <tr><td>INV014</td><td><span class="badge" data-variant="success">Paid</span></td><td>Credit Card</td><td>$500.00</td></tr>
+          <tr><td>INV015</td><td><span class="badge outline" data-variant="danger">Unpaid</span></td><td>PayPal</td><td>$90.00</td></tr>
+          <tr><td>INV016</td><td><span class="badge" data-variant="secondary">Pending</span></td><td>Credit Card</td><td>$275.00</td></tr>
+          <tr><td>INV017</td><td><span class="badge" data-variant="success">Paid</span></td><td>Bank Transfer</td><td>$330.00</td></tr>
+          <tr><td>INV018</td><td><span class="badge" data-variant="success">Paid</span></td><td>Credit Card</td><td>$210.00</td></tr>
+          <tr><td>INV019</td><td><span class="badge outline" data-variant="danger">Unpaid</span></td><td>PayPal</td><td>$60.00</td></tr>
+          <tr><td>INV020</td><td><span class="badge" data-variant="success">Paid</span></td><td>Credit Card</td><td>$480.00</td></tr>
+          <tr><td>INV021</td><td><span class="badge" data-variant="secondary">Pending</span></td><td>Bank Transfer</td><td>$185.00</td></tr>
+          <tr><td>INV022</td><td><span class="badge" data-variant="success">Paid</span></td><td>PayPal</td><td>$95.00</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <footer data-table-pagination>
+      <div class="flex items-center justify-between gap-4">
+        <label class="hstack items-center gap-2">
+          Rows per page
+          <mo-select data-placeholder="8" style="width: 4.375rem">
+            <button type="button" popovertarget="ex-tbl-rows" data-select-trigger aria-label="Rows per page"></button>
+            <ul popover id="ex-tbl-rows" class="popover" role="listbox" aria-label="Rows per page">
+              <li><button type="button" role="option" value="8" aria-selected="true">8</button></li>
+              <li><button type="button" role="option" value="10">10</button></li>
+              <li><button type="button" role="option" value="20">20</button></li>
+              <li><button type="button" role="option" value="50">50</button></li>
+            </ul>
+          </mo-select>
+        </label>
+        <div class="hstack items-center gap-2">
+          <span data-table-info>22 row(s)</span>
+          <div class="hstack gap-1">
+            <button type="button" data-table-prev class="outline small icon" aria-label="Previous page" disabled>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6" /></svg>
+            </button>
+            <button type="button" data-table-next class="outline small icon" aria-label="Next page">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </mo-data-table>
+</article>

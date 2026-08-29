@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Mo popover test</title>
+<link rel="stylesheet" href="/dist/mo.min.css" />
+<script src="/dist/mo.min.js"></script>
+<style>body { padding: 2rem }</style>
+</head>
+<body>
+
+<div style="display: flex; flex-direction: column; align-items: center; gap: 1rem; padding-top: 12rem">
+  <button type="button" class="outline" popovertarget="p-center">Open</button>
+  <div popover id="p-center" class="popover">Centered content</div>
+
+  <button type="button" class="outline" popovertarget="p-start">Start</button>
+  <div popover id="p-start" class="popover" data-align="start">Start content</div>
+
+  <button type="button" class="outline" popovertarget="p-end">End</button>
+  <div popover id="p-end" class="popover" data-align="end">End content</div>
+
+  <button type="button" class="outline" popovertarget="p-top">Top</button>
+  <div popover id="p-top" class="popover" data-side="top" data-align="start">Top content</div>
+</div>
+
+<div style="height: 100vh"></div>
+
+</body>
+</html>

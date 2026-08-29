@@ -1,38 +1,124 @@
 @layer components {
     figure[data-variant="avatar"]:not([role="group"]) {
         display: inline-flex;
+        position: relative;
         align-items: center;
         justify-content: center;
-        width: var(--sz, 2.5rem);
-        height: var(--sz, 2.5rem);
-        color: var(--primary);
+        width: var(--mo-avatar-size, var(--sz, 2rem));
+        height: var(--mo-avatar-size, var(--sz, 2rem));
+        flex-shrink: 0;
+        color: var(--muted-foreground);
         background-color: var(--muted);
         border-radius: var(--radius-full);
+        font-size: var(--text-7);
         font-weight: var(--font-medium);
-        overflow: hidden;
+        overflow: clip;
+        user-select: none;
 
+        /* Image and fallback both fill the circle; image on top covers fallback like shadcn.
+           Fallback may be bare text or a span, so we handle both. */
         & > img {
-            width: 100%;
-            height: 100%;
+            position: absolute;
+            inset: 0;
+            inline-size: 100%;
+            block-size: 100%;
             object-fit: cover;
+            z-index: 1;
         }
 
-        &.small {
+        /* Fallback initials: when present as a span, fill and center behind the image.
+           Bare text fallback still works via the flex centering on the figure itself,
+           but wrapping in a span gives a proper overlay that matches shadcn. */
+        & > span:not([data-badge]) {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            place-items: center;
+            z-index: 0;
+        }
+
+        &.small,
+        &[data-size="sm"] {
+            --sz: 1.5rem;
+            font-size: var(--text-8);
+        }
+        &.large,
+        &[data-size="lg"] {
+            --sz: 2.5rem;
+        }
+        &[data-size="default"] {
             --sz: 2rem;
         }
-        &.large {
-            --sz: 3.25rem;
+
+        /* AvatarBadge: absolute status dot or plus icon on the corner.
+           data-variant="success" recolors it like shadcn's bg-green-600.
+           Unclip so the separating ring survives; the img stays round. */
+        &:has(> [data-badge]) {
+            overflow: visible;
+
+            & > img {
+                border-radius: inherit;
+            }
+        }
+
+        & > [data-badge] {
+            display: inline-flex;
+            position: absolute;
+            z-index: 1;
+            align-items: center;
+            justify-content: center;
+            box-sizing: content-box;
+            block-size: 0.625rem;
+            inline-size: 0.625rem;
+            color: var(--primary-foreground);
+            background-color: var(--_badge-bg, var(--primary));
+            border-radius: var(--radius-full);
+            box-shadow: 0 0 0 2px var(--background);
+            inset-block-end: 0;
+            inset-inline-end: 0;
+            user-select: none;
+
+            & > svg {
+                width: 0.5rem;
+                height: 0.5rem;
+            }
+
+            &[data-variant="success"] { --_badge-bg: var(--success); }
+            &[data-variant="warning"] { --_badge-bg: var(--warning); }
+            &[data-variant="danger"] { --_badge-bg: var(--danger); }
+
+            /* sm hides the icon entirely; lg grows both */
+            .small &,
+            [data-size="sm"] & {
+                block-size: 0.5rem;
+                inline-size: 0.5rem;
+
+                & > svg { display: none; }
+            }
+
+            .large &,
+            [data-size="lg"] & {
+                block-size: 0.75rem;
+                inline-size: 0.75rem;
+            }
         }
     }
 
     figure[data-variant="avatar"][role="group"] {
         display: inline-flex;
+        position: relative;
         align-items: center;
         margin: 0;
 
+        /* GroupCount icon: size-4 like shadcn, responsive */
+        & > figure > svg {
+            width: 1rem;
+            height: 1rem;
+        }
+
         & figure[data-variant="avatar"] {
             isolation: isolate;
-            margin-inline-end: calc(var(--space-5) * -1);
+            margin-inline-end: calc(var(--space-2) * -1);
             border: 2px solid var(--background);
 
             &:last-child {
@@ -40,21 +126,32 @@
             }
         }
 
-        &.small {
-            --sz: 2rem;
+        &.small,
+        &[data-size="sm"] {
+            --sz: 1.5rem;
 
             & figure[data-variant="avatar"] {
-                margin-inline-end: calc(var(--space-4) * -0.8);
                 border-width: 1px;
+            }
+
+            & > figure > svg {
+                width: 0.75rem;
+                height: 0.75rem;
             }
         }
 
-        &.large {
-            --sz: 3.25rem;
+        &.large,
+        &[data-size="lg"] {
+            --sz: 2.5rem;
 
-            & figure[data-variant="avatar"] {
-                margin-inline-end: calc(var(--space-6) * -1);
+            & > figure > svg {
+                width: 1.25rem;
+                height: 1.25rem;
             }
+        }
+
+        &[data-size="default"] {
+            --sz: 2rem;
         }
     }
 }

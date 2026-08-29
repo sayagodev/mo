@@ -1,0 +1,237 @@
+@layer components {
+  /* shadcn/ui Questionnaire — multi-step form wizard. Steps are plain
+     <form data-questionnaire-step> siblings; mo-questionnaire orchestrates
+     which one shows and validates through the platform on advance.
+     Supports both plain fieldset radios and shadcn-like
+     [data-questionnaire-choices]/[data-questionnaire-choice] cards. */
+  mo-questionnaire {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    inline-size: 100%;
+    min-inline-size: 0;
+  }
+
+  /* Progress row: "Step X of N" count + native progress bar. */
+  mo-questionnaire > [data-questionnaire-progress] {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    font-size: var(--text-7);
+    color: var(--muted-foreground);
+    min-height: 1lh;
+
+    & [data-questionnaire-count] {
+      min-width: 14ch;
+      font-weight: var(--font-medium);
+      font-variant-numeric: tabular-nums;
+    }
+
+    & progress {
+      flex: 1;
+      height: 0.25rem;
+      border-radius: var(--radius-full);
+    }
+  }
+
+  /* Step anatomy — spacing owned here; inputs/buttons come from
+     form.css/button.css ([data-field], ghost, submit). */
+  mo-questionnaire form[data-questionnaire-step] {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    min-width: 0;
+    border: none;
+    padding: 0;
+    margin: 0;
+
+    & > h3 {
+      font-size: var(--text-regular);
+      font-weight: var(--font-semibold);
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      text-wrap: pretty;
+    }
+
+    & > p {
+      font-size: var(--text-7);
+      color: var(--muted-foreground);
+      text-wrap: pretty;
+    }
+
+    & > footer {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      align-items: center;
+      gap: var(--space-2);
+      min-height: 2.75rem;
+      inline-size: 100%;
+
+      & [data-questionnaire-back] {
+        grid-column: 1;
+        justify-self: start;
+      }
+
+      & [data-questionnaire-skip] {
+        grid-column: 2;
+        justify-self: end;
+      }
+
+      & button[type="submit"],
+      & [data-questionnaire-next],
+      & [data-questionnaire-submit] {
+        grid-column: 3;
+        justify-self: end;
+      }
+    }
+  }
+
+  /* Shadcn-style choice list: grid of selectable cards. */
+  mo-questionnaire [data-questionnaire-choices] {
+    display: grid;
+    gap: var(--space-2);
+    min-width: 0;
+  }
+
+  mo-questionnaire [data-questionnaire-choice] {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    min-height: 2.75rem;
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-medium);
+    background-color: var(--card);
+    cursor: pointer;
+    transition: border-color var(--transition-fast), background-color var(--transition-fast);
+    text-align: start;
+
+    &:hover {
+      border-color: color-mix(in srgb, var(--border) 60%, var(--foreground));
+      background-color: color-mix(in srgb, var(--accent) 40%, transparent);
+    }
+
+    &:has(input:checked) {
+      border-color: var(--primary);
+      background-color: color-mix(in srgb, var(--primary) 6%, transparent);
+    }
+
+    &:has(input:focus-visible) {
+      outline: 2px solid var(--ring);
+      outline-offset: 2px;
+    }
+
+    & > input {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    & > span[data-indicator] {
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      width: 1rem;
+      height: 1rem;
+      margin-block-start: 0.125rem;
+      border: 1px solid var(--input);
+      background-color: var(--background);
+      color: transparent;
+      position: relative;
+
+      &[data-type="radio"] {
+        border-radius: var(--radius-full);
+
+        &::after {
+          content: "";
+          width: 0.375rem;
+          height: 0.375rem;
+          border-radius: 50%;
+          background-color: var(--primary-foreground);
+          opacity: 0;
+          transition: opacity var(--transition-fast);
+        }
+      }
+
+      &[data-type="checkbox"] {
+        border-radius: calc(var(--radius) * 0.4);
+
+        &::after {
+          content: "";
+          width: 0.625rem;
+          height: 0.625rem;
+          background-color: var(--primary-foreground);
+          -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+          mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+          -webkit-mask-size: 100%;
+          mask-size: 100%;
+          -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+          -webkit-mask-position: center;
+          mask-position: center;
+          opacity: 0;
+          transition: opacity var(--transition-fast);
+        }
+      }
+    }
+
+    &:has(input:checked) > span[data-indicator] {
+      background-color: var(--primary);
+      border-color: var(--primary);
+      color: var(--primary-foreground);
+
+      &::after {
+        opacity: 1;
+      }
+    }
+
+    & [data-questionnaire-label] {
+      display: flex;
+      flex-direction: column;
+      gap: 0.125rem;
+      font-size: var(--text-7);
+      font-weight: var(--font-medium);
+      line-height: 1.4;
+    }
+
+    & [data-questionnaire-description] {
+      font-size: var(--text-8);
+      font-weight: var(--font-normal);
+      color: var(--muted-foreground);
+    }
+
+    & [data-shortcut] {
+      margin-inline-start: auto;
+      font-size: var(--text-8);
+      color: var(--muted-foreground);
+      display: none;
+    }
+
+    &:has([data-shortcut]) [data-shortcut] {
+      display: inline-flex;
+    }
+  }
+
+  /* Freeform input wrapper */
+  mo-questionnaire [data-questionnaire-input] {
+    width: 100%;
+  }
+
+  mo-questionnaire [data-questionnaire-input] input,
+  mo-questionnaire [data-questionnaire-input] textarea {
+    width: 100%;
+  }
+
+  /* Validation error */
+  mo-questionnaire [data-questionnaire-error] {
+    font-size: var(--text-8);
+    color: var(--danger);
+    min-height: 1lh;
+  }
+
+  mo-questionnaire [data-questionnaire-error]:empty {
+    display: none;
+  }
+}

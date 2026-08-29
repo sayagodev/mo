@@ -1,0 +1,18 @@
+@layer components {
+  /* shadcn/ui Separator: hr horizontal by default; vertical via
+     [data-orientation="vertical"] on hr or any separator element. */
+  hr[data-orientation="vertical"],
+  [role="separator"][data-orientation="vertical"] {
+    align-self: stretch;
+    width: auto;
+    height: auto;
+    border: none;
+    border-inline-start: 1px solid var(--border);
+  }
+
+  hr[data-orientation="horizontal"],
+  [role="separator"][data-orientation="horizontal"] {
+    border: none;
+    border-top: 1px solid var(--border);
+  }
+}

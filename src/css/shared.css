@@ -1,0 +1,260 @@
+@layer components {
+  /* Shared primitives used across component files.
+
+   1. Menu anatomy: dropdown, menubar and context-menu items live inside a
+      menu[popover]; scoping here keeps the contract global without leaking
+      into other popovers.
+   2. Focus ring: one rule instead of a copy in every control.
+   3. Cover media: images filling fixed-ratio or media slots.
+   4. Description links: alert/item muted descriptions share the same
+      underline + hover-foreground pattern — one rule instead of per-file copies.
+   5. Variant tokens: --primary/--secondary/--destructive aliases prevent
+      duplication between button.css and badge.css — both consume the same
+      theme tokens, not copied hex values.
+   6. Icon sizing: button/badge/menu SVGs all consume the same [&_svg]:size-4
+      contract (16px) with per-size overrides kept local — pointer-events none
+      and flex-shrink are not duplicated per file. */
+
+  /* Shared item anatomy: works on button, a, or any element.
+     Buttons need a full chrome reset or they render as solid Mo buttons. */
+  menu[popover] {
+    text-align: start;                             /* never inherit center from a parent container */
+  }
+
+  menu[popover] [role="menuitem"],
+  menu[popover] [role="menuitemcheckbox"],
+  menu[popover] [role="menuitemradio"] {
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--space-2);
+    width: 100%;
+    padding-block: calc(var(--space-3) * 0.5);   /* py-1.5 */
+    padding-inline: var(--space-2);              /* px-2 */
+    appearance: none;
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    height: auto;
+    min-height: 0;
+    text-align: start;
+    font-family: inherit;
+    font-size: var(--text-7);                    /* text-sm */
+    font-weight: var(--font-normal, 400);
+    line-height: 1.25rem;
+    color: inherit;
+    text-decoration: none;
+    white-space: nowrap;
+    border-radius: var(--radius-small);
+    cursor: default;
+    user-select: none;
+    outline: none;
+    transition: background-color var(--transition-fast), color var(--transition-fast);
+
+    /* Override the generic button.css chrome via its own hooks so the
+       accent hover always wins regardless of cascade specificity. */
+    --_bg: transparent;
+    --_fg: inherit;
+    --_hov-bg: var(--accent);
+    --_hov-fg: var(--accent-foreground);
+
+    &[disabled],
+    &[aria-disabled="true"] {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
+    /* [&_svg]:size-4 muted, destructive variants keep colored icons.
+       A trailing svg (check marks, status icons) hugs the far edge. */
+    & > svg {
+      width: 1rem;
+      height: 1rem;
+      flex-shrink: 0;
+      pointer-events: none;
+      color: var(--muted-foreground);
+    }
+
+    & > svg:last-child:not(:first-child) {
+      margin-inline-start: auto;
+    }
+
+    &[data-variant="danger"] {
+      color: var(--destructive);
+
+      & > svg { color: var(--destructive); }
+
+      --_hov-bg: color-mix(in srgb, var(--destructive) 10%, transparent);
+      --_hov-fg: var(--destructive);
+    }
+  }
+
+  /* Checkbox/radio items reserve the leading indicator slot (pl-8) */
+  menu[popover] [role="menuitemcheckbox"],
+  menu[popover] [role="menuitemradio"] {
+    padding-inline-start: 2rem;                  /* pl-8 */
+  }
+
+  /* Inset items/labels align with checkbox/radio text */
+  menu[popover] [data-inset] {
+    padding-inline-start: 2rem;
+  }
+
+  /* Checked indicators: check mark (checkbox) / filled dot (radio) */
+  menu[popover] [role="menuitemcheckbox"][aria-checked="true"]::before,
+  menu[popover] [role="menuitemradio"][aria-checked="true"]::before {
+    content: "";
+    position: absolute;
+    inset-inline-start: var(--space-2);
+    block-size: 1rem;
+    inline-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: currentColor;
+    mask-repeat: no-repeat;
+    mask-size: contain;
+    mask-position: center;
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");
+  }
+
+  /* Radio item indicator: filled dot (CircleIcon size-2 fill-current) */
+  menu[popover] [role="menuitemradio"][aria-checked="true"]::before {
+    inline-size: 0.5rem;
+    inset-inline-start: 0.75rem;
+    border-radius: var(--radius-full);
+  }
+
+  /* Group label: px-2 py-1.5 font-medium — always start-aligned so menu
+     labels never inherit a centered container (e.g. context-menu demo). */
+  menu[popover] [data-label] {
+    padding: calc(var(--space-3) * 0.5) var(--space-2);
+    font-size: var(--text-7);
+    font-weight: var(--font-medium);
+    color: inherit;
+    text-align: start;
+    user-select: none;
+  }
+
+  /* Shortcut hint: ml-auto text-xs tracking-widest muted */
+  menu[popover] [data-shortcut] {
+    margin-inline-start: auto;
+    font-family: inherit;
+    font-size: var(--text-8);
+    letter-spacing: 0.1em;
+    color: var(--muted-foreground);
+    background: none;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    min-width: 0;
+
+    [data-variant="danger"] & { color: color-mix(in srgb, var(--destructive) 60%, transparent); }
+  }
+
+  /* Submenu trigger: chevron drawn on the far edge; highlighted with item */
+  menu[popover] [role="menuitem"][popovertarget] {
+    &::after {
+      content: "";
+      margin-inline-start: auto;
+      inline-size: 1rem;
+      block-size: 1rem;
+      flex-shrink: 0;
+      background-color: var(--muted-foreground);
+      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 18 6-6-6-6'/%3E%3C/svg%3E");
+      -webkit-mask-size: contain;
+      mask-size: contain;
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+      mask-position: center;
+    }
+
+    &:hover::after,
+    &:focus::after { background-color: currentColor; }
+  }
+
+  /* Spacing before/after separators inside groups */
+  menu[popover] :is([role="menuitem"], [data-label]) + hr,
+  menu[popover] hr + [role="menuitem"] {
+    margin-block-start: var(--space-2);
+  }
+
+  /* Menu surface separator: -mx-1 my-1 full-bleed hairline */
+  menu[popover] > hr {
+    height: 1px;
+    margin-block: var(--space-1);
+    margin-inline: calc(var(--space-1) * -1);   /* full-bleed inside p-1 */
+    background-color: var(--border);
+    border: none;
+  }
+
+  /* ---- 2. Shared focus ring --------------------------------------------
+     One ring for every interactive control; component files keep only their
+     special cases (danger tint, inset variants). Badge reuses this ring via
+     .badge so the focus style is not duplicated in badge.css. */
+  :is(button, [type="submit"], [type="reset"], [type="button"], a.button,
+      [role="tab"], input:not([type="range"]), select, textarea, summary, .badge,
+      nav[aria-label="breadcrumb" i] a):focus-visible {
+    outline: none;
+    border-color: var(--ring);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 50%, transparent);
+  }
+
+  /* ---- 2b. Badge destructive focus tint is the only override kept in badge.css;
+     it extends the shared ring with --destructive 20%/40% rather than duplicating
+     the base ring definition. */
+
+  /* ---- 3. Cover media ---------------------------------------------------
+     Single source for "image fills its fixed-size box" — item thumbnails,
+     empty states, and aspect-ratio boxes share the same cover geometry,
+     so the rule lives here and not as copies in each file.
+     Avatar handles its own cover (absolute overlay) in avatar.css. */
+  [data-aspect-ratio] > :is(img, video, iframe),
+  [data-slot="aspect-ratio"] > :is(img, video, iframe),
+  [data-empty-media][data-variant="image"] img,
+  [data-item-media][data-variant="image"] img {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  /* ---- 4. Shared description links ---------------------------------------
+     Alert, Item, etc. use muted descriptions with underline-on-link pattern.
+     Centralized here so individual component files don't duplicate the same
+     `a { underline; hover:text-foreground }` block. */
+  [data-item-description] a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  [data-item-description] a:hover {
+    color: var(--foreground);
+  }
+
+  [role="alert"] :is(h1, h2, h3, h4, h5, h6, p) a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  [role="alert"] :is(h1, h2, h3, h4, h5, h6, p) a:hover {
+    color: var(--foreground);
+  }
+
+  /* ---- 5. Breadcrumb shared helpers + sr-only ------------------------------
+      BreadcrumbEllipsis uses .sr-only for the accessible "More" label and
+      relies on no per-file duplicate definition. Centralized here so
+      breadcrumb.css does not duplicate the globally-used visually-hidden
+      pattern. Breadcrumb link focus reuses the §2 ring (selector added to
+      the :is() list above) instead of a local copy. */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+}

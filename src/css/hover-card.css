@@ -1,0 +1,66 @@
+@layer components {
+  /* shadcn/ui HoverCard: rich preview revealed on hover/focus of a trigger.
+     <mo-hovercard> wraps trigger + card ([popover] child); src/js/hover-card.js
+     handles hover intent, grace period and placement. Card = popover surface
+     like .popover at w-80; slides in from the side it opens on. */
+  mo-hovercard {
+    display: contents;
+
+    & > [popover] {
+      position: fixed;
+      margin: 0;
+      padding: var(--space-4);
+      width: var(--mo-hover-card-width, 20rem); /* w-80 */
+      max-width: calc(100vw - 1rem);
+      background-color: var(--popover);
+      color: var(--popover-foreground);
+      border: none;
+      border-radius: var(--mo-hover-card-radius, var(--radius-large));
+      box-shadow: 0 0 0 1px color-mix(in srgb, var(--foreground) 5%, transparent), var(--shadow-lg);
+      opacity: 0;
+      transform: translateY(4px); /* default side: below */
+      transition:
+        opacity 150ms ease-out,
+        transform 150ms ease-out,
+        display 150ms allow-discrete,
+        overlay 150ms allow-discrete;
+
+      &[data-side="top"] {
+        transform: translateY(-4px);
+      }
+
+      &[data-side="left"] {
+        transform: translateX(-4px);
+      }
+
+      &[data-side="right"] {
+        transform: translateX(4px);
+      }
+
+      &:popover-open {
+        opacity: 1;
+        transform: translate(0, 0);
+      }
+
+      @starting-style {
+        &:popover-open {
+          opacity: 0;
+          transform: translateY(4px);
+        }
+
+        /* Mirrors the data-side closed transforms. */
+        &[data-side="top"]:popover-open {
+          transform: translateY(-4px);
+        }
+
+        &[data-side="left"]:popover-open {
+          transform: translateX(-4px);
+        }
+
+        &[data-side="right"]:popover-open {
+          transform: translateX(4px);
+        }
+      }
+    }
+  }
+}

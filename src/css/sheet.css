@@ -1,0 +1,224 @@
+@layer components {
+  /* shadcn/ui Sheet: slide-over panel on <dialog>. Sides via data-side
+     (right is the default). Reuses dialog.css anatomy (header/div/footer,
+     backdrop fade); overrides chrome to edge-attached panels and swaps the
+     scale animation for a slide with allow-discrete. */
+  dialog.sheet {
+    inset-block: 0;
+    inset-inline: auto 0;
+    width: min(100%, var(--mo-sheet-max-width, 24rem)); /* sm:max-w-sm */
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    border-radius: 0;
+    overflow-y: auto;
+
+    /* Closed state slides toward the attached edge; right is default.
+       display stays in the open rule so :not([open]) keeps display:none.
+       Use shadcn easing cubic-bezier(0.32,0.72,0,1) for backdrop+slide.
+       Base opacity 0 enables exit fade (like dialog.css). */
+    opacity: 0;
+    transform: translateX(100%);
+    transition:
+      opacity 300ms cubic-bezier(0.32, 0.72, 0, 1),
+      transform 300ms cubic-bezier(0.32, 0.72, 0, 1),
+      overlay 300ms cubic-bezier(0.32, 0.72, 0, 1) allow-discrete,
+      display 300ms cubic-bezier(0.32, 0.72, 0, 1) allow-discrete;
+
+    &[open] {
+      opacity: 1;
+      transform: translateX(0);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+
+      & > form {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        gap: var(--space-4);
+      }
+    }
+
+    @starting-style {
+      &[open] {
+        opacity: 0;
+        transform: translateX(100%);
+      }
+    }
+
+    &[data-side="left"] {
+      inset-inline: 0 auto;
+      transform: translateX(-100%);
+      border-inline-end: 1px solid var(--border);
+
+      &[open] { transform: translateX(0); }
+
+      @starting-style {
+        &[open] {
+          opacity: 0;
+          transform: translateX(-100%);
+        }
+      }
+    }
+
+    &[data-side="top"],
+    &[data-side="bottom"] {
+      inset-inline: 0;
+      width: 100%;
+      /* Beat the UA dialog max-width (calc(100% - 6px - 2em)) so horizontal
+         sheets span the viewport edge to edge like shadcn inset-x-0. */
+      max-width: none;
+      height: auto;
+      max-height: var(--mo-sheet-max-block-size, 50vh);
+      transform: translateY(-100%);
+
+      &[open] { transform: translateY(0); }
+
+      @starting-style {
+        &[open] {
+          opacity: 0;
+          transform: translateY(-100%);
+        }
+      }
+    }
+
+    &[data-side="top"] {
+      inset-block: 0 auto;
+      border-block-end: 1px solid var(--border);
+      border-radius: 0 0 var(--radius-large) var(--radius-large);
+    }
+
+    &[data-side="bottom"] {
+      inset-block: auto 0;
+      transform: translateY(100%);
+      border-block-start: 1px solid var(--border);
+      border-radius: var(--radius-large) var(--radius-large) 0 0;
+      /* Allow dragging via handle */
+      touch-action: pan-y;
+
+      &[open] { transform: translateY(0); }
+
+      @starting-style {
+        &[open] {
+          opacity: 0;
+          transform: translateY(100%);
+        }
+      }
+    }
+
+    &[data-side="right"] {
+      border-inline-start: 1px solid var(--border);
+    }
+
+    /* shadcn SheetHeader/Footer: p-4 gap-0.5 md:gap-1.5; DrawerHeader text-center at bottom
+       Header keeps compact bottom (content follows), Footer keeps full p-4 so
+       the bottom button (Cancel) has breathing room from the viewport edge. */
+    & > header,
+    & > form > header {
+      display: flex;
+      flex-direction: column;
+      gap: calc(var(--space-1) * 0.5);
+      padding: var(--space-4);
+      padding-block-end: 0;
+
+      @media (min-width: 768px) {
+        gap: var(--space-1);
+      }
+    }
+
+    & > footer,
+    & > form > footer {
+      display: flex;
+      flex-direction: column;
+      gap: calc(var(--space-1) * 0.5);
+      padding: var(--space-4);
+
+      @media (min-width: 768px) {
+        gap: var(--space-1);
+      }
+    }
+
+    &[data-side="bottom"] > :is(header, footer),
+    &[data-side="bottom"] > form > :is(header, footer) {
+      text-align: center;
+
+      @media (min-width: 768px) {
+        text-align: start;
+      }
+    }
+
+    &[data-side="bottom"] > header,
+    &[data-side="bottom"] > form > header {
+      & > :is(h1, h2, h3, h4, h5, h6) {
+        font-size: var(--text-5);
+        font-weight: var(--font-semibold);
+        line-height: 1;
+      }
+
+      & > p {
+        font-size: var(--text-7);
+        color: var(--muted-foreground);
+        margin-block-end: 0;
+      }
+    }
+
+    & > footer,
+    & > form > footer {
+      margin-block-start: auto;
+      /* Keep shadcn gap-2 between footer buttons, but preserve p-4 from above */
+      gap: var(--space-2);
+    }
+
+    & > :is(p, div, section),
+    & > form > :is(p, div, section) {
+      padding: var(--space-4);
+    }
+
+    /* Bottom sheet content scroll area like shadcn's scroll-fade */
+    &[data-side="bottom"] > :is(p, div, section),
+    &[data-side="bottom"] > form > :is(p, div, section) {
+      overflow-y: auto;
+    }
+
+    /* Close button: absolute top-right ghost icon button. */
+    & > .icon,
+    & > form > .icon {
+      position: absolute;
+      inset-block-start: var(--space-3);
+      inset-inline-end: var(--space-3);
+    }
+
+    /* Drawer handle (Vaul-style): centered rounded grab bar at the top of
+       bottom sheets. Visible only for data-side=bottom (shadcn hides elsewhere).
+       Interactive: cursor-grab and draggable to close. */
+    & > .handle,
+    & > form > .handle {
+      flex-shrink: 0;
+      align-self: center;
+      inline-size: var(--mo-sheet-handle-width, 6.25rem);
+      block-size: var(--mo-sheet-handle-height, 0.5rem);
+      margin-block-start: var(--space-3);
+      padding: 0;
+      border-radius: var(--radius-full);
+      background-color: var(--muted);
+      cursor: grab;
+      touch-action: none;
+
+      &:active {
+        cursor: grabbing;
+      }
+    }
+
+    /* Hide handle for non-bottom sides (shadcn group-data-[vaul-drawer-direction=bottom]:block) */
+    &:not([data-side="bottom"]) > .handle,
+    &:not([data-side="bottom"]) > form > .handle {
+      display: none;
+    }
+
+    /* Backdrop click area: dialog backdrop already fades via dialog.css */
+    &::backdrop {
+      cursor: pointer;
+    }
+  }
+}

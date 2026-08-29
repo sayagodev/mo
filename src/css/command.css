@@ -1,0 +1,216 @@
+@layer components {
+  /* shadcn/ui Command (cmdk): searchable action list in two flavors —
+     palette (<mo-command> wrapping <dialog class="command">, opened via
+     commandfor="show-modal") and inline (no dialog child: the host itself
+     is the bordered surface). Anatomy: [data-command-input] search row,
+     [data-command-list] scroll region, [data-command-groups] sections with
+     [data-command-label], [role="option"] items, [data-command-empty]
+     state and a [data-command-footer] hints row. Filtering/roving live in
+     command.js; the roving [aria-selected] paints the accent state. */
+  mo-command {
+    display: contents;
+  }
+
+  mo-command:not(:has(> dialog)) {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    width: var(--mo-command-width, 24rem);
+    max-width: 100%;
+    background-color: var(--popover);
+    color: var(--popover-foreground);
+    border: none;
+    border-radius: var(--mo-command-radius, var(--radius-large));
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--foreground) 5%, transparent), var(--shadow-lg);
+  }
+
+  /* Palette surface: dialog.css provides the centered modal chrome; only
+     the width hook differs here (sm:max-w-lg). Must stay hidden when
+     not open — the unconditional display:flex would otherwise keep a closed
+     dialog covering the page and intercepting clicks (docs invisible layer). */
+  mo-command > dialog.command {
+    overflow: hidden;
+    width: min(100% - 2rem, var(--mo-command-width, var(--mo-dialog-max-width, 32rem)));
+    padding: 0;
+  }
+
+  mo-command > dialog.command:not([open]) {
+    display: none;
+  }
+
+  mo-command > dialog.command[open] {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Search row: h-12 borderless input over a bottom hairline; the search
+     glyph is baked into the background like the select chevron in form.css. */
+  mo-command [data-command-input] {
+    flex-shrink: 0;
+    height: 3rem;
+    padding-inline: var(--space-3);
+    padding-inline-start: 2.5rem;
+    font-size: var(--text-7);
+    background-color: transparent;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23737373' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' opacity='.5'%3E%3Ccircle cx='11' cy='11' r='8' /%3E%3Cpath d='m21 21-4.3-4.3' /%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: left 0.75rem center;
+    background-size: 1rem;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    border-radius: 0;
+    box-shadow: none;
+    outline: none;
+
+    /* No ring on the search field; the hairline stays put (shadcn has no
+       focus style on cmdk's input either). Must override shared.css
+       focus-visible ring which would otherwise highlight the separator line.
+       Use higher specificity + layer order to beat :focus-visible in @layer base. */
+    &:is(:focus, :focus-visible, :focus-within),
+    &:is(:focus, :focus-visible, :focus-within):is(:focus-visible) {
+      outline: none !important;
+      outline-offset: 0 !important;
+      border-color: transparent;
+      border-bottom-color: var(--border);
+      box-shadow: none !important;
+    }
+  }
+
+  /* Scroll region (shadcn CommandList max-h-[300px]). */
+  mo-command [data-command-list] {
+    display: flex;
+    flex-direction: column;
+    max-height: var(--mo-command-list-height, 18.75rem);
+    padding: var(--space-1);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    /* shadcn no-scrollbar: hide native scrollbars but keep scroll */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+      width: 0;
+      height: 0;
+    }
+  }
+
+  mo-command [data-command-empty] {
+    padding-block: var(--space-6);
+    font-size: var(--text-7);
+    text-align: center;
+    color: var(--muted-foreground);
+  }
+
+  mo-command [data-command-groups] {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Group heading: px-2 py-1.5 text-xs font-medium muted */
+  mo-command [data-command-label] {
+    padding: calc(var(--space-3) * 0.5) var(--space-2);
+    font-size: var(--text-8);
+    font-weight: var(--font-medium);
+    color: var(--muted-foreground);
+    user-select: none;
+  }
+
+  /* Items: bare-button chrome reset to cmdk geometry (px-2 py-1.5 text-sm
+     rounded-sm), same recipe as dropdown items. justify-content must be
+     re-declared: the @layer base button chrome centers content. */
+  mo-command [role="option"] {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--space-2);
+    width: 100%;
+    padding-block: calc(var(--space-3) * 0.5);
+    padding-inline: var(--space-2);
+    appearance: none;
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    height: auto;
+    min-height: 0;
+    text-align: start;
+    font-family: inherit;
+    font-size: var(--text-7);
+    font-weight: var(--font-normal, 400);
+    line-height: 1.25rem;
+    color: inherit;
+    white-space: nowrap;
+    border-radius: var(--radius-medium);
+    cursor: default;
+    user-select: none;
+    outline: none;
+    transition: background-color var(--transition-fast), color var(--transition-fast);
+
+    /* Beat button.css generic chrome via its own variable hooks. */
+    --_bg: transparent;
+    --_fg: inherit;
+    --_hov-bg: var(--muted);
+    --_hov-fg: var(--foreground);
+
+    &[disabled],
+    &[aria-disabled="true"] {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
+    /* [&_svg]:size-4 muted */
+    & > svg {
+      width: 1rem;
+      height: 1rem;
+      flex-shrink: 0;
+      pointer-events: none;
+      color: var(--muted-foreground);
+    }
+  }
+
+  /* Shortcut hint rides the far edge as plain muted text (ml-auto text-xs
+     tracking-widest) — kbd.css's chip chrome is reset, like menu items. */
+  mo-command [role="option"] > kbd,
+  mo-command [role="option"] > [data-shortcut] {
+    margin-inline-start: auto;
+    min-width: 0;
+    padding: 0;
+    font-family: inherit;
+    font-weight: var(--font-normal, 400);
+    background: none;
+    border: none;
+    border-radius: 0;
+  }
+
+  mo-command [role="option"][aria-selected="true"],
+  mo-command [role="option"]:hover {
+    background-color: var(--_hov-bg);
+    color: var(--_hov-fg);
+  }
+
+  /* Separator bleeds through the list padding, like dropdown menus. */
+  mo-command hr {
+    margin-block: var(--space-1);
+    margin-inline: calc(var(--space-1) * -1);
+  }
+
+  /* Footer hints row: ↑↓ navigate · ↵ select … esc */
+  mo-command [data-command-footer] {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-2) var(--space-4);
+    font-size: var(--text-8);
+    color: var(--muted-foreground);
+
+    & > span {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1);
+    }
+
+    & > :last-child {
+      margin-inline-start: auto;
+    }
+  }
+}

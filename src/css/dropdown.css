@@ -1,14 +1,18 @@
 @layer components {
-  ot-dropdown {
+  /* shadcn/ui DropdownMenu: popover surface (p-1, rounded-md, shadow-md),
+     items as bare buttons reset to Radix geometry (px-2 py-1.5, text-sm,
+     rounded-sm), plus label / shortcut / checkbox / radio item support. */
+  mo-dropdown {
     [popover] {
       position: fixed;
       margin: 0;
-      /* padding: var(--space-1); */
-      min-width: 12rem;
-      background-color: var(--background);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-medium);
-      box-shadow: var(--shadow-small);
+      padding: var(--space-1);
+      min-width: var(--mo-dropdown-min-width, 8rem);
+      background-color: var(--popover);
+      color: var(--popover-foreground);
+      border: none;
+      border-radius: var(--mo-dropdown-radius, var(--radius-large));
+      box-shadow: 0 0 0 1px color-mix(in srgb, var(--foreground) 5%, transparent), var(--shadow-lg);
       opacity: 0;
       transform: translateY(-4px);
       transition:
@@ -29,22 +33,6 @@
         }
       }
 
-      hr {
-        margin: var(--space-1) 0;
-      }
-    }
-
-    [role="menuitem"] {
-      display: flex;
-      width: 100%;
-      padding: var(--space-2) var(--space-3);
-      justify-content: start;
-      cursor: pointer;
-
-      &:hover, &:focus {
-        background-color: var(--accent);
-        outline: none;
-      }
     }
   }
 }

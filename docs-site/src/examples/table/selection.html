@@ -1,0 +1,51 @@
+<article class="card flush">
+  <mo-data-table>
+    <div class="table">
+      <table>
+        <thead>
+          <tr>
+            <th data-select-all><input type="checkbox" aria-label="Select all" /></th>
+            <th data-sortable><button type="button">Task</button></th>
+            <th>Status</th>
+            <th>Priority</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-selected>
+            <td data-select><input type="checkbox" aria-label="Select row" checked /></td>
+            <td><strong>Refactor auth flow</strong></td>
+            <td><span class="badge" data-variant="success">Done</span></td>
+            <td>High</td>
+          </tr>
+          <tr>
+            <td data-select><input type="checkbox" aria-label="Select row" /></td>
+            <td><strong>Ship dark mode</strong></td>
+            <td><span class="badge">In Progress</span></td>
+            <td>Medium</td>
+          </tr>
+          <tr>
+            <td data-select><input type="checkbox" aria-label="Select row" /></td>
+            <td><strong>Update docs</strong></td>
+            <td><span class="badge outline" data-variant="secondary">Backlog</span></td>
+            <td>Low</td>
+          </tr>
+          <tr data-selected>
+            <td data-select><input type="checkbox" aria-label="Select row" checked /></td>
+            <td><strong>Fix pagination bug</strong></td>
+            <td><span class="badge" data-variant="success">Done</span></td>
+            <td>High</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <footer data-table-pagination>
+      <span data-table-info></span>
+      <nav class="pagination" aria-label="Table pagination">
+        <ul>
+          <li><button type="button" data-table-prev aria-label="Previous page">‹ Previous</button></li>
+          <li><button type="button" data-table-next aria-label="Next page">Next ›</button></li>
+        </ul>
+      </nav>
+    </footer>
+  </mo-data-table>
+</article>

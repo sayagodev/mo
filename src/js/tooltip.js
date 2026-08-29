@@ -1,5 +1,5 @@
 /**
- * oat - Tooltip
+ * mo - Tooltip
  * Converts title attributes to data-tooltip for custom styling.
  */
 

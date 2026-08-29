@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Mo test — questionnaire</title>
+<link rel="stylesheet" href="/dist/mo.min.css" />
+<script src="/dist/mo.min.js"></script>
+<style>body { padding: 2rem; max-width: 26rem }</style>
+</head>
+<body>
+
+<mo-questionnaire id="q">
+  <div data-questionnaire-progress></div>
+
+  <form data-questionnaire-step id="q-step1">
+    <h3 id="q-h1">Account details</h3>
+    <p>Tell us who will own this workspace.</p>
+    <div data-field>
+      <label for="q-name">Full name</label>
+      <input id="q-name" name="name" required placeholder="Evil Rabbit" />
+    </div>
+    <div data-field>
+      <label for="q-email">Email</label>
+      <input id="q-email" name="email" type="email" required placeholder="you@example.com" />
+    </div>
+    <footer>
+      <button type="button" class="ghost" data-questionnaire-back>Back</button>
+      <button type="submit">Continue</button>
+    </footer>
+  </form>
+
+  <form data-questionnaire-step id="q-step2" hidden>
+    <h3 id="q-h2">Preferences</h3>
+    <p>Choose how your workspace behaves.</p>
+    <fieldset>
+      <legend>Visibility</legend>
+      <div class="vstack gap-2">
+        <label><input type="radio" name="visibility" value="private" checked /> Private</label>
+        <label><input type="radio" name="visibility" value="team" /> Team</label>
+      </div>
+    </fieldset>
+    <footer>
+      <button type="button" class="ghost" data-questionnaire-back>Back</button>
+      <button type="submit">Save plan</button>
+    </footer>
+  </form>
+</mo-questionnaire>
+
+<mo-questionnaire id="q-late" data-start="2">
+  <div data-questionnaire-progress></div>
+
+  <form data-questionnaire-step id="l-step1">
+    <h3>Account details</h3>
+    <div data-field>
+      <label for="l-name">Full name</label>
+      <input id="l-name" name="name" required />
+    </div>
+    <footer>
+      <button type="button" class="ghost" data-questionnaire-back>Back</button>
+      <button type="submit">Continue</button>
+    </footer>
+  </form>
+
+  <form data-questionnaire-step id="l-step2" hidden>
+    <h3>Preferences</h3>
+    <footer>
+      <button type="button" class="ghost" data-questionnaire-back>Back</button>
+      <button type="submit">Save plan</button>
+    </footer>
+  </form>
+</mo-questionnaire>
+
+<article class="card" id="card-variant">
+  <header>
+    <h3>Create agent task</h3>
+    <p>Two quick questions before the agent starts.</p>
+  </header>
+  <mo-questionnaire id="q-card">
+    <div data-questionnaire-progress></div>
+
+    <form data-questionnaire-step id="c-step1">
+      <h3>What should the agent work on?</h3>
+      <p>Choose the task that should be handled next.</p>
+      <div class="vstack gap-2">
+        <label><input type="radio" name="task" value="fix" checked /> Fix the failing tests</label>
+        <label><input type="radio" name="task" value="refactor" /> Refactor the data layer</label>
+      </div>
+      <footer>
+        <button type="button" class="ghost" data-questionnaire-back>Back</button>
+        <button type="submit">Next</button>
+      </footer>
+    </form>
+
+    <form data-questionnaire-step id="c-step2" hidden>
+      <h3>What should the final handoff include?</h3>
+      <p>Pick the level of detail needed for review.</p>
+      <div class="vstack gap-2">
+        <label><input type="radio" name="output" value="summary" /> Summary only</label>
+        <label><input type="radio" name="output" value="files" checked /> Summary and changed files</label>
+      </div>
+      <footer>
+        <button type="button" class="ghost" data-questionnaire-back>Back</button>
+        <button type="submit">Create task</button>
+      </footer>
+    </form>
+  </mo-questionnaire>
+</article>
+
+</body>
+</html>

@@ -1,0 +1,18 @@
+<div data-button-group role="group" aria-label="Amount">
+  <div data-button-group>
+    <mo-select data-placeholder="$">
+      <button type="button" popovertarget="bg-currency" data-select-trigger aria-label="Currency"></button>
+      <ul popover id="bg-currency" class="popover" role="listbox">
+        <li><button type="button" role="option" value="$" aria-selected="true">$ USD</button></li>
+        <li><button type="button" role="option" value="€">€ EUR</button></li>
+        <li><button type="button" role="option" value="£">£ GBP</button></li>
+      </ul>
+    </mo-select>
+    <input placeholder="10.00" inputmode="decimal" pattern="[0-9]*" aria-label="Amount" />
+  </div>
+  <div data-button-group>
+    <button type="button" class="outline icon" aria-label="Send">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+    </button>
+  </div>
+</div>

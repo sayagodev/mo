@@ -1,0 +1,21 @@
+<button type="button" class="outline" command="show-modal" commandfor="ex-drawer-invite">Open drawer</button>
+
+<dialog closedby="any" id="ex-drawer-invite" class="sheet" data-side="bottom">
+  <form method="dialog">
+    <div class="handle" aria-hidden="true"></div>
+    <header>
+      <h3>Invite users</h3>
+      <p>Invite your colleagues to start using your app.</p>
+    </header>
+    <div>
+      <div data-field>
+        <label for="ex-drawer-invite-email">Email</label>
+        <input id="ex-drawer-invite-email" type="email" placeholder="pedro@mail.com" />
+      </div>
+    </div>
+    <footer>
+      <button type="submit" class="ghost" value="cancel">Cancel</button>
+      <button type="submit">Continue</button>
+    </footer>
+  </form>
+</dialog>

@@ -1,0 +1,24 @@
+<button type="button" command="show-modal" commandfor="ex-dialog">Edit profile</button>
+
+<dialog id="ex-dialog">
+  <form method="dialog">
+    <header>
+      <h3>Edit profile</h3>
+      <p>Make changes to your profile here.</p>
+    </header>
+    <div>
+      <div data-field>
+        <label for="ex-name">Name</label>
+        <input id="ex-name" value="Mo" />
+      </div>
+      <div data-field>
+        <label for="ex-handle">Handle</label>
+        <input id="ex-handle" value="@mo" />
+      </div>
+    </div>
+    <footer>
+      <button type="submit" class="ghost" value="cancel">Cancel</button>
+      <button type="submit" value="save">Save changes</button>
+    </footer>
+  </form>
+</dialog>

@@ -1,0 +1,18 @@
+<mo-resizable style="height: 200px; max-width: 24rem; border: 1px solid var(--border); border-radius: var(--radius-medium)">
+  <div data-resizable-panel>
+    <textarea aria-label="Markdown" placeholder="Markdown" style="width: 100%; height: 100%; border: none; resize: none"></textarea>
+  </div>
+  <!-- handles are inserted automatically between panels -->
+  <div data-resizable-panel>
+    <div style="display: flex; height: 100%; align-items: center; justify-content: center; padding: var(--space-6); font-weight: var(--font-medium)">Preview</div>
+  </div>
+</mo-resizable>
+
+<mo-resizable data-orientation="vertical" data-sizes="25,75" style="height: 200px; margin-top: var(--space-4); max-width: 24rem; border: 1px solid var(--border); border-radius: var(--radius-medium)">
+  <section data-resizable-panel>
+    <div style="display: flex; height: 100%; align-items: center; justify-content: center">Header</div>
+  </section>
+  <section data-resizable-panel>
+    <div style="display: flex; height: 100%; align-items: center; justify-content: center">Content</div>
+  </section>
+</mo-resizable>

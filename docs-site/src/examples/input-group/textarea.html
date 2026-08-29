@@ -1,0 +1,33 @@
+<div class="vstack gap-4">
+  <div data-input-group>
+    <span data-addon data-align="block-start">
+      <span class="flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" /></svg>
+        script.js
+      </span>
+      <button type="button" class="icon ghost" data-push aria-label="Reset">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" /><path d="M21 3v5h-5" /><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" /><path d="M8 16H3v5" /></svg>
+      </button>
+      <button type="button" class="icon ghost" aria-label="Copy">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2" /><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" /></svg>
+      </button>
+    </span>
+    <textarea placeholder="console.log('Hello, world!');" aria-label="Code editor"></textarea>
+    <span data-addon data-align="block-end">
+      Line 1, Column 1
+      <span data-push>JavaScript</span>
+    </span>
+  </div>
+  <div data-input-group>
+    <textarea placeholder="Share your thoughts..." aria-label="Comment"></textarea>
+    <span data-addon data-align="block-end">
+      <span data-push></span>
+      <button type="button" class="ghost">Cancel</button>
+      <button type="button">Post comment</button>
+    </span>
+  </div>
+  <div data-field>
+    <label for="ig-textarea-plain">Default textarea (no input group)</label>
+    <textarea id="ig-textarea-plain" placeholder="Enter your text here..."></textarea>
+  </div>
+</div>

@@ -1,13 +1,13 @@
 @layer components {
-  ot-taginput {
+  mo-taginput {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: var(--space-2);
-    padding: var(--space-2) var(--space-3);
+    padding: var(--mo-taginput-padding, var(--space-2) var(--space-3));
     background-color: var(--background);
     border: 1px solid var(--input);
-    border-radius: var(--radius-medium);
+    border-radius: var(--mo-input-radius, var(--radius-medium));
     cursor: text;
     transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
     width: 100%;
@@ -15,7 +15,7 @@
 
     &:focus-within {
       border-color: var(--ring);
-      box-shadow: 0 0 0 2px rgb(from var(--ring) r g b / 0.2);
+      box-shadow: 0 0 0 2px color-mix(in srgb, var(--ring) 20%, transparent);
     }
 
     /* Strip the inherited input chrome; it's just a bare typing field. */
@@ -29,6 +29,52 @@
 
       &:focus {
         box-shadow: none;
+      }
+    }
+
+    /* Badge + integrated remove button — the × must not look like a primary button */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1);
+      padding-inline-end: 0.25rem; /* tighter trailing for the × */
+
+      & button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        inline-size: 1rem;
+        block-size: 1rem;
+        flex-shrink: 0;
+        margin: 0;
+        padding: 0;
+        font-size: 0.875rem;
+        line-height: 1;
+        font-weight: 400;
+        color: inherit;
+        background: transparent;
+        border: none;
+        border-radius: var(--radius-full);
+        cursor: pointer;
+        transition: background-color var(--transition-fast), color var(--transition-fast);
+        /* Override generic button.css chrome */
+        --_h: auto;
+        --_bg: transparent;
+        --_fg: inherit;
+        --_hov-bg: color-mix(in srgb, var(--foreground) 15%, transparent);
+        --_hov-fg: var(--foreground);
+        height: auto;
+        min-height: 0;
+        box-shadow: none;
+
+        &:active {
+          background-color: color-mix(in srgb, var(--foreground) 20%, transparent);
+        }
+
+        &:focus-visible {
+          outline: none;
+          box-shadow: 0 0 0 2px color-mix(in srgb, var(--ring) 50%, transparent);
+        }
       }
     }
 

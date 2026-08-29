@@ -1,7 +1,7 @@
-// oat - Base Web Component Class
+// mo - Base Web Component Class
 // Provides lifecycle management, event handling, and utilities.
 
-export class OtBase extends HTMLElement {
+export class MoBase extends HTMLElement {
   #initialized = false;
 
   // Called when element is added to DOM.
@@ -104,3 +104,48 @@ document.addEventListener('touchstart', e => {
     e.target.close();
   }
 }, { passive: false });
+
+// Modal <dialog> focus trap: intercept Tab at the boundaries so the cycle
+// stays inside the dialog instead of briefly escaping to the browser UI
+// (native sequential navigation hands focus past the top layer on wrap).
+const FOCUSABLE = 'a[href], button:not(:disabled), input:not([type="hidden"]):not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex="-1"])';
+
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Tab') return;
+  const dialog = e.target.closest?.('dialog[open]') ||
+    (document.activeElement instanceof HTMLDialogElement ? document.activeElement : null);
+  if (!dialog) return;
+
+  const focusables = [...dialog.querySelectorAll(FOCUSABLE)]
+    .filter(el => el.getClientRects().length > 0);
+  if (focusables.length === 0) {
+    e.preventDefault();
+    return;
+  }
+
+  const first = focusables[0];
+  const last = focusables[focusables.length - 1];
+  const active = document.activeElement;
+
+  // Focus escaped or sits outside: pull it back inside.
+  if (!dialog.contains(active)) {
+    e.preventDefault();
+    (e.shiftKey ? last : first).focus();
+    return;
+  }
+
+  if (!e.shiftKey && active === last) {
+    e.preventDefault();
+    first.focus();
+  } else if (e.shiftKey && active === first) {
+    e.preventDefault();
+    last.focus();
+  }
+});
+
+// Two-state buttons: any [aria-pressed] toggles on click, like shadcn Toggle.
+document.addEventListener('click', e => {
+  const toggle = e.target.closest('button[aria-pressed]');
+  if (!toggle || toggle.matches(':disabled, [disabled], [aria-disabled="true"]')) return;
+  toggle.setAttribute('aria-pressed', String(toggle.getAttribute('aria-pressed') !== 'true'));
+});

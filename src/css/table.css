@@ -1,5 +1,5 @@
 @layer base {
-  /* Container to get horizontal scroll on small screens. */
+  /* shadcn/ui Table: hairline rows, h-10 header cells, muted/50 hover. */
   .table {
     min-width: 320px;
     width: 100%;
@@ -10,6 +10,7 @@
     border-collapse: collapse;
     width: 100%;
     font-size: var(--text-7);
+    caption-side: bottom;
   }
 
   thead {
@@ -18,21 +19,33 @@
 
   tfoot {
     border-top: 1px solid var(--border);
+    background-color: color-mix(in srgb, var(--muted) 50%, transparent);
+    font-weight: var(--font-medium);
+  }
+
+  caption {
+    margin-block-start: var(--space-4);
+    font-size: var(--text-7);
+    color: var(--muted-foreground);
   }
 
   th, td {
     overflow-wrap: break-word;
+    text-align: start;
+    vertical-align: middle;
+    white-space: nowrap;
   }
 
   th {
-    padding: var(--space-3) var(--space-2);
-    text-align: start;
+    height: 2.5rem;
+    padding: var(--mo-table-cell-padding-y, 0) var(--mo-table-cell-padding-x, var(--space-2));
     font-weight: var(--font-medium);
-    color: var(--muted-foreground);
+    color: var(--foreground);
   }
 
   td {
-    padding: var(--space-3) var(--space-2);
+    padding: var(--mo-table-cell-padding-y, var(--space-2)) var(--mo-table-cell-padding-x, var(--space-2));
+    vertical-align: middle;
   }
 
   tbody tr {
@@ -44,7 +57,122 @@
     }
 
     &:hover {
-      background-color: rgb(from var(--muted) r g b / 0.5);
+      background-color: color-mix(in srgb, var(--muted) 50%, transparent);
     }
+
+    /* mo-data-table row selection (shadcn data-[state=selected]:bg-muted) */
+    &[data-selected] {
+      background-color: color-mix(in srgb, var(--muted) 50%, transparent);
+    }
+
+    /* When a row's checkbox is checked, highlight the row like shadcn
+       data-[state=selected]:bg-muted — keeps selection visible even without
+       JS setting data-selected (user request: checkbox in table). */
+    &:has(> td input[type="checkbox"]:checked),
+    &:has(> th input[type="checkbox"]:checked),
+    &:has(input:checked) {
+      background-color: color-mix(in srgb, var(--muted) 50%, transparent);
+    }
+  }
+
+  /* Sortable headers (<mo-data-table>): the th keeps its table-cell display,
+     so the aria-sort chevron renders as an inline pseudo-element next to the
+     trigger button instead of flexing the cell out of the column algorithm. */
+  th[data-sortable] {
+    cursor: pointer;
+    user-select: none;
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: inset 0 0 0 3px color-mix(in srgb, var(--ring) 50%, transparent);
+    }
+  }
+}
+
+@layer components {
+  /* Sortable header button must beat button.css (which lives in components layer).
+     Using !important ensures it overrides the primary button chrome. */
+  th[data-sortable] > button {
+    appearance: none !important;
+    background: none !important;
+    background-color: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    inline-size: auto !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: var(--space-1) !important;
+    font: inherit !important;
+    font-weight: inherit !important;
+    color: inherit !important;
+    cursor: pointer !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    /* Override button.css chrome */
+    --_h: auto !important;
+    --_bg: transparent !important;
+    --_fg: inherit !important;
+    --_bd: transparent !important;
+
+    &:hover {
+      background-color: transparent !important;
+      color: inherit !important;
+    }
+
+    &:active {
+      transform: none !important;
+    }
+  }
+
+  /* Always reserve space for the sort chevron to avoid layout shift.
+     Invisible (opacity 0) when not sorted, faint on hover, solid when sorted. */
+  th[data-sortable]::after {
+    content: "";
+    display: inline-block;
+    inline-size: 1rem;
+    block-size: 1rem;
+    margin-inline-start: var(--space-2);
+    vertical-align: middle;
+    background-color: var(--muted-foreground);
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m18 15-6-6-6 6'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m18 15-6-6-6 6'/%3E%3C/svg%3E");
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+  }
+
+  th[data-sortable]:hover::after {
+    opacity: 0.35;
+  }
+
+  th[data-sortable][aria-sort]::after {
+    opacity: 1;
+  }
+
+  th[data-sortable][aria-sort='descending']::after {
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  }
+  /* Pagination footer (<mo-data-table>): info text left, buttons right. */
+  [data-table-pagination] {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding-block-start: var(--space-4);
+  }
+
+  [data-table-info] {
+    font-size: var(--text-7);
+    color: var(--muted-foreground);
   }
 }

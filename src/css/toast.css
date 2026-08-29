@@ -39,35 +39,74 @@
     }
   }
 
+  /* Shadcn-like neutral toast with simple stacking (one after another, no scale) */
   .toast {
     --transition: 300ms;
     --transition-in: calc(var(--transition) - 50ms);
 
-    padding: var(--space-5) var(--space-4);
-    max-width: 28rem;
-    min-width: 20rem;
+    padding: var(--mo-toast-padding, var(--space-4));
+    max-width: var(--mo-toast-max-width, 28rem);
+    min-width: var(--mo-toast-min-width, 20rem);
     pointer-events: auto;
-    background-color: var(--card);
+    display: flex;
+    align-items: start;
+    gap: var(--space-3);
+    background-color: var(--popover);
+    color: var(--popover-foreground);
     border: 1px solid var(--border);
-    border-inline-start-width: var(--space-1);
-    border-inline-start-style: solid;
-    border-inline-start-color: var(--_variant-color, var(--border));
-    border-radius: var(--radius-medium);
-    box-shadow: var(--shadow-small);
+    border-radius: var(--radius-large);
+    box-shadow: var(--shadow-lg);
     transition: opacity var(--transition-in), transform var(--transition-in), margin var(--transition-in);
-    line-height: 1;
 
     .toast-title {
-      font-weight: 600;
-      margin: 0 0 var(--space-3) 0;
-      color: var(--_variant-color, inherit);
+      font-size: var(--text-7);
+      font-weight: var(--font-semibold);
+      color: inherit;
     }
+
     .toast-message {
+      font-size: var(--text-7);
       color: var(--muted-foreground);
     }
 
+    .toast-content {
+      flex: 1;
+      display: grid;
+      gap: 0.125rem;
+    }
+
+    /* Icon slot — spinner, check, etc. */
+    & > [data-toast-icon] {
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.125rem;
+      height: 1.125rem;
+      margin-block-start: 1px;
+      color: var(--muted-foreground);
+
+      & > svg {
+        width: 1rem;
+        height: 1rem;
+      }
+
+      & > [aria-busy="true"]::before {
+        width: 1rem;
+        height: 1rem;
+        border-width: 2px;
+      }
+    }
+
+    &[data-variant="success"] > [data-toast-icon] { color: var(--success); }
+    &[data-variant="warning"] > [data-toast-icon] { color: var(--warning); }
+    &[data-variant="danger"] > [data-toast-icon],
+    &[data-variant="error"] > [data-toast-icon] { color: var(--destructive); }
+    &[data-variant="info"] > [data-toast-icon] { color: var(--foreground); }
+
     & > [data-close] {
       margin-inline-start: auto;
+      flex-shrink: 0;
       background: none;
       border: none;
       padding: 0;
@@ -93,6 +132,14 @@
       max-height: 0;
       overflow: hidden;
       transition: opacity var(--transition), margin var(--transition), padding var(--transition), max-height var(--transition);
+    }
+
+    /* Status variants tint the title through the shared --variant-color
+       mapping ([data-variant] in 01-theme.css); info stays neutral. */
+    &:is([data-variant="success"], [data-variant="warning"], [data-variant="danger"], [data-variant="error"]) {
+      & .toast-title {
+        color: var(--variant-color);
+      }
     }
   }
 }

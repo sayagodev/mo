@@ -1,0 +1,73 @@
+<form>
+  <fieldset>
+    <legend>Payment Method</legend>
+    <p class="text-light">All transactions are secure and encrypted.</p>
+    <div data-field>
+      <label for="ex-card-name">Name on Card</label>
+      <input id="ex-card-name" required placeholder="Evil Rabbit" />
+    </div>
+    <div data-field>
+      <label for="ex-card-number">Card Number</label>
+      <input id="ex-card-number" required placeholder="1234 5678 9012 3456" />
+      <small data-hint>Enter your 16-digit card number.</small>
+    </div>
+    <div class="row">
+      <div class="col-4">
+        <div data-field>
+          <label for="ex-exp-month">Month</label>
+          <select id="ex-exp-month">
+            <option value="" selected>MM</option>
+            <option>01</option>
+            <option>02</option>
+            <option>03</option>
+            <option>04</option>
+            <option>05</option>
+            <option>06</option>
+            <option>07</option>
+            <option>08</option>
+            <option>09</option>
+            <option>10</option>
+            <option>11</option>
+            <option>12</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-4">
+        <div data-field>
+          <label for="ex-exp-year">Year</label>
+          <select id="ex-exp-year">
+            <option value="" selected>YYYY</option>
+            <option>2025</option>
+            <option>2026</option>
+            <option>2027</option>
+            <option>2028</option>
+            <option>2029</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-4">
+        <div data-field>
+          <label for="ex-cvv">CVV</label>
+          <input id="ex-cvv" required placeholder="123" />
+        </div>
+      </div>
+    </div>
+  </fieldset>
+  <fieldset>
+    <legend>Billing Address</legend>
+    <p class="text-light">The billing address associated with your payment method.</p>
+    <label class="flex items-center gap-2 mt-2">
+      <input type="checkbox" checked /> Same as shipping address
+    </label>
+  </fieldset>
+  <fieldset>
+    <div data-field>
+      <label for="ex-comments">Comments</label>
+      <textarea id="ex-comments" placeholder="Add any additional comments"></textarea>
+    </div>
+  </fieldset>
+  <div class="hstack">
+    <button type="submit">Submit</button>
+    <button type="button" class="outline">Cancel</button>
+  </div>
+</form>

@@ -4,20 +4,27 @@
  * optional [data-files] element.
  *
  * Usage:
- * <ot-upload>
+ * <mo-upload>
  *   <input type="file" name="files" multiple accept="image/*" hidden />
  *   <button type="button">Choose files</button>
  *   <div data-files><small data-hint>Drop files here or click to choose</small></div>
- * </ot-upload>
+ * </mo-upload>
  *
  * Events:
  *   change             - the native input's change event bubbles up on both
  *                        picker selection and drop/removal.
  */
 
-import { OtBase } from './base.js';
+import { MoBase } from './base.js';
 
-class OtUpload extends OtBase {
+/**
+ * Upload wrapping a native file input with drag-and-drop and file badges.
+ *
+ * @tag mo-upload
+ * @attr {string} data-files - On a child element: hosts one removable badge per selected file.
+ * @fires {Event} change - The wrapped input's change bubbles on picker selection, drop or badge removal.
+ */
+class OtUpload extends MoBase {
   #input;
   #out;
   #empty;
@@ -97,4 +104,4 @@ class OtUpload extends OtBase {
   }
 }
 
-customElements.define('ot-upload', OtUpload);
+customElements.define('mo-upload', OtUpload);

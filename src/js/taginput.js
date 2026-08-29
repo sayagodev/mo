@@ -1,10 +1,10 @@
 /**
- * oat - TagInput Component
+ * mo - TagInput Component
  * Uses a native <input> to manage a list of tags and a native <datalist> for optional autocomplete.
  * Type a word and press Enter or comma to turn it into a tag.
  *
  * Usage:
- * <ot-taginput value="apple, mango"><input placeholder="Add tags ..." maxlength="20" /></ot-taginput>
+ * <mo-taginput value="apple, mango"><input placeholder="Add tags ..." maxlength="20" /></mo-taginput>
  *
  * Attributes:
  *   value              - comma-separated initial tags
@@ -18,14 +18,22 @@
  *                        detail = the current array of tags (strings and/or objects)
  */
 
-import { OtBase } from './base.js';
+import { MoBase } from './base.js';
 
 const h = t => document.createElement(t);
 
 // Display text for a tag, which may be a plain string or an object.
 const label = v => String(v).trim();
 
-class OtTaginput extends OtBase {
+/**
+ * Tag input rendering entries as removable badges with datalist autocomplete.
+ *
+ * @tag mo-taginput
+ * @attr {string} value - Initial comma-separated tags.
+ * @prop {Array} value - Get or set the tags array.
+ * @fires {CustomEvent<Array>} input - Tags added or removed (detail = tags array).
+ */
+class OtTaginput extends MoBase {
   // Maps a tag's badge element to its backing object (only set for object tags).
   #data = new WeakMap();
 
@@ -100,7 +108,7 @@ class OtTaginput extends OtBase {
       return;
     }
 
-    // Render the tag as an oat 'badge'.
+    // Render the tag as an mo 'badge'.
     const t = h('span');
     t.className = 'badge';
     t.dataset.variant = 'secondary';
@@ -153,4 +161,4 @@ class OtTaginput extends OtBase {
   }
 }
 
-customElements.define('ot-taginput', OtTaginput);
+customElements.define('mo-taginput', OtTaginput);

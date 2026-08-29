@@ -1,14 +1,35 @@
 import './base.js';
+import './sheet.js';
 import './tabs.js';
+import './accordion.js';
 import './dropdown.js';
 import './upload.js';
 import './tooltip.js';
 import './sidebar.js';
 import './taginput.js';
-import { toast, toastEl, toastClear } from './toast.js';
+import './toggle-group.js';
+import './hover-card.js';
+import './menubar.js';
+import './context-menu.js';
+import './carousel.js';
+import './command.js';
+import './combobox.js';
+import './select.js';
+import './navigation-menu.js';
+import './popover.js';
+import './input-otp.js';
+import './resizable.js';
+import './data-table.js';
+import './questionnaire.js';
+import './scroll-area.js';
+import './slider.js';
+import { toast, toastEl, toastClear, toastPromise } from './toast.js';
 
-// Register the global window.ot.* APIs.
-const ot = window.ot || (window.ot = {});
-ot.toast = toast;
-ot.toast.el = toastEl;
-ot.toast.clear = toastClear;
+// Register the global window.mo.* APIs (keep ot alias for backward compat).
+const mo = window.mo || (window.mo = {});
+const ot = window.ot || (window.ot = mo);
+mo.toast = ot.toast = toast;
+mo.toast.el = ot.toast.el = toastEl;
+mo.toast.clear = ot.toast.clear = toastClear;
+mo.toast.dismiss = ot.toast.dismiss = toastClear;
+mo.toast.promise = ot.toast.promise = toastPromise;

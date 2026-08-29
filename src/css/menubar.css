@@ -1,0 +1,126 @@
+@layer components {
+  /* shadcn/ui Menubar: h-9 flex bar of ghost triggers plus the dropdown menu
+     surface and item anatomy ([role=menuitem*], labels, shortcuts, checkbox/
+     radio indicators) reused under this element. */
+  mo-menubar {
+    display: flex;
+    align-items: center;
+    gap: var(--mo-menubar-gap, var(--space-1));                /* gap-1 */
+    height: var(--mo-menubar-height, 2.25rem);                 /* h-9 */
+    padding: var(--space-1);                                   /* p-1 */
+    background-color: var(--background);
+    color: var(--foreground);
+    border: 1px solid var(--border);
+    border-radius: var(--mo-menubar-radius, var(--radius-large));
+    box-shadow: var(--shadow-xs);
+
+    /* Bar triggers: ghost look (rounded-sm px-2 py-1 text-sm font-medium),
+       highlighted while hovered, keyboard-focused or while their menu is
+       open ([aria-expanded="true"], kept in sync by the JS). */
+    & > [popovertarget] {
+      display: inline-flex;
+      align-items: center;
+      height: 100%;
+      padding-block: calc(var(--space-3) * 0.5);               /* py-1 */
+      padding-inline: var(--space-2);                          /* px-2 */
+      appearance: none;
+      background-color: transparent;
+      border: none;
+      box-shadow: none;
+      font-family: inherit;
+      font-size: var(--text-7);                                /* text-sm */
+      font-weight: var(--font-medium);
+      line-height: 1.25rem;
+      color: inherit;
+      white-space: nowrap;
+      border-radius: var(--radius-small);
+      cursor: default;
+      user-select: none;
+      outline: none;
+      transition: background-color var(--transition-fast), color var(--transition-fast);
+
+      /* Beat button.css generic chrome via its own variable hooks so the
+         muted trigger hover always wins regardless of specificity. */
+      --_bg: transparent;
+      --_fg: inherit;
+      --_hov-bg: var(--muted);
+      --_hov-fg: var(--foreground);
+      --_bd: transparent;
+
+      /* Buttons press-scale globally; bar triggers highlight instead. */
+      &:not(:disabled):active {
+        transform: none;
+      }
+
+      &:is(:hover, :focus-visible),
+      &[aria-expanded="true"] {
+        background-color: var(--muted);
+        color: var(--foreground);
+      }
+
+      /* Bar triggers behave like ghost buttons: muted hover, foreground text. */
+      &:is(:hover, :focus-visible),
+      &[aria-expanded="true"] {
+        background-color: var(--muted);
+        color: var(--foreground);
+      }
+
+      &:focus-visible {
+        border-color: transparent;
+        box-shadow: none;
+      }
+
+      &[disabled],
+      &[aria-disabled="true"] {
+        pointer-events: none;
+        opacity: 0.5;
+      }
+    }
+
+    /* Menu surface: p-1 rounded-md shadow-md, min-w-[12rem]. */
+    [popover] {
+      position: fixed;
+      margin: 0;
+      padding: var(--space-1);
+      min-width: var(--mo-menubar-min-width, 12rem);
+      background-color: var(--popover);
+      color: var(--popover-foreground);
+      border: none;
+      border-radius: var(--mo-menubar-radius, var(--radius-large));
+      box-shadow: 0 0 0 1px color-mix(in srgb, var(--foreground) 5%, transparent), var(--shadow-lg);
+      opacity: 0;
+      transform: translateY(-4px);
+      transition:
+        opacity 150ms ease-out,
+        transform 150ms ease-out,
+        display 150ms allow-discrete,
+        overlay 150ms allow-discrete;
+
+      &:popover-open {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      @starting-style {
+        &:popover-open {
+          opacity: 0;
+          transform: translateY(-4px);
+        }
+      }
+
+      /* Menu surface separator: full-bleed hairline (see shared.css). */
+      & > hr {
+        height: 1px;
+        margin-block: var(--space-1);
+        margin-inline: calc(var(--space-1) * -1);
+        background-color: var(--border);
+        border: none;
+      }
+    }
+
+    /* Nested surfaces: same chrome as the root menu (min-w-[8rem]). */
+    [popover] [popover] {
+      min-width: calc(var(--mo-menubar-min-width, 12rem) * 2 / 3);
+    }
+  }
+}

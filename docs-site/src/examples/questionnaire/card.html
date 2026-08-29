@@ -1,0 +1,37 @@
+<article class="card">
+  <header>
+    <h3>Create agent task</h3>
+    <p>Two quick questions before the agent starts.</p>
+  </header>
+  <mo-questionnaire>
+    <div data-questionnaire-progress></div>
+
+    <form data-questionnaire-step>
+      <h3>What should the agent work on?</h3>
+      <p>Choose the task that should be handled next.</p>
+      <div class="vstack gap-2">
+        <label><input type="radio" name="task" value="fix" checked /> Fix the failing tests</label>
+        <label><input type="radio" name="task" value="refactor" /> Refactor the data layer</label>
+        <label><input type="radio" name="task" value="docs" /> Update the integration guide</label>
+      </div>
+      <footer>
+        <button type="button" class="ghost" data-questionnaire-back>Back</button>
+        <button type="submit">Next</button>
+      </footer>
+    </form>
+
+    <form data-questionnaire-step hidden>
+      <h3>What should the final handoff include?</h3>
+      <p>Pick the level of detail needed for review.</p>
+      <div class="vstack gap-2">
+        <label><input type="radio" name="output" value="summary" /> Summary only</label>
+        <label><input type="radio" name="output" value="files" checked /> Summary and changed files</label>
+        <label><input type="radio" name="output" value="review" /> Full review handoff</label>
+      </div>
+      <footer>
+        <button type="button" class="ghost" data-questionnaire-back>Back</button>
+        <button type="submit">Create task</button>
+      </footer>
+    </form>
+  </mo-questionnaire>
+</article>

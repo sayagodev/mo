@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Mo marker test</title>
+<link rel="stylesheet" href="/dist/mo.min.css" />
+<script src="/dist/mo.min.js"></script>
+<style>body { padding: 2rem }</style>
+</head>
+<body>
+
+<div data-marker data-test="default">
+  <span data-marker-icon aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" x2="6" y1="3" y2="15" /></svg></span>
+  <span data-marker-content>Switched to a new branch</span>
+</div>
+
+<div data-marker="separator" data-test="separator">
+  <span data-marker-content>Today</span>
+</div>
+
+<div data-marker="border" data-test="border">
+  <span data-marker-icon aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8" /></svg></span>
+  <span data-marker-content>Reviewed 8 related files</span>
+</div>
+
+<div data-marker role="status" data-test="status">
+  <span data-marker-icon aria-hidden="true"><span aria-busy="true" data-spinner="small"></span></span>
+  <span data-marker-content class="shimmer">Thinking…</span>
+</div>
+
+<a href="#" data-marker data-test="link">
+  <span data-marker-content>View the pull request</span>
+</a>
+
+<button type="button" data-marker data-test="button">
+  <span data-marker-content>Revert this change</span>
+</button>
+
+<div data-marker data-test="inner-link">
+  <span data-marker-content>Read the <a href="#" data-test="inner-a">release notes</a> for details.</span>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,113 @@
+@layer components {
+  /* shadcn/ui Empty mapped to semantic attributes:
+     [data-empty] container · [data-empty-header] · [data-empty-media]
+     (+icon|image) · [data-empty-title] · [data-empty-description]
+     [data-empty-content]
+
+     Base state keeps shadcn's `border-dashed` (a visible 1px dashed
+     hairline); [data-variant="muted"] adds the bg-muted/30 surface. */
+  /* :not(mo-select) prevents collision with mo-select's data-empty placeholder state */
+  [data-empty]:not(mo-select) {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+    align-items: center;
+    justify-content: center;
+    gap: var(--mo-empty-gap, var(--space-4));
+    padding: var(--mo-empty-padding, var(--space-12));
+    border: var(--mo-empty-border-width, 1px) dashed var(--mo-empty-border-color, currentColor);
+    border-radius: var(--mo-empty-radius, var(--radius-large));
+    text-align: center;
+    text-wrap: balance;
+
+    @media (min-width: 768px) {
+      padding: var(--mo-empty-padding-md, var(--space-12));
+    }
+
+    &[data-variant="outline"] {
+      --mo-empty-border-color: currentColor;
+    }
+
+    /* Muted surface, the source example's `bg-muted/30 h-full` composition */
+    &[data-variant="muted"] {
+      background-color: color-mix(in srgb, var(--muted) 30%, transparent);
+    }
+  }
+
+  [data-empty-header] {
+    display: flex;
+    max-width: var(--mo-empty-header-max-width, 24rem);
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    text-align: center;
+  }
+
+  [data-empty-media] {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    margin-block-end: var(--space-2);
+    background-color: transparent;
+
+    & > svg {
+      flex-shrink: 0;
+      pointer-events: none;
+      width: var(--mo-empty-media-icon-svg-size, 1.5rem);
+      height: var(--mo-empty-media-icon-svg-size, 1.5rem);
+    }
+
+    /* Icon tile: size-10 rounded-lg bg-muted, svg size-6 */
+    &[data-variant="icon"] {
+      width: var(--mo-empty-media-icon-size, 2.5rem);
+      height: var(--mo-empty-media-icon-size, 2.5rem);
+      border-radius: var(--mo-empty-media-icon-radius, var(--radius-medium));
+      color: var(--foreground);
+      background-color: var(--muted);
+    }
+
+    /* Image thumbnail: size-10 rounded overflow-hidden
+       Cover geometry (100% + object-fit:cover) lives in shared.css. */
+    &[data-variant="image"] {
+      width: var(--mo-empty-media-image-size, 2.5rem);
+      height: var(--mo-empty-media-image-size, 2.5rem);
+      overflow: hidden;
+      border-radius: var(--radius-small);
+    }
+  }
+
+  [data-empty-title] {
+    font-size: var(--text-5);
+    font-weight: var(--font-medium);
+    letter-spacing: -0.01em;
+  }
+
+  [data-empty-description] {
+    margin: 0;
+    font-size: var(--text-7);
+    line-height: var(--leading-normal);
+    color: var(--muted-foreground);
+
+    & a {
+      text-decoration: underline;
+      text-underline-offset: 4px;
+
+      &:hover {
+        color: var(--primary);
+      }
+    }
+  }
+
+  [data-empty-content] {
+    display: flex;
+    width: 100%;
+    max-width: var(--mo-empty-content-max-width, 24rem);
+    min-width: 0;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+    font-size: var(--text-7);
+  }
+}

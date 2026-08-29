@@ -1,29 +1,84 @@
 {
-  "name": "@sayagodev/oat",
-  "version": "0.7.1",
+  "name": "@sayagodev/mo",
+  "version": "0.8.0",
+  "type": "module",
   "license": "MIT",
   "author": "sayagodev",
-  "homepage": "https://github.com/sayagodev/oat",
-  "description": " Neautral, semantic HTML/CSS/JS UI library (fork of @knadh/oat)",
+  "homepage": "https://github.com/sayagodev/mo",
+  "description": "Mo (墨) — neutral, semantic HTML/CSS/JS UI library with a shadcn/ui-inspired design token system. Zero dependencies.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sayagodev/oat.git"
+    "url": "git+https://github.com/sayagodev/mo.git"
   },
-  "keywords": ["ui", "components", "component-library"],
-
-  "files": [
-    "oat.min.css",
-    "oat.min.js",
-    "oat.d.ts",
+  "keywords": [
+    "ui",
+    "components",
+    "component-library",
     "css",
-    "js"
+    "design-system",
+    "shadcn"
   ],
-
-  "types": "oat.d.ts",
-
-  "main": "oat.min.js",
-  "style": "oat.min.css",
-
-  "unpkg": "oat.min.js",
-  "jsdelivr": "oat.min.js"
+  "files": [
+    "mo.min.css",
+    "mo.css",
+    "mo.min.js",
+    "mo.js",
+    "mo.esm.js",
+    "mo.esm.min.js",
+    "mo.d.ts",
+    "mo.html-data.json",
+    "css",
+    "js",
+    "bin",
+    "registry.json",
+    "mo.vscode.css-data.json",
+    "custom-elements.json",
+    "mo.globals.html-data.json"
+  ],
+  "types": "mo.d.ts",
+  "main": "mo.min.js",
+  "module": "mo.esm.js",
+  "style": "mo.min.css",
+  "unpkg": "mo.min.js",
+  "jsdelivr": "mo.min.js",
+  "bin": {
+    "mo": "./bin/cli.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./mo.d.ts",
+      "import": "./mo.esm.js",
+      "require": "./mo.min.js",
+      "style": "./mo.min.css"
+    },
+    "./css": "./mo.css",
+    "./css/*": "./css/*",
+    "./js": "./mo.js",
+    "./js/*": "./js/*",
+    "./registry.json": "./registry.json"
+  },
+  "sideEffects": [
+    "*.css",
+    "./mo.css",
+    "./mo.min.css",
+    "./mo.js",
+    "./mo.min.js",
+    "./src/js/*.js",
+    "./js/*.js"
+  ],
+  "dependencies": {
+    "@clack/prompts": "^0.11.0",
+    "cac": "^6.7.14",
+    "picocolors": "^1.1.1"
+  },
+  "devDependencies": {
+    "@custom-elements-manifest/analyzer": "^0.11.0",
+    "@types/react": "^19.2.18",
+    "@wc-toolkit/jsx-types": "^1.7.1",
+    "custom-element-vs-code-integration": "^1.5.0",
+    "playwright": "^1.62.1",
+    "react": "^19.2.8",
+    "typescript": "^5.9.3"
+  },
+  "customElements": "custom-elements.json"
 }

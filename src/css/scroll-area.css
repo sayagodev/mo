@@ -1,0 +1,87 @@
+@layer components {
+  /* shadcn/ui ScrollArea without Radix: the container scrolls natively and
+     the native scrollbars are restyled — scrollbar-width/scrollbar-color
+     (Firefox) plus ::-webkit-scrollbar twins (older Chromium/Safari). No
+     wrapper element, no thumb tracking JS.
+
+     Contract: [data-scroll-area] IS the scrollable box. Size it from the
+     outside or through --mo-scroll-area-height / --mo-scroll-area-width;
+     there is no default height, matching shadcn where h-72/w-48 come from
+     the consumer. [data-slot="scroll-area"] is the shadcn-compatible alias.
+
+     Fades: [data-fades] applies mask-image gradients (default block axis,
+     "x" inline, "xy" both) so content dissolves at the edges instead of
+     clipping hard. Static by design — scroll-driven animations stay out of
+     scope (ANALYSIS §7). Loading src/js/scroll-area.js upgrades them: it
+     toggles data-at-top/bottom/left/right as the box scrolls, sharpening
+     each reached edge. Put background/border on a wrapper when combining
+     fades with a frame, so the mask dissolves the content, not the frame. */
+  [data-scroll-area],
+  [data-slot="scroll-area"] {
+    overflow: auto;
+    block-size: var(--mo-scroll-area-height, auto);
+    inline-size: var(--mo-scroll-area-width, auto);
+    scrollbar-width: thin;                       /* w-2.5 ≈ native thin bar */
+    scrollbar-color: var(--border) transparent;
+
+    /* Fade layers live in custom properties so the edge-tracking attrs can
+       swap one edge for a solid-gradient layer (fully opaque = no-op under
+       intersect) without redefining the whole mask. Percentage stops
+       resolve against the mask box, mirroring shadcn's 12%-capped-at-40px
+       default depth. */
+    &[data-fades] {
+      --_fade: var(--mo-scroll-fade-size, min(2.5rem, 12%));
+      --_top: linear-gradient(to bottom, transparent, #000 var(--_fade));
+      --_bottom: linear-gradient(to top, transparent, #000 var(--_fade));
+      --_left: linear-gradient(to right, transparent, #000 var(--_fade));
+      --_right: linear-gradient(to left, transparent, #000 var(--_fade));
+
+      -webkit-mask-image: var(--_top), var(--_bottom);
+      mask-image: var(--_top), var(--_bottom);
+      -webkit-mask-composite: source-in;
+      mask-composite: intersect;
+
+      /* Edge reached → that side renders crisp (JS-driven). The no-op
+         layer is a solid gradient because mask layers are images — a bare
+         color would invalidate the whole declaration. */
+      &[data-at-top] { --_top: linear-gradient(#000 0 0); }
+      &[data-at-bottom] { --_bottom: linear-gradient(#000 0 0); }
+      &[data-at-left] { --_left: linear-gradient(#000 0 0); }
+      &[data-at-right] { --_right: linear-gradient(#000 0 0); }
+
+      &[data-fades="x"] {
+        -webkit-mask-image: var(--_left), var(--_right);
+        mask-image: var(--_left), var(--_right);
+      }
+
+      &[data-fades="xy"] {
+        -webkit-mask-image: var(--_top), var(--_bottom), var(--_left),
+          var(--_right);
+        mask-image: var(--_top), var(--_bottom), var(--_left), var(--_right);
+      }
+    }
+  }
+
+  /* WebKit fallback (ignored wherever scrollbar-width/color apply). Track
+     invisible, pill thumb in --border, hover darkened toward foreground. */
+  [data-scroll-area]::-webkit-scrollbar,
+  [data-slot="scroll-area"]::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  [data-scroll-area]::-webkit-scrollbar-track,
+  [data-slot="scroll-area"]::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+
+  [data-scroll-area]::-webkit-scrollbar-thumb,
+  [data-slot="scroll-area"]::-webkit-scrollbar-thumb {
+    background-color: var(--border);
+    border-radius: var(--radius-full);
+
+    &:hover {
+      background-color: color-mix(in srgb, var(--border) 60%, var(--muted-foreground));
+    }
+  }
+}

@@ -1,0 +1,27 @@
+<div data-button-group role="group" aria-label="Follow">
+  <mo-dropdown>
+    <button type="button" class="outline" popovertarget="bg-dd-menu">Follow</button>
+    <menu popover id="bg-dd-menu">
+      <button role="menuitem" type="button">Today</button>
+      <button role="menuitem" type="button">
+        Tomorrow
+        <span data-shortcut>⌘T</span>
+      </button>
+      <hr />
+      <button role="menuitem" type="button">This week</button>
+      <button role="menuitem" type="button">This month</button>
+    </menu>
+  </mo-dropdown>
+  <mo-dropdown>
+    <button type="button" class="outline" popovertarget="bg-dd-more" aria-label="More options">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+    </button>
+    <menu popover id="bg-dd-more">
+      <div data-label>Snooze</div>
+      <button role="menuitem" type="button">For 1 hour</button>
+      <button role="menuitem" type="button">Until tomorrow</button>
+      <hr />
+      <button role="menuitem" type="button">Unfollow</button>
+    </menu>
+  </mo-dropdown>
+</div>

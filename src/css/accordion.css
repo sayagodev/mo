@@ -1,38 +1,71 @@
 @layer components {
+  /* shadcn/ui Accordion: flat items separated by bottom borders. */
+  mo-accordion {
+    display: block;
+  }
+
   details {
+    border-bottom: 1px solid var(--border);
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    /* Animate open/close like shadcn's accordion-down/up (progressive:
+        ignored where ::details-content / interpolate-size are unsupported). */
+    interpolate-size: allow-keywords;
+
+    &::details-content {
+      block-size: 0;
+      overflow: clip;
+      transition: block-size 200ms ease, content-visibility 200ms allow-discrete;
+    }
+
+    &[open]::details-content {
+      block-size: auto;
+    }
+  }
+
+  details[disabled] {
+    opacity: 0.5;
+
+    & summary {
+      pointer-events: none;
+      cursor: not-allowed;
+
+      &:hover { text-decoration: none; }
+      &::after { display: none; }
+    }
+  }
+
+  /* Bordered wrapper around flat items (shadcn borders example) */
+  mo-accordion.bordered {
+    display: block;
     border: 1px solid var(--border);
-    border-radius: var(--radius-medium);
+    border-radius: var(--radius-large);
     overflow: hidden;
 
-    & + details {
-      margin-top: -1px;
-      border-start-start-radius: 0;
-      border-start-end-radius: 0;
-    }
-
-    &:has(+ details) {
-      border-end-start-radius: 0;
-      border-end-end-radius: 0;
-    }
-
-    &[open] summary {
-      border-bottom: 1px solid var(--border);
+    & > details {
+      padding-inline: var(--mo-accordion-padding, var(--space-4));
     }
   }
 
   summary {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
-    gap: var(--space-2);
-    padding: var(--space-4);
+    gap: var(--space-4);
+    padding: var(--mo-accordion-padding, var(--space-4)) 0;
+    font-size: var(--text-7);
     font-weight: var(--font-medium);
+    text-align: start;
     cursor: pointer;
     user-select: none;
-    transition: background-color var(--transition-fast);
+    border-radius: var(--radius-small);
 
     &:hover {
-      background-color: var(--muted);
+      text-decoration: underline;
+      text-underline-offset: 2px;
     }
 
     &::-webkit-details-marker, &::marker {
@@ -41,14 +74,18 @@
 
     &::after {
       content: "";
-      width: 1em;
-      height: 1em;
+      width: 1rem;
+      height: 1rem;
       flex-shrink: 0;
-      background-color: currentColor;
+      translate: 0 0.125rem;
+      background-color: var(--muted-foreground);
+      -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
       mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+      -webkit-mask-size: contain;
       mask-size: contain;
+      -webkit-mask-repeat: no-repeat;
       mask-repeat: no-repeat;
-      transition: transform var(--transition-fast);
+      transition: transform 200ms ease;
     }
 
     details[open] &::after {
@@ -57,6 +94,155 @@
   }
 
   details > *:not(summary) {
-    margin: var(--space-4);
+    padding-block-end: var(--space-4);
+    font-size: var(--text-7);
+    line-height: 1.5;
+    color: var(--muted-foreground);
+
+    & p:not(:last-child) {
+      margin-block-end: var(--space-4);
+    }
+
+    & a {
+      color: inherit;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+
+      &:hover {
+        color: var(--foreground);
+      }
+    }
+  }
+
+  /* Opt-in boxed variant (the old oat look) */
+  details.boxed {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-large);
+    overflow: hidden;
+
+    & summary {
+      padding-inline: var(--mo-accordion-padding, var(--space-4));
+    }
+
+    &[open] summary {
+      border-bottom: 1px solid var(--border);
+    }
+
+    & > *:not(summary) {
+      padding-inline: var(--mo-accordion-padding, var(--space-4));
+    }
+
+    & + details.boxed {
+      margin-top: -1px;
+      border-start-start-radius: 0;
+      border-start-end-radius: 0;
+    }
+  }
+
+  /* File tree — shadcn-like, minimal markup. Use data-file-tree on the list
+     container and data-file-tree-tabs on the header tabs. Isolates from the
+     global accordion/details styles so the docs example stays small. */
+  [data-file-tree] {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding: 0 var(--space-3) var(--space-3);
+  }
+  [data-file-tree] details {
+    border: none !important;
+    border-bottom: none !important;
+  }
+  [data-file-tree] details::details-content {
+    block-size: auto !important;
+    overflow: visible !important;
+    transition: none !important;
+  }
+  [data-file-tree] details > *:not(summary) {
+    padding-block-end: 0 !important;
+    font-size: inherit !important;
+    color: inherit !important;
+    line-height: inherit !important;
+  }
+  [data-file-tree] summary {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: calc(var(--space-1) * 1.5) !important;
+    padding: var(--space-1) var(--space-2) !important;
+    font-size: var(--text-8) !important;
+    font-weight: var(--font-medium) !important;
+    min-height: 2rem !important;
+    border-radius: var(--radius-small) !important;
+    list-style: none;
+  }
+  [data-file-tree] summary::-webkit-details-marker,
+  [data-file-tree] summary::marker { display: none; }
+  [data-file-tree] summary::after { display: none !important; }
+  [data-file-tree] .chevron {
+    transition: transform 150ms ease;
+    flex-shrink: 0;
+    color: var(--muted-foreground);
+  }
+  [data-file-tree] details[open] > summary .chevron { transform: rotate(90deg); }
+  [data-file-tree] summary:hover {
+    background: var(--accent);
+    color: var(--accent-foreground);
+  }
+  [data-file-tree] button.link:hover {
+    text-decoration: none;
+    background: var(--accent);
+    color: var(--accent-foreground);
+    border-radius: var(--radius-small);
+  }
+  [data-file-tree] button.link { border-radius: var(--radius-small); }
+  [data-file-tree] button {
+    justify-content: flex-start;
+    width: 100%;
+    gap: var(--space-2);
+    font-size: var(--text-8);
+    font-weight: var(--font-normal);
+    min-height: 2rem;
+    cursor: pointer;
+  }
+  [data-file-tree] button svg,
+  [data-file-tree] summary svg:not(.chevron) {
+    width: 1rem !important;
+    height: 1rem !important;
+    flex-shrink: 0;
+  }
+  [data-file-tree] details > div {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    margin-left: 1.25rem;
+    margin-top: var(--space-1);
+  }
+
+  [data-file-tree-tabs] {
+    display: flex;
+    background: var(--muted);
+    padding: 3px;
+    border-radius: var(--radius-medium);
+    width: 100%;
+    gap: 2px;
+  }
+  [data-file-tree-tabs] button[data-state="active"] {
+    flex: 1;
+    background: light-dark(var(--background), var(--card));
+    box-shadow: var(--shadow-xs);
+    border-radius: calc(var(--radius-medium) - 2px);
+    height: 1.5rem;
+    font-size: var(--text-8);
+    font-weight: var(--font-medium);
+    color: var(--foreground);
+    border: 1px solid var(--border);
+  }
+  [data-file-tree-tabs] button[data-state="inactive"] {
+    flex: 1;
+    height: 1.5rem;
+    font-size: var(--text-8);
+    color: var(--muted-foreground);
+    background: transparent;
+    border: 1px solid transparent;
   }
 }

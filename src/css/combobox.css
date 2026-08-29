@@ -1,0 +1,211 @@
+@layer components {
+  /* shadcn/ui Combobox: editable input + chevron trigger opening a filtered
+     listbox popover. The trigger frame mirrors [data-input-group] geometry;
+     options reuse the menu-item recipe; placement (below, flipped above on
+     overflow) lives in combobox.js. Anatomy: <div data-combobox> around
+      input[role=combobox] + [data-combobox-toggle], then ul[popover] with
+      li > button[role="option"], optional [role=group] + [data-label]
+      sections, a [data-combobox-clear] button and a
+      [data-combobox-empty] row. */
+  mo-combobox {
+    display: block;
+  }
+
+  mo-combobox [data-combobox] {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: var(--mo-combobox-height, 2.25rem);
+    background-color: light-dark(transparent, color-mix(in srgb, var(--input) 30%, transparent));
+    border: 1px solid var(--input);
+    border-radius: var(--mo-combobox-radius, var(--radius-medium));
+    box-shadow: var(--shadow-xs);
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+
+    /* The frame owns focus, like [data-input-group]. */
+    &:focus-within {
+      outline: none;
+      border-color: var(--ring);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 50%, transparent);
+    }
+
+    &:is([aria-invalid="true"], :has([aria-invalid="true"])) {
+      border-color: var(--danger);
+
+      &:focus-within {
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--danger) 20%, transparent);
+      }
+    }
+  }
+
+  /* The input goes chrome-less inside the frame. */
+  mo-combobox [data-combobox] input[role="combobox"] {
+    flex: 1 1 auto;
+    width: 1%;
+    min-width: 0;
+    height: 100%;
+    padding-inline: var(--space-3);
+    font-size: var(--text-7);
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+
+    &:focus {
+      outline: none;
+      border: none;
+      box-shadow: none;
+    }
+  }
+
+  /* Chevron seat: the author's .icon.ghost button stretched into the frame,
+     squared off and muted; the glyph flips while the list is open. */
+  mo-combobox [data-combobox-toggle] {
+    align-self: stretch;
+    height: auto;
+    margin: 2px;
+    border: none;
+    box-shadow: none;
+    border-radius: calc(var(--mo-combobox-radius, var(--radius-medium)) - 3px);
+    color: var(--muted-foreground);
+
+    & > svg {
+      transition: rotate var(--transition-fast);
+    }
+  }
+
+  mo-combobox:has(ul[popover]:popover-open) [data-combobox-toggle] > svg {
+    rotate: 180deg;
+  }
+
+  /* Option list: native popover placed fixed by combobox.js (#place),
+     widened to the trigger frame, flipped above on viewport overflow.
+     Shadcn smooth: zoom 95 + slide + fade; Mo mimics with scale+translate
+     plus allow-discrete for display/overlay to avoid flick. */
+  mo-combobox ul[popover] {
+    position: fixed;
+    inset: 0 auto auto 0;
+    margin: 0;
+    padding: var(--space-1);
+    min-width: var(--mo-combobox-min-width, 8rem);
+    max-height: var(--mo-combobox-max-height, 20rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    list-style: none;
+    background-color: var(--popover);
+    color: var(--popover-foreground);
+    border: none;
+    border-radius: var(--radius-large);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--foreground) 5%, transparent), var(--shadow-lg);
+    opacity: 0;
+    transform: translateY(-4px) scale(0.97);
+    transform-origin: top center;
+    transition:
+      opacity 150ms ease-out,
+      transform 150ms ease-out,
+      scale 150ms ease-out,
+      display 150ms allow-discrete,
+      overlay 150ms allow-discrete;
+
+    &:popover-open {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    @starting-style {
+      &:popover-open {
+        opacity: 0;
+        transform: translateY(-4px) scale(0.97);
+      }
+    }
+  }
+
+  mo-combobox ul[popover] li {
+    margin: 0;
+  }
+
+  /* Group: optgroup-like [role=group] section with a [data-label] heading,
+     same recipe as the menu/command group label. */
+  mo-combobox ul[popover] li[role="group"] {
+    display: flex;
+    flex-direction: column;
+  }
+
+  mo-combobox [data-label] {
+    padding: calc(var(--space-3) * 0.5) var(--space-2);
+    font-size: var(--text-8);
+    font-weight: var(--font-medium);
+    color: var(--muted-foreground);
+    text-align: start;
+    user-select: none;
+  }
+
+  /* Separator bleeds through the list padding, like dropdown menus. */
+  mo-combobox ul[popover] hr {
+    margin-block: var(--space-1);
+    margin-inline: calc(var(--space-1) * -1);
+  }
+
+  /* Options: bare-button chrome reset to menu-item geometry; the roving
+     [aria-selected] paints the accent state (hover follows via JS). */
+  mo-combobox [role="option"] {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--space-2);
+    width: 100%;
+    padding-block: calc(var(--space-3) * 0.5);
+    padding-inline: var(--space-2);
+    appearance: none;
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    height: auto;
+    min-height: 0;
+    text-align: start;
+    font-family: inherit;
+    font-size: var(--text-7);
+    font-weight: var(--font-normal, 400);
+    line-height: 1.25rem;
+    color: inherit;
+    white-space: nowrap;
+    border-radius: var(--radius-medium);
+    cursor: default;
+    user-select: none;
+    outline: none;
+    transition: background-color var(--transition-fast), color var(--transition-fast);
+
+    /* Beat button.css generic chrome via its own variable hooks. */
+    --_bg: transparent;
+    --_fg: inherit;
+    --_hov-bg: var(--accent);
+    --_hov-fg: var(--accent-foreground);
+
+    &[disabled],
+    &[aria-disabled="true"] {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
+    & > svg {
+      width: 1rem;
+      height: 1rem;
+      flex-shrink: 0;
+      pointer-events: none;
+      color: var(--muted-foreground);
+    }
+  }
+
+  mo-combobox [role="option"][aria-selected="true"],
+  mo-combobox [role="option"]:hover {
+    background-color: var(--_hov-bg);
+    color: var(--_hov-fg);
+  }
+
+  mo-combobox [data-combobox-empty] {
+    padding-block: var(--space-2);
+    font-size: var(--text-7);
+    text-align: center;
+    color: var(--muted-foreground);
+  }
+}

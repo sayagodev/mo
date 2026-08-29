@@ -1,0 +1,86 @@
+@layer components {
+  /* shadcn/ui ContextMenu: right-click menu over any content region. The
+     wrapper is invisible plumbing; its <menu popover> reuses the dropdown
+     surface and item anatomy under this attribute hook. */
+  [data-context-menu] {
+    display: block;
+
+    /* Optional region chrome (shadcn's dashed aspect-video demo box). Any
+       content works without it — right-click anywhere inside the wrapper. */
+    &[data-variant="outline"] {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-8);
+      border: var(--mo-context-menu-outline-width, 1px) dashed var(--mo-context-menu-outline-color, var(--border));
+      border-radius: var(--radius-xlarge);
+      font-size: var(--text-7);
+      color: var(--muted-foreground);
+      text-align: center;
+    }
+
+    /* Menu surface: p-1 rounded-md shadow-md, min-w-[8rem]. */
+    [popover] {
+      position: fixed;
+      margin: 0;
+      padding: var(--space-1);
+      min-width: var(--mo-context-menu-min-width, 8rem);
+      background-color: var(--popover);
+      color: var(--popover-foreground);
+      border: none;
+      border-radius: var(--mo-context-menu-radius, var(--radius-large));
+      box-shadow: 0 0 0 1px color-mix(in srgb, var(--foreground) 5%, transparent), var(--shadow-lg);
+      opacity: 0;
+      transform: translateY(-4px);
+      transition:
+        opacity 150ms ease-out,
+        transform 150ms ease-out,
+        display 150ms allow-discrete,
+        overlay 150ms allow-discrete;
+
+      &[data-side="top"] {
+        transform: translateY(4px);
+      }
+
+      &[data-side="left"] {
+        transform: translateX(4px);
+      }
+
+      &[data-side="right"] {
+        transform: translateX(-4px);
+      }
+
+      &:popover-open {
+        opacity: 1;
+        transform: translate(0, 0);
+      }
+
+      @starting-style {
+        &:popover-open {
+          opacity: 0;
+          transform: translateY(-4px);
+        }
+
+        &[data-side="top"]:popover-open {
+          opacity: 0;
+          transform: translateY(4px);
+        }
+
+        &[data-side="left"]:popover-open {
+          opacity: 0;
+          transform: translateX(4px);
+        }
+
+        &[data-side="right"]:popover-open {
+          opacity: 0;
+          transform: translateX(-4px);
+        }
+      }
+
+      /* Surface separators come from shared.css (menu[popover] > hr). */
+    }
+
+    /* Nested surfaces re-use the exact same chrome as the root menu, like
+       shadcn ContextMenuSubContent (min-w-[8rem]) — no override needed. */
+  }
+}

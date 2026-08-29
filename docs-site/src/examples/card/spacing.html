@@ -1,0 +1,17 @@
+<div class="flex flex-wrap gap-4">
+  <article class="card" style="flex: 1 1 16rem">
+    <header>
+      <h3>Default</h3>
+      <p>Padding comes from --space-6 via --mo-card-padding.</p>
+    </header>
+    <p class="mt-2">Cards accept a padding hook so density can change per surface without touching the component.</p>
+  </article>
+
+  <article class="card" style="flex: 1 1 16rem; --mo-card-padding: var(--space-3)">
+    <header>
+      <h3>Compact</h3>
+      <p>Same card, --mo-card-padding set to --space-3.</p>
+    </header>
+    <p class="mt-2">Dense dashboards and sidebars drop the padding hook to a smaller step.</p>
+  </article>
+</div>

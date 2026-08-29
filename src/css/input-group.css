@@ -1,0 +1,184 @@
+@layer components {
+  /* shadcn/ui InputGroup: one bordered frame around a control with inline
+     (icon/text/kbd/button) or block (textarea header/footer) addons.
+     Contract: [data-input-group] wrapper; addons are [data-addon] spans
+     placed before/after the control in DOM order; block addons declare
+     data-align="block-start" | "block-end". Focus and invalid states live
+     on the frame via :focus-within / :has([aria-invalid=true]). */
+  [data-input-group] {
+    /* Hairlines join every child after the first; width flips per axis. */
+    --_bw: 0px;
+    --_hairline: var(--mo-input-group-divider, var(--input));
+
+    display: flex;
+    align-items: center;
+    inline-size: 100%;
+    min-inline-size: 0;
+    block-size: var(--mo-input-group-height, 2.25rem);
+    background-color: light-dark(transparent, color-mix(in srgb, var(--input) 30%, transparent));
+    border: 1px solid var(--input);
+    border-radius: var(--mo-input-group-radius, var(--radius-medium));
+    box-shadow: var(--shadow-xs);
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+
+    & > * + * {
+      --_bw: 1px;
+    }
+
+    /* The frame owns focus, the control goes chrome-less. */
+    &:focus-within {
+      border-color: var(--ring);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 50%, transparent);
+    }
+
+    /* Error state: frame + addon hairlines turn destructive. */
+    &:is([aria-invalid="true"], :has(:is(input, textarea, select)[aria-invalid="true"])) {
+      --_hairline: color-mix(in srgb, var(--mo-input-group-divider, var(--input)) 40%, var(--danger));
+      border-color: var(--danger);
+
+      &:focus-within {
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--danger) 20%, transparent);
+      }
+    }
+
+    /* Disabled controls dim their addons too. */
+    &:has(> :disabled) > [data-addon] {
+      opacity: 0.5;
+    }
+
+    & > :is(input, textarea, select) {
+      flex: 1 1 auto;
+      inline-size: 1%;
+      min-inline-size: 0;
+      block-size: 100%;
+      background-color: transparent;
+      border-radius: 0;
+      box-shadow: none;
+      border: none;
+      border-inline-start: var(--_bw) solid var(--_hairline);
+
+      &:focus {
+        outline: none;
+        box-shadow: none;
+        border-block-end: none;
+        border-block-start: none;
+        border-inline-start: var(--_bw) solid var(--_hairline);
+        border-inline-end: none;
+      }
+    }
+
+    & > select {
+      flex: 0 0 auto;
+      inline-size: auto;
+    }
+
+    /* mo-select inside a group plays the same role as a native <select>:
+       its trigger is reset to a chrome-less slice of the frame. */
+    & > mo-select {
+      flex: 0 0 auto;
+      min-inline-size: 0;
+      inline-size: auto;
+      block-size: 100%;
+
+      & > [data-select-trigger] {
+        block-size: 100%;
+        border-radius: 0;
+        border: none;
+        box-shadow: none;
+        border-inline-start: var(--_bw) solid var(--_hairline);
+        background-color: transparent;
+      }
+    }
+
+    /* Textarea groups stack vertically and grow with content. */
+    &:has(> textarea) {
+      flex-direction: column;
+      align-items: stretch;
+      block-size: auto;
+      min-height: var(--mo-input-group-height, 2.25rem);
+    }
+
+    & > textarea {
+      flex: 1 1 auto;
+      inline-size: 100%;
+      min-inline-size: 0;
+      block-size: auto;
+      min-height: 4.5rem;
+      padding-block: var(--space-3);
+      padding-inline: var(--space-3);
+      field-sizing: content;
+      resize: none;
+      border: none;
+    }
+
+    /* Textarea group: the textarea itself must fill full width, overriding the 1% row hack. */
+    &:has(> textarea) > textarea {
+      inline-size: 100%;
+      block-size: auto;
+      border-inline-start: none;
+    }
+
+    &:has(> textarea) > :is(input, select) {
+      inline-size: 100%;
+      block-size: auto;
+    }
+
+    /* Inline addons: muted label/icon/kbd/button strip beside the control. */
+    & > [data-addon] {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding-inline: var(--mo-input-group-addon-padding-x, var(--space-3));
+      font-size: var(--text-7);
+      font-weight: var(--font-medium);
+      white-space: nowrap;
+      color: var(--muted-foreground);
+      user-select: none;
+      cursor: text;
+      border-inline-start: var(--_bw) solid var(--_hairline);
+
+      & > svg {
+        width: 1rem;
+        height: 1rem;
+        flex-shrink: 0;
+        pointer-events: none;
+      }
+    }
+
+    /* Compact in-addon buttons (shadcn InputGroupButton xs), declared
+       through the Button hooks so .xs/.small/.large/.icon still work.
+       :where() keeps specificity below Button's own size classes. */
+    & :where([data-addon] button) {
+      --_h: 1.5rem;
+      --_px: var(--space-2);
+      font-size: var(--text-8);
+      border-radius: calc(var(--radius-medium) - 0.25rem);
+    }
+
+    /* Block axis join inside textarea groups. Higher specificity than the
+       inline rules above so it wins regardless of source order. */
+    &:has(> textarea) > :is(input, textarea, select, [data-addon]) {
+      border-inline-start: none;
+      border-block-start: var(--_bw) solid var(--_hairline);
+    }
+
+    /* Block addons: full-width rows above/below a textarea. */
+    & > [data-align^="block"] {
+      inline-size: 100%;
+      justify-content: flex-start;
+      padding-block: var(--space-2);
+      padding-inline: var(--space-3);
+      flex-shrink: 0;
+
+      /* Push trailing content to the far edge. */
+      & > [data-push] {
+        margin-inline-start: auto;
+      }
+    }
+
+    /* Spinner in addon should be centered and not stretched */
+    & > [data-addon]:has([data-spinner]) {
+      min-width: 0;
+    }
+  }
+}

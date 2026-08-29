@@ -1,0 +1,60 @@
+<mo-questionnaire style="max-width: 28rem; margin-inline: auto;">
+  <div data-questionnaire-progress></div>
+
+  <form data-questionnaire-step data-required data-error="Please select an option.">
+    <h3>What should the agent build next?</h3>
+    <p>Choose a direction or describe another task.</p>
+    <div data-questionnaire-choices>
+      <label data-questionnaire-choice>
+        <input type="radio" name="direction" value="tool-calls" required>
+        <span data-indicator data-type="radio"></span>
+        <span data-questionnaire-label>Tool call timeline <small data-questionnaire-description>Show what the agent ran and what came back.</small></span>
+        <span data-shortcut>1</span>
+      </label>
+      <label data-questionnaire-choice>
+        <input type="radio" name="direction" value="approvals">
+        <span data-indicator data-type="radio"></span>
+        <span data-questionnaire-label>Approval checkpoints <small data-questionnaire-description>Ask before sensitive actions.</small></span>
+        <span data-shortcut>2</span>
+      </label>
+      <label data-questionnaire-choice>
+        <input type="radio" name="direction" value="handoffs">
+        <span data-indicator data-type="radio"></span>
+        <span data-questionnaire-label>Sub-agent handoffs <small data-questionnaire-description>Make delegated work easier to follow.</small></span>
+        <span data-shortcut>3</span>
+      </label>
+    </div>
+    <div data-questionnaire-error></div>
+    <footer>
+      <button type="button" class="ghost" data-questionnaire-back>Back</button>
+      <button type="submit">Next</button>
+    </footer>
+  </form>
+
+  <form data-questionnaire-step hidden>
+    <h3>How should progress be reviewed?</h3>
+    <p>Select the verification depth.</p>
+    <div data-questionnaire-choices>
+      <label data-questionnaire-choice>
+        <input type="radio" name="review" value="targeted">
+        <span data-indicator data-type="radio"></span>
+        <span data-questionnaire-label>Targeted checks</span>
+      </label>
+      <label data-questionnaire-choice>
+        <input type="radio" name="review" value="complete">
+        <span data-indicator data-type="radio"></span>
+        <span data-questionnaire-label>Complete test suite</span>
+      </label>
+      <label data-questionnaire-choice>
+        <input type="radio" name="review" value="manual">
+        <span data-indicator data-type="radio"></span>
+        <span data-questionnaire-label>Tests and manual QA</span>
+      </label>
+    </div>
+    <div data-questionnaire-error></div>
+    <footer>
+      <button type="button" class="ghost" data-questionnaire-back>Back</button>
+      <button type="submit">Save workflow</button>
+    </footer>
+  </form>
+</mo-questionnaire>

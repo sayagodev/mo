@@ -1,0 +1,21 @@
+<button type="button" class="outline" command="show-modal" commandfor="ex-drawer-team">Edit team</button>
+
+<dialog closedby="any" id="ex-drawer-team" class="sheet" data-side="bottom">
+  <form method="dialog">
+    <div class="handle" aria-hidden="true"></div>
+    <header>
+      <h3>Create team</h3>
+      <p>Pick a name for your new team.</p>
+    </header>
+    <div>
+      <div data-field>
+        <label for="ex-drawer-team-name">Team name</label>
+        <input id="ex-drawer-team-name" placeholder="Acme Inc." />
+      </div>
+    </div>
+    <footer>
+      <button type="submit" class="ghost" value="cancel">Cancel</button>
+      <button type="submit">Save changes</button>
+    </footer>
+  </form>
+</dialog>

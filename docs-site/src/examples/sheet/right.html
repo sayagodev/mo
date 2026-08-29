@@ -1,0 +1,27 @@
+<button type="button" class="outline" command="show-modal" commandfor="ex-sheet-right">Right</button>
+
+<dialog closedby="any" id="ex-sheet-right" class="sheet" data-side="right">
+  <form method="dialog">
+    <button type="submit" value="cancel" class="icon ghost" aria-label="Close">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+    </button>
+    <header>
+      <h3>Edit profile</h3>
+      <p>Make changes to your profile here. Click save when you're done.</p>
+    </header>
+    <div>
+      <div data-field>
+        <label for="ex-sheet-right-name">Name</label>
+        <input id="ex-sheet-right-name" value="Pedro Duarte" />
+      </div>
+      <div data-field>
+        <label for="ex-sheet-right-username">Username</label>
+        <input id="ex-sheet-right-username" value="@peduarte" />
+      </div>
+    </div>
+    <footer>
+      <button type="submit">Save changes</button>
+      <button type="submit" class="ghost" value="cancel">Cancel</button>
+    </footer>
+  </form>
+</dialog>

@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>breadcrumb mo vs shadcn</title>
+<link rel="stylesheet" href="/dist/mo.min.css" />
+<script src="/dist/mo.min.js"></script>
+<style>
+  body { padding: 2rem; font-family: sans-serif; background: white; color: black; }
+  .test-section { margin-bottom: 2rem; }
+  h2 { font-size: 1rem; margin-bottom: 0.5rem; }
+</style>
+</head>
+<body>
+  <div class="test-section" id="mo-basic">
+    <h2>Mo basic</h2>
+    <nav aria-label="breadcrumb">
+      <ol>
+        <li><a href="#">Home</a></li>
+        <li aria-hidden="true">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg>
+        </li>
+        <li><a href="#">Components</a></li>
+        <li aria-hidden="true">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg>
+        </li>
+        <li><span aria-current="page">Breadcrumb</span></li>
+      </ol>
+    </nav>
+  </div>
+
+  <div class="test-section" id="mo-dropdown">
+    <h2>Mo with dropdown (ghost small)</h2>
+    <nav aria-label="breadcrumb">
+      <ol>
+        <li><a href="#">Home</a></li>
+        <li aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 2 22" /></svg></li>
+        <li>
+          <mo-dropdown>
+            <button type="button" popovertarget="bc-dd" class="ghost small">Components <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6" /></svg></button>
+            <menu popover id="bc-dd"><button role="menuitem">Docs</button></menu>
+          </mo-dropdown>
+        </li>
+        <li aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2 2 22" /></svg></li>
+        <li><span aria-current="page">Breadcrumb</span></li>
+      </ol>
+    </nav>
+  </div>
+
+  <div class="test-section" id="mo-ellipsis">
+    <h2>Mo ellipsis</h2>
+    <nav aria-label="breadcrumb">
+      <ol>
+        <li><a href="#">Home</a></li>
+        <li aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6" /></svg></li>
+        <li><span aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1" /><circle cx="19" cy="12" r="1" /><circle cx="5" cy="12" r="1" /></svg><span class="sr-only">More</span></span></li>
+        <li aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6" /></svg></li>
+        <li><span aria-current="page">Breadcrumb</span></li>
+      </ol>
+    </nav>
+  </div>
+
+  <div class="test-section" id="mo-bare">
+    <h2>Mo bare (auto slash)</h2>
+    <nav aria-label="breadcrumb">
+      <ol>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Projects</a></li>
+        <li><span aria-current="page">Breadcrumb</span></li>
+      </ol>
+    </nav>
+  </div>
+
+  <div class="test-section" id="mo-ellipsis-dropdown">
+    <h2>Mo ellipsis dropdown (icon ghost)</h2>
+    <nav aria-label="breadcrumb">
+      <ol>
+        <li><a href="#">Home</a></li>
+        <li aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6" /></svg></li>
+        <li><mo-dropdown><button type="button" popovertarget="bc-ell" class="ghost icon small" aria-label="Toggle menu"><span aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1" /><circle cx="19" cy="12" r="1" /><circle cx="5" cy="12" r="1" /></svg></span></button><menu popover id="bc-ell"><button role="menuitem">Docs</button></menu></mo-dropdown></li>
+        <li aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6" /></svg></li>
+        <li><span aria-current="page">Breadcrumb</span></li>
+      </ol>
+    </nav>
+  </div>
+</body>
+</html>

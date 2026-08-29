@@ -1,0 +1,17 @@
+<button type="button" class="outline" command="show-modal" commandfor="ad-media">Share Project</button>
+
+<dialog id="ad-media" role="alertdialog" aria-labelledby="ad-media-title">
+  <form method="dialog">
+    <header style="align-items:center; text-align:center;">
+      <div style="display:inline-flex; width:2.5rem; height:2.5rem; align-items:center; justify-content:center; background:var(--muted); border-radius:var(--radius-small); margin-bottom:var(--space-2);">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 5a3 3 0 0 0-5.908 1.177A3 3 0 0 0 8 5a3 3 0 0 0 0 6h8a3 3 0 0 0 0-6Z" /><path d="M12 17a3 3 0 0 0 3-3v-1" /><circle cx="12" cy="12" r="10" /></svg>
+      </div>
+      <h3 id="ad-media-title">Share this project?</h3>
+      <p>Anyone with the link will be able to view and edit this project.</p>
+    </header>
+    <footer>
+      <button type="button" class="ghost" value="cancel" command="close" commandfor="ad-media">Cancel</button>
+      <button type="submit" value="share">Share</button>
+    </footer>
+  </form>
+</dialog>

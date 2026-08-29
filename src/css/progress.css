@@ -6,12 +6,12 @@
     border: none;
     border-radius: var(--radius-full);
     overflow: hidden;
-    background: var(--muted);
+    background: color-mix(in srgb, var(--primary) 20%, transparent);
   }
 
   progress {
     &::-webkit-progress-bar {
-      background-color: var(--muted);
+      background-color: transparent;
       border-radius: var(--radius-full);
     }
 
@@ -29,7 +29,7 @@
 
   meter {
     &::-webkit-meter-bar {
-      background: var(--muted);
+      background: color-mix(in srgb, var(--primary) 20%, transparent);
       border: none;
       border-radius: var(--radius-full);
       height: var(--bar-height);

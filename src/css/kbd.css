@@ -1,0 +1,21 @@
+@layer components {
+  /* shadcn/ui Kbd: semantic <kbd>, monospaced key chip. */
+  kbd {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-1);
+    min-width: 1.5rem;
+    padding: var(--space-1) calc(var(--space-2) * 0.75);
+    background-color: var(--muted);
+    color: var(--muted-foreground);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-small);
+    border-bottom-width: 2px;
+    font-family: var(--font-mono);
+    font-size: calc(var(--text-8) * 0.9);
+    font-weight: var(--font-normal, 400);
+    line-height: 1;
+    user-select: none;
+  }
+}

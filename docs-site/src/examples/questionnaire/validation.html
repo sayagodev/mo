@@ -1,0 +1,33 @@
+<mo-questionnaire>
+  <div data-questionnaire-progress></div>
+
+  <form data-questionnaire-step>
+    <h3>How much detail should the answer include?</h3>
+    <p>Both fields are required — Continue stays on this step until they validate.</p>
+    <div data-field>
+      <label for="qv-detail">Detail level</label>
+      <select id="qv-detail" name="detail" required>
+        <option value="" selected>Select a depth…</option>
+        <option value="summary">Concise summary</option>
+        <option value="complete">Complete answer</option>
+      </select>
+    </div>
+    <div data-field>
+      <label for="qv-audience">Audience</label>
+      <input id="qv-audience" name="audience" required placeholder="My team or public audience" />
+    </div>
+    <footer>
+      <button type="button" class="ghost" data-questionnaire-back>Back</button>
+      <button type="submit">Continue</button>
+    </footer>
+  </form>
+
+  <form data-questionnaire-step hidden>
+    <h3>Review</h3>
+    <p>Everything checks out. Submit to save the configuration.</p>
+    <footer>
+      <button type="button" class="ghost" data-questionnaire-back>Back</button>
+      <button type="submit">Validate answers</button>
+    </footer>
+  </form>
+</mo-questionnaire>

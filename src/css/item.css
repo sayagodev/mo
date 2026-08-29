@@ -1,0 +1,163 @@
+@layer components {
+  /* shadcn/ui Item family mapped to semantic attributes:
+     [data-item-group] list · [data-item] row · [data-item-media] (+icon|image)
+     [data-item-content] > [data-item-title]/[data-item-description]
+     [data-item-actions] · [data-item-header]/[data-item-footer]
+
+     Default item carries the bordered card look (shadcn outline);
+     [data-variant="muted"] swaps border for a muted surface. */
+  [data-item-group] {
+    display: flex;
+    flex-direction: column;
+    gap: var(--mo-item-group-gap, var(--space-2));
+
+    &:is(ul, ol) {
+      list-style: none;
+      margin-block: 0;
+      padding-inline-start: 0;
+    }
+  }
+
+  [data-item] {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--mo-item-gap, var(--space-4));
+    padding: var(--mo-item-padding, calc(var(--space-2) * 1.25));
+    font-size: var(--text-7);
+    color: inherit;
+    border: 1px solid var(--border);
+    border-radius: var(--mo-item-radius, var(--radius-large));
+    box-shadow: var(--shadow-xs);
+    transition: background-color var(--transition-fast), border-color var(--transition-fast);
+
+    &[data-size="sm"] {
+      gap: var(--space-2);
+      padding: var(--mo-item-padding-sm, var(--space-2));
+    }
+
+    /* Muted variant: secondary surface instead of border+shadow */
+    &[data-variant="muted"] {
+      background-color: color-mix(in srgb, var(--muted) 50%, transparent);
+      border-color: transparent;
+      box-shadow: none;
+    }
+
+    /* Link items get the accent hover, like shadcn [a]:hover:bg-accent/50 */
+    &:is(a) {
+      text-decoration: none;
+
+      &:hover {
+        background-color: color-mix(in srgb, var(--accent) 50%, transparent);
+      }
+    }
+
+    /* Header/footer span the full row of a wrapped flex item */
+    & > :is([data-item-header], [data-item-footer]) {
+      display: flex;
+      flex-basis: 100%;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-2);
+    }
+
+    /* Full-width media in a header, e.g. cover image cards */
+    & > [data-item-header] > img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: var(--radius-small);
+    }
+  }
+
+  [data-item-media] {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+
+    & > svg {
+      width: 1rem;
+      height: 1rem;
+      flex-shrink: 0;
+      pointer-events: none;
+    }
+
+    /* Nudge up beside the title line once a description exists */
+    [data-item]:has([data-item-description]) > & {
+      align-self: start;
+      translate: 0 2px;
+    }
+
+    /* Icon tile: size-8 rounded border bg-muted, svg size-4 */
+    &[data-variant="icon"] {
+      width: var(--mo-item-media-icon-size, 2rem);
+      height: var(--mo-item-media-icon-size, 2rem);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-small);
+      background-color: var(--muted);
+    }
+
+    /* Image thumbnail: size-10 rounded overflow-hidden
+       Cover geometry (100% + object-fit:cover) lives in shared.css — not duplicated here. */
+    &[data-variant="image"] {
+      width: var(--mo-item-media-image-size, 2.5rem);
+      height: var(--mo-item-media-image-size, 2.5rem);
+      overflow: hidden;
+      border-radius: var(--radius-small);
+    }
+  }
+
+  [data-item-content] {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--space-1);
+    min-width: 0;
+
+    /* Trailing secondary content column stays compact */
+    & + [data-item-content] {
+      flex: 0 0 auto;
+    }
+  }
+
+  [data-item-title] {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    width: fit-content;
+    font-size: var(--text-7);
+    font-weight: var(--font-medium);
+    line-height: 1.375;
+  }
+
+  [data-item-description] {
+    margin: 0 !important;
+    margin-block: 0 !important;
+    margin-block-end: 0 !important;
+    overflow: hidden;
+    line-clamp: 2;
+    font-size: var(--text-8);
+    font-weight: var(--font-normal, 400);
+    line-height: var(--leading-normal);
+    color: var(--muted-foreground);
+    text-wrap: balance;
+
+    & a {
+      color: inherit;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+
+      &:hover {
+        color: var(--primary);
+      }
+    }
+  }
+
+  [data-item-actions] {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+}

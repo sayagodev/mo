@@ -1,0 +1,48 @@
+@layer components {
+  /* shadcn/ui Toggle: any button carrying aria-pressed. Default is
+     borderless (no border, no shadow); add .ghost for the completely
+     outline-free one. Hover only shifts text color (shadcn
+     hover:text-foreground — no bg change). Pressed state uses the muted
+     surface like shadcn's data-state=on. */
+  button[aria-pressed] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    height: 2.25rem;
+    padding-inline: calc(var(--space-3) * 0.75);
+    border-radius: var(--radius-large);
+    border: 1px solid transparent;
+    background-color: transparent;
+    color: var(--foreground);
+    font-size: var(--text-7);
+    font-weight: var(--font-medium);
+    cursor: pointer;
+    transition: background-color var(--transition-fast), color var(--transition-fast);
+
+    /* Beat button.css generic chrome via its own variable hooks, so the
+       muted hover always wins regardless of specificity. */
+    --_bg: transparent;
+    --_fg: var(--foreground);
+    --_hov-bg: transparent;
+    --_hov-fg: var(--foreground);
+    --_bd: transparent;
+
+    &:disabled {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
+    &.ghost {
+      border-color: transparent;
+    }
+
+    &[aria-pressed="true"] {
+      background-color: var(--mo-toggle-bg, var(--muted));
+      color: var(--foreground);
+    }
+  }
+
+  button.small[aria-pressed] { height: 2rem; padding-inline: calc(var(--space-2) * 0.9); font-size: var(--text-8); }
+  button.large[aria-pressed] { height: 2.5rem; padding-inline: var(--space-4); }
+}

@@ -1,0 +1,71 @@
+<fieldset>
+  <legend>Subscription Plan</legend>
+  <div class="vstack gap-2 mt-2">
+    <label><input type="radio" name="rg-fields-plan" value="free" checked /> Free Plan</label>
+    <label><input type="radio" name="rg-fields-plan" value="pro" /> Pro Plan</label>
+    <label><input type="radio" name="rg-fields-plan" value="enterprise" /> Enterprise</label>
+  </div>
+</fieldset>
+
+<fieldset>
+  <legend>Battery Level</legend>
+  <p class="text-light">Choose your preferred battery level.</p>
+  <div class="vstack gap-2 mt-2">
+    <label><input type="radio" name="rg-fields-battery" value="high" /> High</label>
+    <label><input type="radio" name="rg-fields-battery" value="medium" /> Medium</label>
+    <label><input type="radio" name="rg-fields-battery" value="low" /> Low</label>
+  </div>
+</fieldset>
+
+<div class="vstack gap-4">
+  <div class="flex items-start gap-2">
+    <input type="radio" id="rd-fields-touch-1" name="rg-fields-touch" value="option1" />
+    <div class="vstack gap-1">
+      <label for="rd-fields-touch-1">Enable Touch ID</label>
+      <small class="text-light">Enable Touch ID to quickly unlock your device.</small>
+    </div>
+  </div>
+  <div class="flex items-start gap-2">
+    <input type="radio" id="rd-fields-touch-2" name="rg-fields-touch" value="option2" />
+    <div class="vstack gap-1">
+      <label for="rd-fields-touch-2">Enable Touch ID and Face ID to make it even faster to unlock your device. This is a long label to test the layout.</label>
+      <small class="text-light">Enable Touch ID to quickly unlock your device.</small>
+    </div>
+  </div>
+</div>
+
+<div class="vstack gap-4">
+  <label class="flex items-start gap-2">
+    <input type="radio" id="rd-fields-title-1" name="rg-fields-title" value="title1" />
+    <span class="vstack gap-1">
+      <strong>Enable Touch ID</strong>
+      <span class="text-light">Enable Touch ID to quickly unlock your device.</span>
+    </span>
+  </label>
+  <label class="flex items-start gap-2">
+    <input type="radio" id="rd-fields-title-2" name="rg-fields-title" value="title2" />
+    <span class="vstack gap-1">
+      <strong>Enable Touch ID and Face ID to make it even faster to unlock your device. This is a long label to test the layout.</strong>
+      <span class="text-light">Enable Touch ID to quickly unlock your device.</span>
+    </span>
+  </label>
+</div>
+
+<fieldset aria-invalid="true">
+  <legend>Invalid Radio Group</legend>
+  <div data-field class="mt-2">
+    <div class="vstack gap-2">
+      <label><input type="radio" name="rg-fields-invalid" value="invalid1" aria-invalid="true" /> Invalid Option 1</label>
+      <label><input type="radio" name="rg-fields-invalid" value="invalid2" aria-invalid="true" /> Invalid Option 2</label>
+    </div>
+    <small class="error">Select a valid option to continue.</small>
+  </div>
+</fieldset>
+
+<fieldset>
+  <legend>Disabled Radio Group</legend>
+  <div class="vstack gap-2 mt-2">
+    <label><input type="radio" name="rg-fields-disabled" value="disabled1" disabled /> Disabled Option 1</label>
+    <label><input type="radio" name="rg-fields-disabled" value="disabled2" disabled /> Disabled Option 2</label>
+  </div>
+</fieldset>

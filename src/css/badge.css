@@ -1,58 +1,173 @@
 @layer components {
   .badge {
     display: inline-flex;
+    width: fit-content;
     align-items: center;
     justify-content: center;
     gap: var(--space-1);
-    padding: var(--space-1) var(--space-4);
+    /* shadcn: px-2 (0.5rem) py-0.5 (0.125rem) → gap-1, rounded-full, text-xs */
+    padding: var(--mo-badge-padding-y, calc(var(--space-1) * 0.5)) var(--mo-badge-padding-x, var(--space-2));
     font-size: var(--text-8);
     font-weight: var(--font-medium);
-    text-wrap: nowrap;
-    line-height: var(--leading-normal);
+    line-height: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    flex-shrink: 0;
+    text-decoration: none;                       /* link badges must not underline */
     background-color: var(--primary);
     color: var(--primary-foreground);
-    border-radius: var(--radius-full);
+    border-radius: var(--mo-badge-radius, var(--radius-large));
+    border: 1px solid transparent;
+    transition:
+      color var(--transition-fast),
+      background-color var(--transition-fast),
+      border-color var(--transition-fast),
+      box-shadow var(--transition-fast);
 
-    &.outline {
-      background-color: transparent;
-      color: var(--foreground);
-      border: 1px solid var(--border);
+    /* [&>svg]:size-3 pointer-events-none + flex-shrink to avoid collapse */
+    & > svg {
+      width: 0.75rem;
+      height: 0.75rem;
+      pointer-events: none;
+      flex-shrink: 0;
     }
 
+    /* Spinner inside badge: override spinner.css default 1rem → size-3 (0.75rem) to match [&>svg]:size-3
+       Use currentColor so the spinner matches the badge text color like shadcn does for Deleting.
+       Visual nudge translate(0,1px) fixes optical centering (user request). */
+    & > [aria-busy="true"]::before {
+      width: 0.75rem;
+      height: 0.75rem;
+      border-width: 1.5px;
+      border-color: color-mix(in srgb, currentColor 20%, transparent);
+      border-top-color: currentColor;
+      translate: 0 1px;
+    }
+
+    /* focus-visible base ring is provided by shared.css (.badge in shared focus-ring selector) — not duplicated here */
+
+    /* aria-invalid:border-destructive ring-destructive/20 dark:ring/40 */
+    &[aria-invalid="true"] {
+      border-color: var(--destructive);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--destructive) 20%, transparent);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      &[aria-invalid="true"] {
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--destructive) 40%, transparent);
+      }
+    }
+
+    /* secondary: bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90 */
     &[data-variant="secondary"] {
       background-color: var(--secondary);
       color: var(--secondary-foreground);
     }
 
-    &:is([data-variant="success"], [data-variant="warning"], [data-variant="danger"]) {
-      color: var(--_variant-color);
+    /* destructive alias: match shadcn (base/style-rhea) cn-badge-variant-destructive —
+       translucent bg-destructive/10 text-destructive dark:bg-destructive/20
+       (NOT solid — the live shadcn border is translucent). */
+    &:is([data-variant="destructive"], [data-variant="danger"]) {
+      background-color: color-mix(in srgb, var(--destructive) 10%, transparent);
+      color: var(--destructive);
+      border-color: transparent;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      &:is([data-variant="destructive"], [data-variant="danger"]) {
+        background-color: color-mix(in srgb, var(--destructive) 20%, transparent);
+      }
+    }
+
+    &:is([data-variant="destructive"], [data-variant="danger"]):focus-visible {
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--destructive) 20%, transparent);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      &:is([data-variant="destructive"], [data-variant="danger"]):focus-visible {
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--destructive) 40%, transparent);
+      }
+    }
+
+    &.outline {
+      background-color: transparent;
+      color: var(--foreground);
+      border-color: var(--border);
+
+      &:is([data-variant="destructive"], [data-variant="danger"]) {
+        color: var(--destructive);
+      }
+
+      &:is(a):hover {
+        background-color: var(--muted);
+        color: var(--muted-foreground);
+        border-color: var(--border);
+      }
+    }
+
+    &.ghost {
+      background-color: transparent;
+      color: var(--foreground);
+      border-color: transparent;
+
+      &:is([data-variant="destructive"], [data-variant="danger"]) {
+        color: var(--destructive);
+      }
+
+      &:is(a):hover {
+        background-color: light-dark(var(--muted), color-mix(in srgb, var(--muted) 50%, transparent));
+        color: var(--muted-foreground);
+      }
+
+      &:is([data-variant="destructive"], [data-variant="danger"]):is(a):hover {
+        background-color: color-mix(in srgb, var(--destructive) 20%, transparent);
+        color: var(--destructive);
+      }
+    }
+
+    &.link {
+      background-color: transparent;
+      border-color: transparent;
+      color: var(--primary);
+
+      &:is(a):hover {
+        text-decoration: underline;
+        text-underline-offset: 4px;
+        background-color: transparent;
+      }
+    }
+
+    /* rounded-full pill — opt-in to restore the legacy pill shape */
+    &.rounded-full {
+      border-radius: var(--radius-full);
+    }
+
+    /* [a&]:hover states — reuse button hover token logic (color-mix 90%) without duplicating per-variant blocks */
+    &:is(a) {
+      text-decoration: none;
+
+      &:hover { text-decoration: none; }
+
+      &:not(.outline, .ghost, .link):hover {
+        background-color: color-mix(in srgb, var(--primary) 80%, transparent);
+      }
+
+      &[data-variant="secondary"]:hover {
+        background-color: color-mix(in srgb, var(--secondary) 80%, transparent);
+      }
+
+      &:is([data-variant="destructive"], [data-variant="danger"]):hover {
+        background-color: color-mix(in srgb, var(--destructive) 20%, transparent);
+      }
+    }
+
+    /* Tinted status extensions — reuse --variant-color from 01-theme (shared mapping) */
+    &:is([data-variant="success"], [data-variant="warning"]) {
+      color: var(--variant-color);
       background-color: light-dark(
-        color-mix(in srgb, var(--_variant-color) 10%, transparent),
-        color-mix(in srgb, var(--_variant-color) 30%, transparent)
+        color-mix(in srgb, var(--variant-color) 10%, transparent),
+        color-mix(in srgb, var(--variant-color) 30%, transparent)
       );
-    }
-
-    position: relative;
-
-    /* A nested button is a remove 'x', revealed on hover. */
-    button {
-      all: unset;
-      position: absolute;
-      right: 0;
-      padding-inline: var(--space-3) var(--space-2);
-      cursor: pointer;
-      opacity: 0;
-      pointer-events: none;
-      border-start-end-radius: inherit;
-      border-end-end-radius: inherit;
-      background-color: color-mix(in srgb, var(--muted) 60%, transparent);
-      transition: opacity var(--transition-fast);
-    }
-
-    &:hover button,
-    button:focus-visible {
-      opacity: 1;
-      pointer-events: auto;
     }
   }
 }

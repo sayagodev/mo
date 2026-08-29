@@ -1,0 +1,37 @@
+<form>
+  <div data-field>
+    <label for="ex-form-name">Name</label>
+    <input id="ex-form-name" required placeholder="Evil Rabbit" />
+  </div>
+  <div data-field>
+    <label for="ex-form-email">Email</label>
+    <input id="ex-form-email" type="email" placeholder="john@example.com" />
+    <small data-hint>We'll never share your email with anyone.</small>
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <div data-field>
+        <label for="ex-form-phone">Phone</label>
+        <input id="ex-form-phone" type="tel" placeholder="+1 (555) 123-4567" />
+      </div>
+    </div>
+    <div class="col-6">
+      <div data-field>
+        <label for="ex-form-country">Country</label>
+        <select id="ex-form-country">
+          <option value="us">United States</option>
+          <option value="uk">United Kingdom</option>
+          <option value="ca">Canada</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div data-field>
+    <label for="ex-form-address">Address</label>
+    <input id="ex-form-address" placeholder="123 Main St" />
+  </div>
+  <div class="hstack justify-end">
+    <button type="button" class="outline">Cancel</button>
+    <button type="submit">Submit</button>
+  </div>
+</form>

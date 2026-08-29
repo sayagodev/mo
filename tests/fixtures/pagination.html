@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Mo pagination test</title>
+<link rel="stylesheet" href="/dist/mo.min.css" />
+<script src="/dist/mo.min.js"></script>
+<style>body { padding: 2rem }</style>
+</head>
+<body>
+
+<nav aria-label="Pagination">
+  <ul class="pagination">
+    <li>
+      <a href="#" aria-label="Go to previous page">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6" /></svg>
+        <span class="pagination-label">Previous</span>
+      </a>
+    </li>
+    <li><a href="#">1</a></li>
+    <li><a href="#" aria-current="page">2</a></li>
+    <li>
+      <a href="#" aria-label="Go to next page">
+        <span class="pagination-label">Next</span>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<div style="width: 5rem">
+  <mo-select data-placeholder="25">
+    <button type="button" popovertarget="sel-rows" data-select-trigger aria-label="Rows per page"></button>
+    <ul popover id="sel-rows" class="popover" role="listbox" aria-label="Rows per page">
+      <li><button type="button" role="option" value="10">10</button></li>
+      <li><button type="button" role="option" value="25" aria-selected="true">25</button></li>
+      <li><button type="button" role="option" value="50">50</button></li>
+    </ul>
+  </mo-select>
+</div>
+
+</body>
+</html>

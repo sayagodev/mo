@@ -1,134 +1,301 @@
-@layer base {
-  :is(button, [type=submit], [type=reset], [type=button], a.button), ::file-selector-button {
-    --_hov: color-mix(in srgb, var(--primary), white 25%);
+@layer components {
+  /* shadcn/ui Button — variants map to:
+     default | .outline | .ghost | .link | [data-variant=secondary] | [data-variant=danger|destructive]
+     sizes: .xs (xs) | .small/.sm (sm) | default | .large/.lg (lg) | .icon/.icon-*
+
+     Lives in the components layer (like every other component file) so its
+     spinner/icon overrides beat spinner.css by specificity, and so later
+     component files keep overriding this chrome by source order.
+     Focus ring: shared.css owns the single :focus-visible ring for
+     :is(button…); only special cases live here (destructive tint, mirroring
+     badge.css, plus aria-invalid). */
+  /* a.button lives outside :is() so the group's specificity stays (0,1,0)
+     (:is() would take a.button's (0,1,1)) — attribute-scoped component rules
+     like [data-sidebar-action] must keep overriding this chrome by order. */
+  :is(button, [type=submit], [type=reset], [type=button]), a.button, ::file-selector-button {
+    /* Public per-component hooks — override on any ancestor or the element itself. */
+    --_h: var(--mo-button-height, 2.25rem);
+    --_px: var(--mo-button-padding-x, var(--space-4));
+    --_py: var(--mo-button-padding-y, var(--space-2));
+
+    --_bg: var(--primary);
+    --_fg: var(--primary-foreground);
+    --_hov-bg: color-mix(in srgb, var(--primary) 80%, transparent);
+    --_hov-fg: var(--_fg);
+    --_bd: transparent;
 
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: var(--space-2);
-    padding: var(--space-2) var(--space-4);
-    font-size: var(--text-7);
+    height: var(--_h);
+    padding: var(--_py) var(--_px);
+    font-size: var(--mo-button-font-size, var(--text-7));
     font-weight: var(--font-medium);
-    line-height: var(--leading-normal);
+    line-height: 1;
     white-space: nowrap;
+    flex-shrink: 0;
     text-decoration: none;
-    background-color: var(--primary);
-    color: var(--primary-foreground);
-    border-radius: var(--radius-medium);
-    border: 1px solid;
-    border-color: rgb(255 255 255 / 0.15) rgb(0 0 0 / 0.2) rgb(0 0 0 / 0.2) rgb(255 255 255 / 0.15);
-    transition: background-color var(--transition-fast), opacity var(--transition-fast), transform var(--transition-fast);
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    background-color: var(--_bg);
+    color: var(--_fg);
+    background-clip: padding-box;
+    border-radius: var(--mo-button-radius, var(--radius-large));
+    border: 1px solid var(--_bd);
+    box-shadow: var(--_shadow, none);
+    outline: none;
+    transition: color var(--transition-fast), background-color var(--transition-fast),
+      border-color var(--transition-fast), box-shadow var(--transition-fast),
+      transform var(--transition-fast);
 
-    &:not(:disabled) {
+    /* shadcn active: translate-y-px plus Mo's subtle scale — both are 1px press feedback */
+    &:not(:disabled, [aria-disabled="true"]):active:not([aria-haspopup]) {
+      transform: translateY(1px) scale(0.98);
+    }
+
+    &:not(:disabled, [aria-disabled="true"]) {
       cursor: pointer;
     }
 
-    &:hover:not(:disabled) {
-      background-color: var(--_hov);
+    &:hover:not(:disabled, [aria-disabled="true"]) {
+      background-color: var(--_hov-bg);
+      color: var(--_hov-fg);
     }
 
-    &:active:not(:disabled) {
-      transform: translate(1px, 1px);
+    &:disabled,
+    &[aria-disabled="true"] {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
+    /* aria-invalid matches shadcn aria-invalid:border-destructive ring */
+    &[aria-invalid="true"] {
+      border-color: var(--destructive);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--destructive) 20%, transparent);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      &[aria-invalid="true"] {
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--destructive) 40%, transparent);
+      }
     }
 
     &[data-variant="secondary"] {
-      --_hov: color-mix(in srgb, var(--secondary), black 10%);
-      background-color: var(--secondary);
-      color: var(--secondary-foreground);
-      border-color: rgb(255 255 255 / 0.5) rgb(0 0 0 / 0.1) rgb(0 0 0 / 0.1) rgb(255 255 255 / 0.5);
+      --_bg: var(--secondary);
+      --_fg: var(--secondary-foreground);
+      --_hov-bg: color-mix(in oklch, var(--secondary), var(--foreground) 5%);
     }
 
-    &[data-variant="danger"] {
-      --_hov: color-mix(in srgb, var(--danger), black 15%);
-      background-color: var(--danger);
-      color: var(--danger-foreground);
-    }
+    &:is([data-variant="danger"], [data-variant="destructive"]) {
+      /* Match shadcn (base/style-rhea) cn-button-variant-destructive:
+         translucent bg-destructive/10 text-destructive
+         hover:bg-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30
+         focus-visible:ring-destructive/20 border-destructive/40. */
+      --_bg: color-mix(in srgb, var(--destructive) 10%, transparent);
+      --_fg: var(--destructive);
+      --_hov-bg: color-mix(in srgb, var(--destructive) 20%, transparent);
+      --_bd: transparent;
 
-    &:is(.outline, .ghost) {
-      --_hov: var(--accent);
-      background-color: transparent;
-      color: var(--foreground);
-
-      &[data-variant="danger"] {
-        --_hov: color-mix(in srgb, var(--danger), transparent 90%);
-        color: var(--danger);
+      @media (prefers-color-scheme: dark) {
+        --_bg: color-mix(in srgb, var(--destructive) 20%, transparent);
+        --_hov-bg: color-mix(in srgb, var(--destructive) 30%, transparent);
       }
 
-      &[data-variant="secondary"] {
-        --_hov: color-mix(in srgb, var(--secondary), transparent 80%);
-        color: var(--secondary-foreground);
+      &:focus-visible {
+        border-color: color-mix(in srgb, var(--destructive) 40%, transparent);
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--destructive) 20%, transparent);
+      }
+
+      @media (prefers-color-scheme: dark) {
+        &:focus-visible {
+          box-shadow: 0 0 0 3px color-mix(in srgb, var(--destructive) 40%, transparent);
+        }
+      }
+    }
+
+    &:is(.outline, .ghost, .link) {
+      --_bg: transparent;
+      --_fg: var(--foreground);
+      --_hov-fg: var(--foreground);
+
+      &:is([data-variant="danger"], [data-variant="destructive"]) {
+        --_hov-bg: color-mix(in srgb, var(--destructive) 10%, transparent);
+        --_hov-fg: var(--destructive);
       }
     }
 
     &.outline {
-      border-color: var(--border);
+      --_bg: var(--background);
+      --_bg: light-dark(var(--background), transparent);
+      --_bd: var(--border);
+      --_bd: light-dark(var(--border), var(--input));   /* visible border in both themes */
+      --_hov-bg: var(--muted);
+      --_hov-bg: light-dark(var(--muted), color-mix(in srgb, var(--input) 30%, transparent));
+      --_hov-fg: var(--foreground);
+      --_shadow: var(--shadow-xs);
 
-      &[data-variant="danger"] {
-        border-color: var(--danger);
-      }
-
-      &[data-variant="secondary"] {
-        border-color: var(--secondary);
+      &:is([data-variant="danger"], [data-variant="destructive"]) {
+        --_hov-bg: color-mix(in srgb, var(--destructive) 10%, transparent);
       }
     }
 
     &.ghost {
-      /* Same as .outline but no border. */
-      border-color: transparent;
+      --_hov-bg: var(--muted);
+      --_hov-bg: light-dark(var(--muted), color-mix(in srgb, var(--muted) 50%, transparent));
+      --_hov-fg: var(--foreground);
     }
 
-    &.small {
-      padding: var(--space-1) var(--space-3);
+    &.link {
+      --_hov-bg: transparent;
+      --_hov-fg: var(--primary);
+      --_fg: var(--primary);
+      color: var(--_fg);
+      text-underline-offset: 4px;
+
+      &:hover:not(:disabled, [aria-disabled="true"]) {
+        background-color: transparent;
+        text-decoration: underline;
+      }
+    }
+
+    &.xs {
+      --_h: var(--mo-button-height-xs, 1.5rem);
+      --_px: var(--mo-button-padding-x-xs, var(--space-2));
+      gap: var(--space-1);
       font-size: var(--text-8);
+
+      /* [&_svg:not([class*='size-'])]:size-3 */
+      & > svg,
+      & > [data-icon] {
+        width: 0.75rem;
+        height: 0.75rem;
+      }
     }
 
-    &.large {
-      height: 3rem;
-      padding: 0 var(--space-6);
+    &.small,
+    &.sm {
+      --_h: var(--mo-button-height-small, 2rem);
+      --_px: var(--mo-button-padding-x-small, var(--space-3));
+      gap: calc(var(--space-1) * 1.5);
+
+      & > svg,
+      & > [data-icon] {
+        width: 0.875rem;
+        height: 0.875rem;
+      }
+    }
+
+    &.large,
+    &.lg {
+      --_h: var(--mo-button-height-large, 2.5rem);
+      --_px: var(--mo-button-padding-x-large, var(--space-6));
       font-size: var(--text-regular);
     }
 
+    /* has-[>svg]: tighter inline padding like shadcn has-data-[icon=inline-*] */
+    &:has(> svg),
+    &:has(> [data-icon="inline-start"]),
+    &:has(> [data-icon="inline-end"]),
+    &:has(> [aria-busy="true"]) {
+      --_px: calc(var(--mo-button-padding-x, var(--space-4)) - var(--space-1));
+
+      &.xs {
+        --_px: calc(var(--mo-button-padding-x-xs, var(--space-2)) - var(--space-1) / 2);
+      }
+
+      &.small,
+      &.sm {
+        --_px: calc(var(--mo-button-padding-x-small, var(--space-3)) - var(--space-1) / 2);
+      }
+
+      &.large,
+      &.lg {
+        --_px: calc(var(--mo-button-padding-x-large, var(--space-6)) - var(--space-2));
+      }
+    }
+
+    /* rounded-full pill — .round is legacy, .rounded-full matches Tailwind/shadcn */
+    &.round,
+    &.rounded-full {
+      border-radius: var(--radius-full);
+    }
+
     &.icon {
-      width: 2.5rem;
+      width: var(--_h);
       padding: 0;
 
-      &.small {
-        width: 2rem;
-      }
+      /* icon-only size aliases mirroring shadcn icon-xs/sm/lg — width follows
+         --_h, so the size classes above drive the square geometry */
+      &.icon-xs { --_h: var(--mo-button-height-xs, 1.5rem); }
+      &.icon-sm { --_h: var(--mo-button-height-small, 2rem); }
+      &.icon-lg { --_h: var(--mo-button-height-large, 2.5rem); }
+    }
 
-      &.large {
-        width: 3rem;
-      }
+    /* Inline SVG icons sized like lucide defaults — shared with shared.css .badge but kept here for cascade */
+    & > svg,
+    & > [data-icon] {
+      width: 1rem;
+      height: 1rem;
+      pointer-events: none;
+      flex-shrink: 0;
+    }
+
+    /* Spinner inside button: icon-sized (16px) and currentColor-tinted like
+       shadcn's Loader2 inheriting text color. Colors are set once here; the
+       size variants below only override geometry. */
+    & > [aria-busy="true"]::before {
+      width: 1rem;
+      height: 1rem;
+      border-width: 2px;
+      border-color: color-mix(in srgb, currentColor 20%, transparent);
+      border-top-color: currentColor;
+    }
+
+    &.xs > [aria-busy="true"]::before {
+      width: 0.75rem;
+      height: 0.75rem;
+      border-width: 1.5px;
+    }
+
+    &.small > [aria-busy="true"]::before,
+    &.sm > [aria-busy="true"]::before {
+      width: 0.875rem;
+      height: 0.875rem;
+      border-width: 1.5px;
     }
   }
 
+  /* File picker button ≈ shadcn's file: utilities. */
   ::file-selector-button {
+    --_h: 1.75rem;
+    --_px: var(--space-2);
+
+    height: var(--_h);
+    margin-inline-end: var(--space-2);
     background-color: transparent;
     color: var(--foreground);
-    border: 1px solid var(--border);
-  }
-  ::file-selector-button:hover {
-    /* pseudoelement:hover can't be nested and has to be a separate block. */
-    background-color: var(--accent);
+    border: none;
   }
 }
 
 @layer components {
+  /* Legacy menu.buttons — kept for backward compat, new code should use [data-button-group] */
   menu.buttons {
     list-style-type: none;
     padding-inline-start: 0;
     display: inline-flex;
 
-    /* In menu.buttons, <li> children are expected to have just one child, which is a button/or a.button */
     & > li {
       &:first-child > * {
-        border-start-start-radius: var(--radius-medium);
-        border-end-start-radius: var(--radius-medium);
+        border-start-start-radius: var(--mo-button-radius, var(--radius-large));
+        border-end-start-radius: var(--mo-button-radius, var(--radius-large));
       }
 
       &:last-child > * {
-        border-start-end-radius: var(--radius-medium);
-        border-end-end-radius: var(--radius-medium);
+        border-start-end-radius: var(--mo-button-radius, var(--radius-large));
+        border-end-end-radius: var(--mo-button-radius, var(--radius-large));
       }
 
       & > * {
@@ -136,7 +303,7 @@
       }
 
       &:not(:last-child) > * {
-        border-inline-end: 1px solid rgb(from var(--primary-foreground) r g b / 0.2);
+        border-inline-end: 1px solid color-mix(in srgb, var(--primary-foreground) 20%, transparent);
       }
     }
   }

@@ -1,0 +1,180 @@
+@layer components {
+  /* shadcn/ui Resizable (react-resizable-panels) → plain flex + Pointer Events.
+     <mo-resizable> lays out its [data-resizable-panel] children and inserts
+     <hr data-resizable-handle> dividers between them when the author did not
+     write any; explicit handles (hr, or a div carrying a grip icon) are kept
+     as-is. Handles have ZERO layout footprint — panels' flex-basis
+     percentages always sum to 100%, so drag math stays trivial percentages.
+
+     Anatomy:
+     <mo-resizable>                          flex row; vertical via data-orientation
+       <div data-resizable-panel style="flex">…</div>
+       <hr data-resizable-handle>            auto-inserted or authored
+       <div data-resizable-panel>…</div>
+     </mo-resizable>
+
+     Hooks:
+       --mo-resizable-hit     handle hit area beyond the 1px line (default 4px)
+       --mo-resizable-line    idle line color (default var(--border))
+       --mo-resizable-active  hover/focus/drag line color (default var(--ring)) */
+  mo-resizable {
+    display: flex;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    flex-wrap: nowrap;
+
+    &[data-orientation='vertical'] {
+      flex-direction: column;
+    }
+  }
+
+  /* Panels: outer flex item uses flexGrow = layout %, flexBasis 0, overflow hidden.
+     Inner wrapper (created by JS) holds the content at 100% and is clipped
+     progressively — text never reflows vertical, it is simply hidden behind
+     the adjacent panel (shadcn behavior: flex: 45 1 0px + inner max-* 100%). */
+  mo-resizable > [data-resizable-panel] {
+    position: relative;
+    display: flex;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+    flex-basis: 0;
+    flex-shrink: 1;
+    /* flex-grow set inline by JS as `${pct} 1 0px` */
+
+    &[data-collapsible] {
+      /* No transition during drag; smooth only on programmatic collapse */
+    }
+  }
+
+  mo-resizable > [data-resizable-panel] > [data-resizable-panel-inner] {
+    flex-grow: 1;
+    max-width: 100%;
+    max-height: 100%;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+    display: block;
+    /* Evita el “drop” letra-por-letra que provoca `p{overflow-wrap:break-word}` de base.
+       En shadcn el panel es `flex h-full items-center justify-center` con texto corto;
+       aquí forzamos clipping en vez de break. */
+    overflow-wrap: normal;
+    word-break: normal;
+    white-space: normal;
+  }
+
+  /* Si el autor quiere títulos de 1 línea con ellipsis, que use `truncate` utility;
+     por defecto lo recortamos sin romper palabras. */
+  mo-resizable > [data-resizable-panel] > [data-resizable-panel-inner] > * {
+    min-width: 0;
+    overflow-wrap: normal;
+  }
+
+  /* Fallback for panels without inner wrapper (legacy content) */
+  mo-resizable > [data-resizable-panel]:not(:has(> [data-resizable-panel-inner])) {
+    overflow: hidden;
+  }
+
+  /* Divider between two adjacent panels. The 1px line is the element itself
+     (shadcn's bg-border); negative half-pixel margins cancel its layout
+     footprint so panels' percentages always fill the group exactly. ::after
+     extends an invisible hit area over the seam for comfortable pointing. */
+  mo-resizable > [data-resizable-handle] {
+    --_hit: var(--mo-resizable-hit, 4px);
+
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: none;
+    background-color: var(--mo-resizable-line, var(--border));
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    transition: background-color var(--transition-fast);
+    flex: 0 0 auto;
+    outline: none;
+    box-shadow: none;
+
+    &:hover,
+    &[data-dragging] {
+      background-color: var(--mo-resizable-active, var(--ring));
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: none;
+      background-color: var(--mo-resizable-line, var(--border));
+    }
+
+    &:focus-visible:hover {
+      background-color: var(--mo-resizable-active, var(--ring));
+    }
+
+    /* Invisible pointer target straddling the seam. */
+    &::after {
+      content: '';
+      position: absolute;
+    }
+  }
+
+  /* Horizontal group: vertical divider line, columns cursor.
+     (00-base.css gives every hr height: 0; restore a stretched cross size.) */
+  mo-resizable:not([data-orientation='vertical']) > [data-resizable-handle] {
+    inline-size: 1px;
+    margin-inline: -0.5px;
+    align-self: stretch;
+    block-size: auto;
+    cursor: col-resize;
+
+    &::after {
+      inset-block: 0;
+      inset-inline: calc(var(--_hit) * -1);
+    }
+  }
+
+  /* Vertical group: horizontal divider line, rows cursor. */
+  mo-resizable[data-orientation='vertical'] > [data-resizable-handle] {
+    block-size: 1px;
+    margin-block: -0.5px;
+    align-self: stretch;
+    inline-size: auto;
+    cursor: row-resize;
+
+    &::after {
+      inset-inline: 0;
+      inset-block: calc(var(--_hit) * -1);
+    }
+  }
+
+  /* Optional grip affordance inside an explicit handle (shadcn's withHandle):
+     chip `w-3.5 h-5` centrado sobre la línea de 1px. Ahora con contraste real
+     para que se vea óvalo y no solo línea más oscura. Usa width/height físicos
+     para evitar el bug de inline-size en flex hijos. */
+  mo-resizable [data-resizable-grip] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 0.875rem;                             /* w-3.5 — un poco más ancho para óvalo visible */
+    height: 1.25rem;                             /* h-5 */
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    background-color: var(--card);
+    color: var(--foreground);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 0 0 1px var(--border);
+    flex-shrink: 0;
+
+    & svg {
+      width: 0.625rem;                           /* size-2.5 */
+      height: 0.625rem;
+      pointer-events: none;
+    }
+  }
+
+  mo-resizable[data-orientation='vertical'] [data-resizable-grip] {
+    rotate: 90deg;
+  }
+}

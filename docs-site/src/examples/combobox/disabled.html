@@ -1,0 +1,15 @@
+<mo-combobox>
+  <div data-combobox>
+    <input role="combobox" aria-expanded="false" aria-controls="cb-disabled" aria-autocomplete="list" placeholder="Select a framework..." autocomplete="off" aria-label="Framework" />
+    <button type="button" class="icon ghost" data-combobox-toggle aria-label="Toggle options">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+    </button>
+  </div>
+  <ul popover id="cb-disabled" role="listbox" aria-label="Frameworks">
+    <li><button type="button" role="option">Next.js</button></li>
+    <li><button type="button" role="option">SvelteKit</button></li>
+    <li><button type="button" role="option" disabled>Nuxt.js</button></li>
+    <li><button type="button" role="option">Remix</button></li>
+    <li data-combobox-empty hidden>No items found.</li>
+  </ul>
+</mo-combobox>

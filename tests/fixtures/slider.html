@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Mo slider test</title>
+<link rel="stylesheet" href="/dist/mo.min.css" />
+<script src="/dist/mo.min.js"></script>
+<style>body { padding: 2rem }</style>
+</head>
+<body>
+
+<div class="vstack gap-2">
+  <label>Single <span data-test="single-value" data-value>50</span></label>
+  <mo-slider data-test="single" min="0" max="100" step="1" value="50"></mo-slider>
+</div>
+
+<div class="vstack gap-2">
+  <label>Range <span data-test="range-value" data-value>25 · 75</span></label>
+  <mo-slider data-test="range" min="0" max="100" step="1" value="25,75"></mo-slider>
+</div>
+
+<div class="vstack gap-2">
+  <label>Multiple <span data-test="multi-value" data-value>20 · 50 · 80</span></label>
+  <mo-slider data-test="multi" min="0" max="100" step="1" value="20,50,80"></mo-slider>
+</div>
+
+<div class="vstack gap-2">
+  <label>Vertical <span data-test="vertical-value" data-value>50</span></label>
+  <mo-slider data-test="vertical" orientation="vertical" min="0" max="100" step="1" value="50"></mo-slider>
+</div>
+
+<div class="vstack gap-2">
+  <label>Native <span data-test="native-value">50</span></label>
+  <input type="range" data-test="native" min="0" max="100" value="50" step="1" aria-label="Native" />
+</div>
+
+</body>
+</html>

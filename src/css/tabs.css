@@ -1,40 +1,139 @@
 @layer components {
+  /* shadcn/ui Tabs: muted track, active tab lifts with background + shadow. */
   [role="tablist"] {
     display: inline-flex;
     align-items: center;
-    gap: var(--space-1);
-    padding: var(--space-1);
-    background-color: var(--muted);
-    border-radius: var(--radius-medium);
+    gap: 0;
+    height: var(--mo-tabs-height, 2rem);
+    padding: 3px;
+    background-color: var(--mo-tabs-list-bg, var(--muted));
+    color: color-mix(in srgb, var(--foreground) 60%, transparent);
+    border-radius: var(--mo-tabs-radius, var(--radius-large));
   }
 
   [role="tab"] {
     display: inline-flex;
+    flex: 1;
     align-items: center;
     justify-content: center;
-    padding: var(--space-2) var(--space-3);
+    height: 100%;
+    padding: calc(var(--space-3) * 0.5) var(--space-1);
     font-size: var(--text-7);
     font-weight: var(--font-medium);
     white-space: nowrap;
     background-color: transparent;
-    color: var(--foreground);
+    color: inherit;
     border: none;
-    border-radius: calc(var(--radius-medium) - 2px);
+    border-radius: calc(var(--mo-tabs-radius, var(--radius-large)) - 2px);
     cursor: pointer;
-    transition: background-color var(--transition-fast), color var(--transition-fast);
+    transition: color var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
 
+    /* shadcn Hover: text-foreground (100%) — not a bg. */
     &:hover {
-      color: var(--muted-foreground);
+      color: var(--foreground);
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 50%, transparent);
     }
 
     &[aria-selected="true"] {
-      background-color: var(--background);
-      box-shadow: var(--shadow-small);
+      background-color: var(--mo-tabs-active-bg, var(--background));
+      background-color: var(--mo-tabs-active-bg, light-dark(var(--background), color-mix(in srgb, var(--input) 30%, transparent)));
+      color: var(--foreground);
+    }
+
+    &:disabled {
+      pointer-events: none;
+      opacity: 0.5;
     }
   }
 
+  /* Line variant (shadcn <TabsList variant="line">): transparent track,
+     active tab marked by a 2px foreground underline instead of a pill.
+     data-variant lives on the tablist. */
+  [role="tablist"][data-variant="line"] {
+    height: auto;
+    gap: var(--space-1);
+    padding: 0;
+    background-color: transparent;
+    border-radius: 0;
+
+    & > [role="tab"] {
+      position: relative;
+      border-radius: 0;
+
+      &::after {
+        content: '';
+        position: absolute;
+        inset-inline: 0;
+        inset-block-end: 0;
+        height: 2px;
+        background-color: var(--foreground);
+        opacity: 0;
+        transition: opacity var(--transition-fast);
+      }
+
+      /* Active line tab: no pill, just bold text + underline */
+      &[aria-selected="true"] {
+        background-color: transparent;
+        background-color: transparent !important;
+        box-shadow: none;
+        font-weight: var(--font-semibold);
+        color: var(--foreground);
+
+        &::after {
+          opacity: 1;
+        }
+      }
+
+      /* Hover on line tabs should not show pill background; keep the text
+         one soft step above the muted inactive label so it never reads as
+         the selected (semibold + underlined) tab. */
+      &:hover {
+        background-color: transparent;
+        color: color-mix(in srgb, var(--foreground) 75%, transparent);
+      }
+
+      &:is(:hover, [aria-selected="true"]):not(:focus-visible) {
+        box-shadow: none;
+      }
+    }
+  }
+
+  /* Vertical orientation (shadcn <Tabs orientation="vertical">): the host
+     becomes a row (tablist + panel side by side), the tablist a column of
+     full-width, start-aligned triggers. */
+  mo-tabs[data-orientation="vertical"] {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--mo-tabs-vertical-gap, var(--space-4));
+  }
+
+  mo-tabs[data-orientation="vertical"] > [role="tablist"] {
+    flex-direction: column;
+    align-items: stretch;
+    height: auto;
+
+    & > [role="tab"] {
+      justify-content: flex-start;
+    }
+  }
+
+  mo-tabs[data-orientation="vertical"] > [role="tabpanel"] {
+    flex: 1;
+    min-width: 0;
+    padding-block-start: 0;
+  }
+
   [role="tabpanel"] {
-    padding: var(--space-4) 0;
+    padding-block-start: var(--space-3);
+    font-size: var(--text-7);
+
+    & > p {
+      color: var(--muted-foreground);
+    }
 
     &:focus-visible {
       outline: none;

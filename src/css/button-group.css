@@ -1,0 +1,163 @@
+@layer components {
+  /* shadcn/ui ButtonGroup: joined segments sharing hairlines.
+     Contract: wrapper carries [role="group"][data-button-group] (fieldset.group
+     stays scoped to OTP-style joined fields). Children are plain buttons,
+     anchors (.button), selects, inputs, text segments ([data-button-group-text]),
+     dividers (hr[data-separator]), <mo-dropdown> triggers and nested groups.
+     Orientation via data-orientation="vertical". */
+  [data-button-group] {
+    display: inline-flex;
+    align-items: stretch;
+    inline-size: fit-content;
+    max-inline-size: 100%;
+
+    /* Nested groups read as separate segments, like shadcn's gap-2. */
+    &:has(> [data-button-group]) {
+      column-gap: var(--mo-button-group-gap, var(--space-2));
+      row-gap: var(--mo-button-group-gap, var(--space-2));
+    }
+
+    & > input {
+      flex: 1 1 auto;
+      inline-size: 1%;
+      min-inline-size: 0;
+    }
+
+    & > select {
+      inline-size: auto;
+      flex: 0 1 auto;
+    }
+
+    & > [data-input-group] {
+      flex: 1 1 auto;
+      inline-size: auto;
+      min-inline-size: 0;
+    }
+  }
+
+  /* Horizontal join: non-first segments lose their start border + radii,
+     non-last segments their end radii (positional, like shadcn). */
+  [data-button-group]:not([data-orientation="vertical"]) {
+    & > :is(button, a.button, select, input, [data-button-group-text]) {
+      &:not(:first-child) {
+        border-start-start-radius: 0;
+        border-end-start-radius: 0;
+        border-inline-start-width: 0;
+      }
+
+      &:not(:last-child) {
+        border-start-end-radius: 0;
+        border-end-end-radius: 0;
+      }
+
+      /* Focused segment floats above collapsed borders. */
+      &:focus-visible {
+        position: relative;
+        z-index: 1;
+      }
+    }
+
+    /* mo-select gets the same segment treatment for its trigger. */
+    & > mo-select {
+      & > [data-select-trigger] {
+        border-radius: 0;
+
+        &:first-child {
+          border-start-start-radius: var(--mo-button-radius, var(--radius-large));
+          border-end-start-radius: var(--mo-button-radius, var(--radius-large));
+        }
+      }
+
+      &:not(:first-child) > [data-select-trigger] {
+        border-inline-start-width: 0;
+      }
+    }
+
+    & > mo-dropdown:not(:first-child) > [popovertarget] {
+      border-start-start-radius: 0;
+      border-end-start-radius: 0;
+      border-inline-start-width: 0;
+    }
+
+    & > mo-dropdown:not(:last-child) > [popovertarget] {
+      border-start-end-radius: 0;
+      border-end-end-radius: 0;
+    }
+
+    & > hr[data-separator] {
+      align-self: stretch;
+      inline-size: 1px;
+      block-size: auto;
+      margin: 0;
+      border: none;
+      background-color: var(--mo-button-group-divider, var(--input));
+    }
+  }
+
+  /* Vertical join mirrors the horizontal rules on the block axis. */
+  [data-button-group][data-orientation="vertical"] {
+    flex-direction: column;
+
+    & > :is(button, a.button, select, input, [data-button-group-text]) {
+      &:not(:first-child) {
+        border-start-start-radius: 0;
+        border-start-end-radius: 0;
+        border-block-start-width: 0;
+      }
+
+      &:not(:last-child) {
+        border-end-start-radius: 0;
+        border-end-end-radius: 0;
+      }
+
+      &:focus-visible {
+        position: relative;
+        z-index: 1;
+      }
+    }
+
+    & > mo-dropdown:not(:first-child) > [popovertarget] {
+      border-start-start-radius: 0;
+      border-start-end-radius: 0;
+      border-block-start-width: 0;
+    }
+
+    & > mo-dropdown:not(:last-child) > [popovertarget] {
+      border-end-start-radius: 0;
+      border-end-end-radius: 0;
+    }
+
+    & > hr[data-separator] {
+      inline-size: auto;
+      block-size: 1px;
+      align-self: stretch;
+      margin: 0;
+      border: none;
+      background-color: var(--mo-button-group-divider, var(--input));
+    }
+  }
+
+  /* shadcn/ui ButtonGroupText: muted bordered label segment between buttons.
+     Reuses --mo-button-radius and shadow tokens from button.css — no duplicated radius. */
+  [data-button-group-text] {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding-inline: var(--mo-button-group-text-padding-x, var(--space-4));
+    font-size: var(--text-7);
+    font-weight: var(--font-medium);
+    white-space: nowrap;
+    color: var(--foreground);
+    background-color: var(--muted);
+    border: 1px solid light-dark(var(--border), var(--input));
+    border-radius: var(--mo-button-radius, var(--radius-medium));
+    box-shadow: var(--shadow-xs);
+
+    & > svg {
+      width: 1rem;
+      height: 1rem;
+      pointer-events: none;
+      color: var(--muted-foreground);
+    }
+  }
+}

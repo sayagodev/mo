@@ -1,0 +1,82 @@
+<mo-questionnaire style="max-width: 28rem; margin-inline: auto;">
+  <div data-questionnaire-progress></div>
+
+  <form data-questionnaire-step data-required data-error="Please choose an option.">
+    <h3>Where should the agent run?</h3>
+    <p>Cloud runs add an environment question to this flow.</p>
+    <div data-questionnaire-choices>
+      <label data-questionnaire-choice>
+        <input type="radio" name="runtime" value="local" required>
+        <span data-indicator data-type="radio"></span>
+        <span data-questionnaire-label>Local workspace</span>
+      </label>
+      <label data-questionnaire-choice>
+        <input type="radio" name="runtime" value="cloud">
+        <span data-indicator data-type="radio"></span>
+        <span data-questionnaire-label>Cloud workspace <small data-questionnaire-description>Needs environment selection next.</small></span>
+      </label>
+    </div>
+    <div data-questionnaire-error></div>
+    <footer>
+      <button type="button" class="ghost" data-questionnaire-back>Back</button>
+      <button type="submit">Next</button>
+    </footer>
+  </form>
+
+  <form data-questionnaire-step hidden data-required>
+    <h3>Which cloud environment?</h3>
+    <p>Only shown after choosing Cloud.</p>
+    <div data-questionnaire-choices>
+      <label data-questionnaire-choice>
+        <input type="radio" name="env" value="preview" required>
+        <span data-indicator data-type="radio"></span>
+        <span data-questionnaire-label>Preview</span>
+      </label>
+      <label data-questionnaire-choice>
+        <input type="radio" name="env" value="staging">
+        <span data-indicator data-type="radio"></span>
+        <span data-questionnaire-label>Staging</span>
+      </label>
+      <label data-questionnaire-choice>
+        <input type="radio" name="env" value="isolated">
+        <span data-indicator data-type="radio"></span>
+        <span data-questionnaire-label>Isolated sandbox</span>
+      </label>
+    </div>
+    <div data-questionnaire-error></div>
+    <footer>
+      <button type="button" class="ghost" data-questionnaire-back>Back</button>
+      <button type="submit">Next</button>
+    </footer>
+  </form>
+
+  <form data-questionnaire-step hidden data-required>
+    <h3>When should the agent request approval?</h3>
+    <p>Final checkpoint before saving.</p>
+    <div data-questionnaire-choices>
+      <label data-questionnaire-choice>
+        <input type="radio" name="approval" value="writes" required>
+        <span data-indicator data-type="radio"></span>
+        <span data-questionnaire-label>Before writing files</span>
+      </label>
+      <label data-questionnaire-choice>
+        <input type="radio" name="approval" value="commands">
+        <span data-indicator data-type="radio"></span>
+        <span data-questionnaire-label>Before running commands</span>
+      </label>
+      <label data-questionnaire-choice>
+        <input type="radio" name="approval" value="sensitive">
+        <span data-indicator data-type="radio"></span>
+        <span data-questionnaire-label>Only for sensitive actions</span>
+      </label>
+    </div>
+    <div data-questionnaire-input style="margin-block-start: var(--space-3);">
+      <textarea name="notes" rows="2" placeholder="Add context for reviewers (optional)"></textarea>
+    </div>
+    <div data-questionnaire-error></div>
+    <footer>
+      <button type="button" class="ghost" data-questionnaire-back>Back</button>
+      <button type="submit">Save execution plan</button>
+    </footer>
+  </form>
+</mo-questionnaire>

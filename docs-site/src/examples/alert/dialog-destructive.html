@@ -1,0 +1,17 @@
+<button type="button" data-variant="danger" command="show-modal" commandfor="alert-dialog-destructive">Delete Chat</button>
+
+<dialog id="alert-dialog-destructive" style="max-width:24rem;">
+  <form method="dialog">
+    <header style="align-items:center; text-align:center;">
+      <div style="display:inline-flex; width:2.5rem; height:2.5rem; align-items:center; justify-content:center; background:color-mix(in srgb, var(--destructive) 10%, transparent); color:var(--destructive); border-radius:var(--radius-small); margin-bottom:var(--space-2);">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /></svg>
+      </div>
+      <h3>Delete chat?</h3>
+      <p>This will permanently delete this chat conversation. View <a href="#">Settings</a> to delete any memories saved during this chat.</p>
+    </header>
+    <footer>
+      <button type="button" class="outline" value="cancel" command="close" commandfor="alert-dialog-destructive">Cancel</button>
+      <button type="submit" value="delete" data-variant="danger">Delete</button>
+    </footer>
+  </form>
+</dialog>

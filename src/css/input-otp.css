@@ -1,0 +1,61 @@
+@layer components {
+  /* shadcn/ui InputOTP: N single-character slots joined into one hairline
+     frame — the fieldset.group recipe (trailing edges drop their border
+     until focused), active slot gets the ring. Cells are built by
+     input-otp.js; a hidden input[name] mirrors the value for forms.
+     Selectors are written as ":has(+ input)" rather than :last-of-type so
+     the hidden mirror never steals the end-cap styles. */
+  mo-otp {
+    display: inline-flex;
+    vertical-align: middle;
+  }
+
+  mo-otp input:not([type="hidden"]) {
+    flex: 0 0 auto;
+    width: var(--mo-otp-cell-size, 2.25rem);
+    height: var(--mo-otp-cell-size, 2.25rem);
+    padding: 0;
+    font-size: var(--text-7);
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+    border-radius: 0;
+
+    /* Join the hairlines: every slot followed by another slot drops its
+       trailing edge until focused, exactly like fieldset.group inputs. */
+    &:not(:focus):has(+ input:not([type="hidden"])) {
+      border-inline-end-color: transparent;
+    }
+
+    /* Active slot: raised above its neighbours' hairlines (form.css paints
+       the border + ring on focus). */
+    &:focus {
+      outline: none;
+      position: relative;
+      z-index: 1;
+    }
+  }
+
+  mo-otp input:first-of-type {
+    border-radius: var(--radius-medium) 0 0 var(--radius-medium);
+  }
+
+  mo-otp input:not([type="hidden"]):not(:has(+ input:not([type="hidden"]))) {
+    border-radius: 0 var(--radius-medium) var(--radius-medium) 0;
+  }
+
+  /* Error state lives on the host (cells are generated); the frame turns
+     destructive like [data-field] inputs. */
+  mo-otp[aria-invalid="true"] {
+    & input:not([type="hidden"]) {
+      border-color: var(--danger);
+
+      &:not(:focus):has(+ input:not([type="hidden"])) {
+        border-inline-end-color: transparent;
+      }
+
+      &:focus {
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--danger) 20%, transparent);
+      }
+    }
+  }
+}

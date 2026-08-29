@@ -1,0 +1,31 @@
+@layer components {
+  /* shadcn/ui AspectRatio (Radix → Base UI) replaced by the native CSS
+     aspect-ratio property — no JS needed.
+
+     Contract: [data-aspect-ratio="16/9"] wrapper div; named ratios ship as
+     attribute values ("1/1", "9/16", "4/3", "21/9"); any other ratio via the
+     --mo-aspect-ratio hook (or shadcn-compatible --ratio alias). The child
+     media (img/video/iframe) fills and crops via the shared cover rule in
+     shared.css — no copy here.
+
+     Shadcn parity: `relative` containing block, `bg-muted` placeholder,
+     `overflow:clip` to honor `border-radius` (shadcn adds `rounded-lg` on
+     both container and image). `inline-size:100%` so the box stretches
+     responsively; constrain width externally (e.g. max-width:24rem like
+     shadcn's `max-w-sm`). Supports both Mo `[data-aspect-ratio]` and shadcn
+     `[data-slot="aspect-ratio"]` selectors. */
+  [data-aspect-ratio],
+  [data-slot="aspect-ratio"] {
+    position: relative;
+    overflow: hidden;
+    overflow: clip;
+    inline-size: 100%;
+    aspect-ratio: var(--mo-aspect-ratio, var(--ratio, 16 / 9));
+    background-color: var(--muted);
+
+    &[data-aspect-ratio="1/1"] { --mo-aspect-ratio: 1 / 1; }
+    &[data-aspect-ratio="9/16"] { --mo-aspect-ratio: 9 / 16; }
+    &[data-aspect-ratio="4/3"] { --mo-aspect-ratio: 4 / 3; }
+    &[data-aspect-ratio="21/9"] { --mo-aspect-ratio: 21 / 9; }
+  }
+}

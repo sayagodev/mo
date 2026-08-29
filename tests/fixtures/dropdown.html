@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Mo test</title>
+<link rel="stylesheet" href="/dist/mo.min.css" />
+<script src="/dist/mo.min.js"></script>
+<style>body { padding: 2rem }</style>
+</head>
+<body>
+
+<mo-dropdown id="dd">
+  <button popovertarget="menu1" data-test="trigger">Options</button>
+  <menu popover id="menu1">
+    <button role="menuitem" type="button" data-test="item-a">Duplicate</button>
+    <button role="menuitem" type="button" data-test="item-danger" data-variant="danger">Delete</button>
+  </menu>
+</mo-dropdown>
+
+</body>
+</html>

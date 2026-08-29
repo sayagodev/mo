@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Mo navigation menu test</title>
+<link rel="stylesheet" href="/dist/mo.min.css" />
+<script src="/dist/mo.min.js"></script>
+<style>body { padding: 2rem }</style>
+</head>
+<body>
+
+<div style="display: flex; justify-content: center; gap: 4rem; padding-top: 8rem">
+  <mo-navigation-menu data-test="hover-menu">
+    <nav data-navigation-menu aria-label="Hover">
+      <ul>
+        <li><a href="#" data-navigation-link>Home</a></li>
+        <li>
+          <button type="button" popovertarget="nm-hover">Components
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+          </button>
+          <div popover id="nm-hover" class="popover">
+            <ul>
+              <li><a href="#"><div data-title>Alert Dialog</div><div data-description>A modal dialog.</div></a></li>
+            </ul>
+          </div>
+        </li>
+        <li><a href="#" data-navigation-link>Docs</a></li>
+      </ul>
+    </nav>
+  </mo-navigation-menu>
+
+  <mo-navigation-menu data-open="click" data-test="click-menu">
+    <nav data-navigation-menu aria-label="Click">
+      <ul>
+        <li>
+          <button type="button" popovertarget="nm-click">Menu
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+          </button>
+          <div popover id="nm-click" class="popover">
+            <ul><li><a href="#">Item</a></li></ul>
+          </div>
+        </li>
+      </ul>
+    </nav>
+  </mo-navigation-menu>
+</div>
+
+</body>
+</html>

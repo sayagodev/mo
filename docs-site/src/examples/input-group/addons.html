@@ -1,0 +1,34 @@
+<div class="vstack gap-4">
+  <div data-input-group>
+    <span data-addon>https://</span>
+    <input placeholder="example.com/page" aria-label="URL path" />
+    <span data-addon>.dev</span>
+  </div>
+  <div data-input-group>
+    <span data-addon>Total</span>
+    <input value="1,250.00" inputmode="decimal" aria-label="Total" />
+    <span data-addon>USD</span>
+  </div>
+  <div data-input-group>
+    <mo-select data-placeholder="https://">
+      <button type="button" popovertarget="ig-proto" data-select-trigger aria-label="Protocol"></button>
+      <ul popover id="ig-proto" class="popover" role="listbox">
+        <li><button type="button" role="option" value="https://" aria-selected="true">https://</button></li>
+        <li><button type="button" role="option" value="http://">http://</button></li>
+      </ul>
+    </mo-select>
+    <input placeholder="example.com" aria-label="Domain" />
+    <mo-select data-placeholder=".com">
+      <button type="button" popovertarget="ig-tld" data-select-trigger aria-label="TLD"></button>
+      <ul popover id="ig-tld" class="popover" role="listbox">
+        <li><button type="button" role="option" value=".com" aria-selected="true">.com</button></li>
+        <li><button type="button" role="option" value=".dev">.dev</button></li>
+        <li><button type="button" role="option" value=".org">.org</button></li>
+      </ul>
+    </mo-select>
+  </div>
+  <div data-input-group>
+    <input id="ig-addons-disabled" placeholder="This field is disabled" disabled aria-label="Disabled example" />
+    <span data-addon>Dims with its control</span>
+  </div>
+</div>

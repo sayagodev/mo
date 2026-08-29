@@ -1,0 +1,33 @@
+<div class="vstack gap-4" style="max-width: 22rem;">
+  <div data-input-group>
+    <input placeholder="Enter file name" aria-label="File name" />
+    <span data-addon>
+      <mo-dropdown>
+        <button type="button" class="icon ghost icon-xs" aria-label="More" popovertarget="ig-dd-file">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="5" r="1" /><circle cx="12" cy="12" r="1" /><circle cx="12" cy="19" r="1" /></svg>
+        </button>
+        <menu popover id="ig-dd-file">
+          <button role="menuitem" type="button">Settings</button>
+          <button role="menuitem" type="button">Copy path</button>
+          <button role="menuitem" type="button">Open location</button>
+        </menu>
+      </mo-dropdown>
+    </span>
+  </div>
+  <div data-input-group>
+    <input placeholder="Enter search query" aria-label="Search query" />
+    <span data-addon>
+      <mo-dropdown>
+        <button type="button" class="ghost xs" popovertarget="ig-dd-search">
+          Search in...
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+        </button>
+        <menu popover id="ig-dd-search">
+          <button role="menuitem" type="button">Documentation</button>
+          <button role="menuitem" type="button">Blog Posts</button>
+          <button role="menuitem" type="button">Changelog</button>
+        </menu>
+      </mo-dropdown>
+    </span>
+  </div>
+</div>

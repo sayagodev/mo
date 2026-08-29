@@ -1,0 +1,23 @@
+<div data-button-group role="group" aria-label="Copilot">
+  <button type="button" class="outline">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8V4H8" /><rect width="16" height="12" x="4" y="8" rx="2" /><path d="M2 14h2" /><path d="M20 14h2" /><path d="M15 13v2" /><path d="M9 13v2" /></svg>
+    Copilot
+  </button>
+  <button type="button" class="outline icon" popovertarget="btn-copilot-pop" aria-label="Open Copilot">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+  </button>
+</div>
+
+<div popover id="btn-copilot-pop" class="popover" style="--mo-popover-min-width: 18rem">
+  <div class="vstack gap-4">
+    <div class="vstack gap-1">
+      <div data-title>Start a new task with Copilot</div>
+      <p data-description>Describe your task in natural language.</p>
+    </div>
+    <div class="vstack gap-2">
+      <label class="sr-only" for="btn-copilot-task">Task description</label>
+      <textarea id="btn-copilot-task" placeholder="I need to..." rows="3"></textarea>
+      <p data-description>Copilot will open a pull request for review.</p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,122 @@
+/* ============================================================
+   Prose — opt-in typography for document-style content.
+
+   The base reset carries zero typographic opinions, so plain
+   markup renders unstyled. Wrap content in class="prose" to get
+   readable article/document typography. Apps building component
+   UIs never need this layer.
+   ============================================================ */
+@layer prose {
+  .prose {
+    line-height: 1.7;
+
+    & > :first-child { margin-block-start: 0; }
+    & > :last-child { margin-block-end: 0; }
+
+    /* Headings */
+    & h1 { font-size: var(--text-1); }
+    & h2 { font-size: var(--text-2); margin-block-start: var(--space-10); }
+    & h3 { font-size: var(--text-3); margin-block-start: var(--space-8); }
+    & h4 { font-size: var(--text-4); margin-block-start: var(--space-6); }
+    & h5 { font-size: var(--text-5); margin-block-start: var(--space-6); }
+    & h6 { font-size: var(--text-regular); margin-block-start: var(--space-6); }
+
+    & h1, & h2, & h3, & h4, & h5, & h6 {
+      font-weight: var(--font-semibold);
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      margin-block-end: var(--space-3);
+    }
+
+    & p {
+      margin-block-end: var(--space-4);
+    }
+
+    /* Lists restore browser markers with comfortable rhythm. */
+    & ul, & ol {
+      margin-block: 0 var(--space-4);
+      padding-inline-start: var(--space-6);
+
+      & ul, & ol { margin-block-end: 0; }
+    }
+
+    & li + li { margin-block-start: var(--space-1); }
+
+    /* Links */
+    & a {
+      color: var(--primary);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      transition: color var(--transition-fast);
+
+      &:hover { color: color-mix(in srgb, var(--primary) 80%, transparent); }
+    }
+
+    strong, b { font-weight: var(--font-bold); }
+
+    small { font-size: var(--text-8); }
+
+    /* Inline code */
+    & code {
+      font-family: var(--font-mono);
+      font-size: 0.875em;
+      padding: 0.125em 0.375em;
+      background-color: var(--faint);
+      border-radius: var(--radius-small);
+    }
+
+    & pre {
+      font-family: var(--font-mono);
+      font-size: var(--text-7);
+      line-height: 1.7;
+      padding: var(--space-4);
+      background-color: var(--faint);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-medium);
+      overflow-x: auto;
+      margin-block-end: var(--space-4);
+
+      & code {
+        padding: 0;
+        background: none;
+        border-radius: 0;
+        font-size: inherit;
+      }
+    }
+
+    & blockquote {
+      border-inline-start: 2px solid var(--border);
+      padding-inline-start: var(--space-4);
+      color: var(--muted-foreground);
+      margin-block-end: var(--space-4);
+
+      & > :last-child { margin-block-end: 0; }
+    }
+
+    & mark {
+      background-color: color-mix(in srgb, var(--warning) 30%, transparent);
+      color: inherit;
+      padding: 0.125em 0.25em;
+      border-radius: var(--radius-small);
+    }
+
+    & hr {
+      margin-block: var(--space-8);
+    }
+
+    & table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: var(--text-7);
+      margin-block-end: var(--space-4);
+
+      & th, & td {
+        padding: var(--space-2) var(--space-3);
+        border-bottom: 1px solid var(--border);
+        text-align: start;
+      }
+
+      & th { font-weight: var(--font-semibold); }
+    }
+  }
+}

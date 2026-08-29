@@ -1,0 +1,31 @@
+<aside data-sidebar>
+  <footer>
+    <ul data-sidebar-menu>
+      <li>
+        <mo-dropdown style="--mo-dropdown-min-width: 14rem">
+          <button type="button" popovertarget="sb-footer-menu" data-sidebar-item data-size="lg" aria-haspopup="menu">
+            <span data-sidebar-media>CN</span>
+            <span>shadcn</span>
+            <small>m@example.com</small>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>
+          </button>
+          <menu popover id="sb-footer-menu">
+            <div data-label class="flex items-center gap-2">
+              <figure data-variant="avatar">CN</figure>
+              <div>
+                <div>shadcn</div>
+                <small class="text-light">m@example.com</small>
+              </div>
+            </div>
+            <hr />
+            <button role="menuitem" type="button">Account</button>
+            <button role="menuitem" type="button">Billing</button>
+            <button role="menuitem" type="button">Notifications</button>
+            <hr />
+            <button role="menuitem" type="button" data-variant="danger">Log out</button>
+          </menu>
+        </mo-dropdown>
+      </li>
+    </ul>
+  </footer>
+</aside>

@@ -1,23 +1,35 @@
 /**
- * oat - Tabs Component
+ * mo - Tabs Component
  * Provides keyboard navigation and ARIA state management.
  *
  * Usage:
- * <ot-tabs>
+ * <mo-tabs>
  *   <div role="tablist">
  *     <button role="tab">Tab 1</button>
  *     <button role="tab">Tab 2</button>
  *   </div>
  *   <div role="tabpanel">Content 1</div>
  *   <div role="tabpanel">Content 2</div>
- * </ot-tabs>
+ * </mo-tabs>
+ *
+ * data-orientation="vertical" on the host turns the tablist into a column
+ * navigated with ArrowUp/ArrowDown. The line look is pure CSS: set
+ * data-variant="line" on the tablist.
  *
  * Add data-anchor="key" to deep link the active tab's id in the URL's #anchor.
  */
 
-import { OtBase } from './base.js';
+import { MoBase } from './base.js';
 
-class OtTabs extends OtBase {
+/**
+ * Tabs with roving tabindex keyboard navigation and hash deep-linking.
+ *
+ * @tag mo-tabs
+ * @attr {string} data-anchor - Deep-links the active tab id under this URL hash key.
+ * @prop {number} activeIndex - Index of the active tab (get/set).
+ * @fires {CustomEvent<{ index: number, tab: HTMLElement }>} mo-tab-change - Fired when the active tab changes.
+ */
+class MoTabs extends MoBase {
   #tabs = [];
   #panels = [];
   #anchor;
@@ -29,7 +41,7 @@ class OtTabs extends OtBase {
     this.#panels = [...this.querySelectorAll(':scope > [role="tabpanel"]')];
 
     if (this.#tabs.length === 0 || this.#panels.length === 0) {
-      console.warn('ot-tabs: Missing tab or tabpanel elements');
+      console.warn('mo-tabs: Missing tab or tabpanel elements');
       return;
     }
 
@@ -41,8 +53,8 @@ class OtTabs extends OtBase {
       if (!panel) return;
 
       this.#ids[i] = tab.id || '';
-      tab.id ||= `ot-tab-${this.uid()}`;
-      panel.id ||= `ot-panel-${this.uid()}`;
+      tab.id ||= `mo-tab-${this.uid()}`;
+      panel.id ||= `mo-panel-${this.uid()}`;
       tab.setAttribute('aria-controls', panel.id);
       panel.setAttribute('aria-labelledby', tab.id);
     });
@@ -67,11 +79,39 @@ class OtTabs extends OtBase {
   }
 
   onkeydown(e) {
-    if (!e.target.closest('[role="tab"]')) return;
+    const target = e.target.closest('[role="tab"]');
+    if (!target) return;
 
-    const next = this.keyNav(e, this.activeIndex, this.#tabs.length, 'ArrowLeft', 'ArrowRight');
+    // Manual activation: arrows move focus only (like shadcn/Radix manual),
+    // Enter/Space activates the focused tab. This prevents layout shifts
+    // when the user just wants to navigate past tabs.
+    if (e.key === 'Enter' || e.key === ' ') {
+      const idx = this.#tabs.indexOf(target);
+      if (idx >= 0) {
+        e.preventDefault();
+        this.#activate(idx);
+        target.focus();
+      }
+      return;
+    }
+
+    // Vertical tablists follow the APG: Up/Down instead of Left/Right.
+    const vertical = this.dataset.orientation === 'vertical';
+    // Use focused index, not activeIndex, for roving
+    const focusedIdx = this.#tabs.indexOf(document.activeElement);
+    const current = focusedIdx >= 0 ? focusedIdx : this.activeIndex;
+    const next = this.keyNav(
+      e,
+      current,
+      this.#tabs.length,
+      vertical ? 'ArrowUp' : 'ArrowLeft',
+      vertical ? 'ArrowDown' : 'ArrowRight',
+      true,
+    );
     if (next >= 0) {
-      this.#activate(next);
+      e.preventDefault();
+      // Move focus only, don't activate
+      this.#tabs.forEach((tab, i) => tab.tabIndex = i === next ? 0 : -1);
       this.#tabs[next].focus();
     }
   }
@@ -90,7 +130,7 @@ class OtTabs extends OtBase {
     this.#panels.forEach((panel, i) => panel.hidden = i !== idx);
 
     if (syncHash) this.#syncHash(idx);
-    this.emit('ot-tab-change', { index: idx, tab: this.#tabs[idx] });
+    this.emit('mo-tab-change', { index: idx, tab: this.#tabs[idx] });
   }
 
   // Index of the tab whose id is in the hash, or return -1.
@@ -124,4 +164,4 @@ class OtTabs extends OtBase {
   }
 }
 
-customElements.define('ot-tabs', OtTabs);
+customElements.define('mo-tabs', MoTabs);

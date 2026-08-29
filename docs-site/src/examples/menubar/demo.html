@@ -1,0 +1,85 @@
+<mo-menubar>
+  <button type="button" role="menuitem" popovertarget="mb-demo-file">File</button>
+  <menu popover id="mb-demo-file">
+    <button role="menuitem" type="button">
+      New Tab
+      <span data-shortcut>⌘T</span>
+    </button>
+    <button role="menuitem" type="button">
+      New Window
+      <span data-shortcut>⌘N</span>
+    </button>
+    <button role="menuitem" type="button" disabled>New Incognito Window</button>
+    <hr />
+    <button role="menuitem" type="button" popovertarget="mb-demo-share">Share</button>
+    <menu popover id="mb-demo-share">
+      <button role="menuitem" type="button">Email link</button>
+      <button role="menuitem" type="button">Messages</button>
+      <button role="menuitem" type="button">Notes</button>
+    </menu>
+    <hr />
+    <button role="menuitem" type="button">
+      Print…
+      <span data-shortcut>⌘P</span>
+    </button>
+  </menu>
+
+  <button type="button" role="menuitem" popovertarget="mb-demo-edit">Edit</button>
+  <menu popover id="mb-demo-edit">
+    <button role="menuitem" type="button">
+      Undo
+      <span data-shortcut>⌘Z</span>
+    </button>
+    <button role="menuitem" type="button">
+      Redo
+      <span data-shortcut>⇧⌘Z</span>
+    </button>
+    <hr />
+    <button role="menuitem" type="button" popovertarget="mb-demo-find">Find</button>
+    <menu popover id="mb-demo-find">
+      <button role="menuitem" type="button">Search the web</button>
+      <hr />
+      <button role="menuitem" type="button">Find…</button>
+      <button role="menuitem" type="button">Find Next</button>
+      <button role="menuitem" type="button">Find Previous</button>
+    </menu>
+    <hr />
+    <button role="menuitem" type="button">Cut</button>
+    <button role="menuitem" type="button">Copy</button>
+    <button role="menuitem" type="button">Paste</button>
+  </menu>
+
+  <button type="button" role="menuitem" popovertarget="mb-demo-view">View</button>
+  <menu popover id="mb-demo-view">
+    <button role="menuitemcheckbox" type="button" aria-checked="false">
+      Always Show Bookmarks Bar
+    </button>
+    <button role="menuitemcheckbox" type="button" aria-checked="true">
+      Always Show Full URLs
+    </button>
+    <hr />
+    <button role="menuitem" type="button" data-inset>
+      Reload
+      <span data-shortcut>⌘R</span>
+    </button>
+    <button role="menuitem" type="button" disabled data-inset>
+      Force Reload
+      <span data-shortcut>⇧⌘R</span>
+    </button>
+    <hr />
+    <button role="menuitem" type="button" data-inset>Toggle Fullscreen</button>
+    <hr />
+    <button role="menuitem" type="button" data-inset>Hide Sidebar</button>
+  </menu>
+
+  <button type="button" role="menuitem" popovertarget="mb-demo-profiles">Profiles</button>
+  <menu popover id="mb-demo-profiles">
+    <button role="menuitemradio" type="button" aria-checked="false">Andy</button>
+    <button role="menuitemradio" type="button" aria-checked="true">Benoit</button>
+    <button role="menuitemradio" type="button" aria-checked="false">Luis</button>
+    <hr />
+    <button role="menuitem" type="button" data-inset>Edit…</button>
+    <hr />
+    <button role="menuitem" type="button" data-inset>Add Profile…</button>
+  </menu>
+</mo-menubar>

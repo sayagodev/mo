@@ -1,0 +1,63 @@
+<mo-questionnaire style="max-width: 28rem; margin-inline: auto;">
+  <div data-questionnaire-progress></div>
+
+  <form data-questionnaire-step>
+    <h3>What should every progress update include?</h3>
+    <p>Select all that apply, or skip this question.</p>
+    <div data-questionnaire-choices>
+      <label data-questionnaire-choice>
+        <input type="checkbox" name="signals" value="progress">
+        <span data-indicator data-type="checkbox"></span>
+        <span data-questionnaire-label>Progress</span>
+      </label>
+      <label data-questionnaire-choice>
+        <input type="checkbox" name="signals" value="decisions">
+        <span data-indicator data-type="checkbox"></span>
+        <span data-questionnaire-label>Decisions</span>
+      </label>
+      <label data-questionnaire-choice>
+        <input type="checkbox" name="signals" value="risks">
+        <span data-indicator data-type="checkbox"></span>
+        <span data-questionnaire-label>Risks</span>
+      </label>
+      <label data-questionnaire-choice>
+        <input type="checkbox" name="signals" value="next-step">
+        <span data-indicator data-type="checkbox"></span>
+        <span data-questionnaire-label>Next step</span>
+      </label>
+    </div>
+    <div data-questionnaire-error></div>
+    <footer>
+      <button type="button" class="ghost" data-questionnaire-back>Back</button>
+      <button type="button" class="outline" data-questionnaire-skip>Skip</button>
+      <button type="submit">Next</button>
+    </footer>
+  </form>
+
+  <form data-questionnaire-step hidden data-required>
+    <h3>When should the task be scheduled?</h3>
+    <p>Pick the delivery timing.</p>
+    <div data-questionnaire-choices>
+      <label data-questionnaire-choice>
+        <input type="radio" name="timing" value="now" required>
+        <span data-indicator data-type="radio"></span>
+        <span data-questionnaire-label>Now</span>
+      </label>
+      <label data-questionnaire-choice>
+        <input type="radio" name="timing" value="next-cycle">
+        <span data-indicator data-type="radio"></span>
+        <span data-questionnaire-label>Next cycle</span>
+      </label>
+      <label data-questionnaire-choice>
+        <input type="radio" name="timing" value="backlog">
+        <span data-indicator data-type="radio"></span>
+        <span data-questionnaire-label>Backlog</span>
+      </label>
+    </div>
+    <div data-questionnaire-error></div>
+    <footer>
+      <button type="button" class="ghost" data-questionnaire-back>Back</button>
+      <button type="submit">Submit</button>
+    </footer>
+  </form>
+</mo-questionnaire>

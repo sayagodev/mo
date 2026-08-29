@@ -1,28 +1,107 @@
 @layer components {
+  /* Alert — semantic callout, grid with optional leading icon and action.
+     Plain [role="alert"] with <h*> title and <p> description. No data-slot
+     hooks: the icon (first <svg>) opens the two-column grid, and a trailing
+     <div> containing a <button> is positioned top-right (uses button.css). */
   [role="alert"] {
     position: relative;
-    display: flex;
-    gap: var(--space-3);
-    padding: var(--space-4) var(--space-6);
-    background-color: var(--background);
+    display: grid;
+    width: 100%;
+    grid-template-columns: 0 1fr;
+    align-items: start;
+    gap: 0.125rem;
+    padding: var(--mo-alert-padding, var(--space-3) var(--space-4));
+    background-color: var(--card);
+    color: var(--card-foreground);
     border: 1px solid var(--border);
-    border-radius: var(--radius-medium);
+    border-radius: var(--mo-alert-radius, var(--radius-large));
     font-size: var(--text-7);
+    text-align: start;
 
-    &[data-variant] {
-      border: none;
+    /* Reserve space when an action button is present */
+    &:has(> div),
+    &:has(> button) {
+      padding-inline-end: 4.5rem;
     }
 
-    &:is([data-variant="error"], [data-variant="danger"], [data-variant="success"], [data-variant="warning"]) {
-      color: var(--_variant-color);
-      background-color: light-dark(
-        color-mix(in srgb, var(--_variant-color) 8%, transparent),
-        color-mix(in srgb, var(--_variant-color) 20%, transparent)
-      );
+    /* Optional leading icon */
+    &:has(> svg) {
+      grid-template-columns: auto 1fr;
+      column-gap: var(--space-3);
 
-      & a {
-        color: var(--_variant-color);
+      & > svg {
+        width: 1rem;
+        height: 1rem;
+        translate: 0 0.125rem;
+        color: currentColor;
+        grid-row: span 2;
+        flex-shrink: 0;
+        pointer-events: none;
       }
+    }
+
+    & > :is(h1, h2, h3, h4, h5, h6) {
+      grid-column: 2;
+      min-height: 1rem;
+      font-size: inherit;
+      font-weight: var(--font-medium);
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+    }
+
+    & > p {
+      grid-column: 2;
+      margin: 0;
+      color: var(--muted-foreground);
+      font-size: var(--text-7);
+      line-height: 1.5;
+      text-wrap: balance;
+    }
+
+    /* Action — trailing wrapper with a button, absolute top-right
+       Shadcn .cn-alert-action is top-1.25 right-1.25 (0.3125rem) while
+       .cn-alert is px-2.5; Mo keeps the visual balance by aligning the
+       action inset to the alert's horizontal padding so the gap to the
+       border is symmetric (user request: match left padding). */
+    & > div:has(> button),
+    & > button {
+      position: absolute;
+      top: var(--space-2);
+      inset-inline-end: var(--space-4);
+    }
+
+    /* Symmetry fix: when the alert has an action, the button's
+       outer edge should sit exactly --space-4 from the border,
+       mirroring the left padding. If a legacy button keeps margin,
+       reset it so inset is the single source of truth. */
+    & > div:has(> button) > button,
+    & > button {
+      margin-inline-end: 0;
+    }
+
+    /* Variants — tokens only, no hardcoded colors */
+    &:is([data-variant="destructive"], [data-variant="danger"], [data-variant="error"]) {
+      color: var(--destructive);
+
+      & > p {
+        color: color-mix(in srgb, var(--destructive) 90%, transparent);
+      }
+
+      & > svg {
+        color: currentColor;
+      }
+    }
+
+    &[data-variant="success"] {
+      color: var(--success);
+
+      & > p { color: color-mix(in srgb, var(--success) 90%, transparent); }
+    }
+
+    &[data-variant="warning"] {
+      color: var(--warning);
+
+      & > p { color: color-mix(in srgb, var(--warning) 90%, transparent); }
     }
   }
 }

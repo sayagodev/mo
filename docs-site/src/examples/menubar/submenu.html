@@ -1,0 +1,39 @@
+<mo-menubar>
+  <button type="button" role="menuitem" popovertarget="mb-submenu-file">File</button>
+  <menu popover id="mb-submenu-file">
+    <button role="menuitem" type="button" popovertarget="mb-submenu-share">Share</button>
+    <menu popover id="mb-submenu-share">
+      <button role="menuitem" type="button">Email link</button>
+      <button role="menuitem" type="button">Messages</button>
+      <button role="menuitem" type="button">Notes</button>
+    </menu>
+    <hr />
+    <button role="menuitem" type="button">
+      Print...
+      <span data-shortcut>⌘P</span>
+    </button>
+  </menu>
+
+  <button type="button" role="menuitem" popovertarget="mb-submenu-edit">Edit</button>
+  <menu popover id="mb-submenu-edit">
+    <button role="menuitem" type="button">
+      Undo
+      <span data-shortcut>⌘Z</span>
+    </button>
+    <button role="menuitem" type="button">
+      Redo
+      <span data-shortcut>⇧⌘Z</span>
+    </button>
+    <hr />
+    <button role="menuitem" type="button" popovertarget="mb-submenu-find">Find</button>
+    <menu popover id="mb-submenu-find">
+      <button role="menuitem" type="button">Find...</button>
+      <button role="menuitem" type="button">Find Next</button>
+      <button role="menuitem" type="button">Find Previous</button>
+    </menu>
+    <hr />
+    <button role="menuitem" type="button">Cut</button>
+    <button role="menuitem" type="button">Copy</button>
+    <button role="menuitem" type="button">Paste</button>
+  </menu>
+</mo-menubar>

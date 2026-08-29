@@ -1,0 +1,170 @@
+@layer components {
+  /* shadcn/ui NavigationMenu, simplified onto semantic HTML + the native
+     Popover API. <mo-navigation-menu> orchestrates open-on-hover (or
+     click-only via data-open="click"), aria-expanded sync and panel
+     placement below the trigger.
+
+     Anatomy:
+     <mo-navigation-menu>
+       <nav data-navigation-menu>
+         <ul>
+           <li><a data-navigation-link href="#">Docs</a></li>   <- plain item
+           <li>                                                 <- disclosure
+             <button type="button" popovertarget="nm1">Components ▾</button>
+             <div popover id="nm1" class="popover">…</div>     <- panel surface
+           </li>
+         </ul>
+       </nav>
+     </mo-navigation-menu>
+
+     Hooks:
+       --mo-navigation-item-height      root item height (default 2.25rem)
+       --mo-navigation-item-padding-x   root item padding
+       --mo-navigation-panel-width      panel width (default 24rem; sm 16rem / lg 37.5rem)
+       --mo-navigation-columns          panel list columns (or data-columns="2|3")
+       --mo-navigation-gap              panel list gap */
+  [data-navigation-menu] > ul {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: var(--text-7);
+  }
+
+  /* Root links and popover triggers share shadcn's navigationMenuTriggerStyle:
+     h-9, px-4, text-sm, medium weight, rounded-md — accent on hover, accent/50
+     while open (data-[state=open]:bg-accent/50). No underline indicator. */
+  [data-navigation-menu] :is([data-navigation-link], li > button[popovertarget]) {
+    --_pad: var(--mo-navigation-item-padding-x, var(--space-3));
+
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    height: var(--mo-navigation-item-height, 2.25rem);
+    padding-inline: var(--_pad);
+    font-size: var(--text-7);
+    font-weight: var(--font-medium);
+    white-space: nowrap;
+    color: var(--foreground);
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: var(--radius-large);
+
+    /* Override @layer-base button chrome (solid primary bg). */
+    background-color: transparent;
+    border: 1px solid transparent;
+    box-shadow: none;
+    transition:
+      color var(--transition-fast),
+      background-color var(--transition-fast);
+
+    &:hover,
+    &:focus-visible {
+      background-color: var(--muted);
+      color: var(--foreground);
+    }
+
+    /* Open state: half-tint like Radix data-[state=open]:bg-accent/50,
+       full accent on hover-while-open. */
+    &[aria-expanded="true"] {
+      background-color: color-mix(in srgb, var(--muted) 50%, transparent);
+      color: var(--foreground);
+
+      &:hover,
+      &:focus-visible {
+        background-color: var(--muted);
+      }
+    }
+
+    /* Chevron: size-3, nudged down 1px, rotates 180° while open. */
+    & > svg {
+      width: 0.75rem;
+      height: 0.75rem;
+      position: relative;
+      top: 1px;
+      color: var(--muted-foreground);
+      transition: rotate var(--transition);
+    }
+
+    &[aria-expanded="true"] > svg {
+      rotate: 180deg;
+    }
+  }
+
+  /* Panel sizing (.popover supplies surface, padding, shadow). Placement is
+     <mo-navigation-menu> JS: below the trigger, centered, 6px gap, flipped
+     on viewport overflow. */
+  [data-navigation-menu] [popover] {
+    inline-size: var(--mo-navigation-panel-width, 24rem);
+    max-inline-size: calc(100vw - 2 * var(--space-4));
+
+    &[data-width="sm"] { inline-size: var(--mo-navigation-panel-width, 16rem); }
+    &[data-width="lg"] { inline-size: var(--mo-navigation-panel-width, 37.5rem); }
+  }
+
+  /* Panel content grid: title/description link items, like shadcn's li grid. */
+  [data-navigation-menu] [popover] ul {
+    --_cols: var(--mo-navigation-columns, 1);
+
+    display: grid;
+    grid-template-columns: repeat(var(--_cols), minmax(0, 1fr));
+    gap: var(--mo-navigation-gap, var(--space-1));
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    &[data-columns="2"] { --_cols: 2; }
+    &[data-columns="3"] { --_cols: 3; }
+  }
+
+  [data-navigation-menu] [popover] a {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding: var(--space-2);
+    border-radius: var(--radius-large);
+    font-size: var(--text-7);
+    color: var(--foreground);
+    text-decoration: none;
+    transition: background-color var(--transition-fast);
+
+    &:hover,
+    &:focus-visible {
+      background-color: var(--muted);
+      color: var(--foreground);
+    }
+
+    /* Row variant for icon lists (shadcn's "With Icon" menu). */
+    &[data-inline] {
+      flex-direction: row;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    & > svg {
+      width: 1rem;
+      height: 1rem;
+      flex-shrink: 0;
+      color: var(--muted-foreground);
+    }
+
+    & [data-title] {
+      font-weight: var(--font-medium);
+      line-height: 1;
+    }
+
+    & [data-description] {
+      color: var(--muted-foreground);
+
+      /* line-clamp-2 */
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+    }
+  }
+}

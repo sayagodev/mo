@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Mo test</title>
+<link rel="stylesheet" href="/dist/mo.min.css" />
+<script src="/dist/mo.min.js"></script>
+<style>body { padding: 2rem }</style>
+</head>
+<body>
+
+<button data-test="default">Default</button>
+<button data-test="outline" class="outline">Outline</button>
+<button data-test="ghost" class="ghost">Ghost</button>
+<button data-test="secondary" data-variant="secondary">Secondary</button>
+<button data-test="danger" class="outline" data-variant="danger">Destructive</button>
+<a class="button link" href="#" data-test="link">Link</a>
+<button data-test="disabled" disabled>Disabled</button>
+<button data-test="small" class="small">Small</button>
+<button data-test="loading" disabled>
+  <span aria-busy="true"></span>
+  Please wait
+</button>
+<button data-test="loading-outline" class="outline" disabled>
+  <span aria-busy="true"></span>
+  Generating
+</button>
+
+</body>
+</html>

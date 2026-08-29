@@ -1,0 +1,179 @@
+@layer components {
+  /* ============================================================
+     Marker — shadcn/ui conversation marker.
+
+     Row-level marker for AI-chat/system notes: status updates,
+     bordered rows and labeled separators. NOT the inline <mark>
+     highlighter (that stays a .prose concern).
+
+     Anatomy (attribute-driven mirror of shadcn's Marker):
+       [data-marker]                 root row (div/a/button)
+         [data-marker-icon]          decorative icon slot (aria-hidden)
+         [data-marker-content]       text slot
+
+     Variants ride the data-marker value:
+       data-marker="border"          default row + bottom hairline (pb-2)
+       data-marker="separator"       centered label between divider lines
+
+     Composition:
+       role="status" + a small spinner in the icon slot for live,
+       in-progress markers; .shimmer on the content for streaming text.
+       Links and buttons work by putting data-marker on <a>/<button>.
+
+     shadcn reference: apps/v4/registry/new-york-v4/ui/marker.tsx
+     (base classes: flex min-h-4 w-full items-center gap-2 text-left
+     text-sm text-muted-foreground, svg size-4, [a] underline-offset-3).
+     ============================================================ */
+  [data-marker] {
+    position: relative;
+    display: flex;
+    width: 100%;
+    min-height: 1rem;
+    align-items: center;
+    gap: var(--space-2);
+    text-align: start;
+    font-size: var(--text-7);
+    color: var(--muted-foreground);
+
+    /* Any svg without an explicit size class becomes size-4 (1rem). */
+    & svg:not([class*="size-"]) {
+      width: 1rem;
+      height: 1rem;
+    }
+
+    /* Links inside a marker: muted, underlined with offset (shadcn's
+       [a]:underline [a]:underline-offset-3 [a]:hover:text-foreground). */
+    & a {
+      color: inherit;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      transition: color var(--transition-fast);
+
+      &:hover {
+        color: var(--foreground);
+      }
+    }
+  }
+
+  /* Polymorphic root: when the marker IS the link/button, strip the
+     UA chrome so it reads as a plain marker row. */
+  :is(a, button)[data-marker] {
+    border: none;
+    padding: 0;
+    background: none;
+    color: var(--muted-foreground);
+    text-decoration: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: var(--text-7);
+    line-height: inherit;
+  }
+
+  /* Decorative icon slot: fixed 1rem square, not announced to AT
+     (author sets aria-hidden, matching shadcn's MarkerIcon). */
+  [data-marker-icon] {
+    display: flex;
+    flex-shrink: 0;
+    width: 1rem;
+    height: 1rem;
+
+    & > svg {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  /* Text slot: wraps long words; separator variant centers it and
+     prevents the hairlines from shrinking it (flex-none). */
+  [data-marker-content] {
+    min-width: 0;
+    overflow-wrap: break-word;
+
+    & a {
+      color: inherit;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      transition: color var(--transition-fast);
+
+      &:hover {
+        color: var(--foreground);
+      }
+    }
+  }
+
+  [data-marker="separator"] {
+    /* Divider lines either side of the label (shadcn's before/after
+       mr-1/ml-1 h-px flex-1 min-w-0 bg-border). */
+    &::before,
+    &::after {
+      content: "";
+      height: 1px;
+      min-width: 0;
+      flex: 1;
+      background-color: var(--border);
+    }
+
+    &::before {
+      margin-inline-end: var(--space-1);
+    }
+
+    &::after {
+      margin-inline-start: var(--space-1);
+    }
+
+    & [data-marker-content] {
+      flex: none;
+      text-align: center;
+    }
+  }
+
+  [data-marker="border"] {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: var(--space-2);
+  }
+
+  /* Shimmer: streaming-text highlight, ported from shadcn's shimmer
+     utility. Apply to [data-marker-content] (or any element). */
+  .shimmer {
+    --_spread: calc(3ch + 40px);
+    --_base: currentColor;
+    --_highlight: color-mix(in srgb, currentColor 20%, transparent);
+
+    background-color: transparent;
+    background-image: linear-gradient(
+      110deg,
+      var(--_base) calc(50% - var(--_spread)),
+      color-mix(in srgb, var(--_highlight), var(--_base) 50%) calc(50% - var(--_spread) * 0.5),
+      var(--_highlight) 50%,
+      color-mix(in srgb, var(--_highlight), var(--_base) 50%) calc(50% + var(--_spread) * 0.5),
+      var(--_base) calc(50% + var(--_spread))
+    );
+    background-repeat: no-repeat;
+    background-size: calc(200% + var(--_spread) * 2) 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: mo-marker-shimmer 2s linear infinite;
+
+    @media (prefers-color-scheme: dark) {
+      --_highlight: color-mix(in srgb, currentColor 35%, white);
+    }
+  }
+
+  @keyframes mo-marker-shimmer {
+    from {
+      background-position: 100% 0;
+    }
+
+    to {
+      background-position: 0 0;
+    }
+  }
+
+  /* Explicit local guard; animations.css also kills all motion globally. */
+  @media (prefers-reduced-motion: reduce) {
+    .shimmer {
+      animation: none;
+    }
+  }
+}
