@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Mo resizable test</title>
+<link rel="stylesheet" href="/dist/mo.min.css" />
+<script src="/dist/mo.min.js"></script>
+<style>body { padding: 2rem } [data-resizable-panel] { background: var(--muted); overflow: hidden }</style>
+</head>
+<body>
+
+<mo-resizable id="basic" style="width: 24rem; height: 8rem; display: flex">
+  <div data-resizable-panel>One</div>
+  <div data-resizable-panel>Two</div>
+</mo-resizable>
+
+<mo-resizable id="clamped" data-sizes="50,50" style="width: 24rem; height: 8rem; display: flex">
+  <div data-resizable-panel data-min="40">A</div>
+  <div data-resizable-handle aria-label="resize" role="separator"><span data-resizable-grip></span></div>
+  <div data-resizable-panel data-min="40">B</div>
+</mo-resizable>
+
+<mo-resizable id="vertical" data-orientation="vertical" style="width: 16rem; height: 16rem; display: flex; flex-direction: column">
+  <div data-resizable-panel>Header</div>
+  <div data-resizable-panel>Content</div>
+</mo-resizable>
+
+</body>
+</html>

@@ -66,10 +66,11 @@
 
     /* destructive alias: match shadcn (base/style-rhea) cn-badge-variant-destructive —
        translucent bg-destructive/10 text-destructive dark:bg-destructive/20
-       (NOT solid — the live shadcn border is translucent). */
+       (NOT solid — the live shadcn border is translucent). Text is darkened
+       toward --foreground so the small 12px label meets WCAG contrast. */
     &:is([data-variant="destructive"], [data-variant="danger"]) {
       background-color: color-mix(in srgb, var(--destructive) 10%, transparent);
-      color: var(--destructive);
+      color: color-mix(in srgb, var(--destructive) 75%, var(--foreground) 25%);
       border-color: transparent;
     }
 
@@ -161,11 +162,14 @@
       }
     }
 
-    /* Tinted status extensions — reuse --variant-color from 01-theme (shared mapping) */
-    &:is([data-variant="success"], [data-variant="warning"]) {
-      color: var(--variant-color);
+    /* Tinted status extensions — reuse --variant-color from 01-theme (shared mapping).
+       Text is darkened toward --foreground so the small 12px label meets WCAG
+       contrast on its light tinted background (shadcn's --variant on flat bg
+       sits just under 4.5:1 for non-bold text). */
+    &:is([data-variant="success"], [data-variant="warning"], [data-variant="destructive"], [data-variant="danger"]) {
+      color: color-mix(in srgb, var(--variant-color) 75%, var(--foreground) 25%);
       background-color: light-dark(
-        color-mix(in srgb, var(--variant-color) 10%, transparent),
+        color-mix(in srgb, var(--variant-color) 12%, transparent),
         color-mix(in srgb, var(--variant-color) 30%, transparent)
       );
     }

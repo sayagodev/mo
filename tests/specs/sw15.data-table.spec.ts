@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 // sw15 — mo-data-table: shadcn/ui data-table contract (sort/select/paginate/filter)
 // over a plain semantic table. Harness loads dist/mo.min.css + mo.min.js.
-const URL = 'file:///tmp/opencode/mo-data-table-harness.html';
+const URL = '/tests/fixtures/data-table.html';
 
 const rows = (page, id: string) =>
   page.$$eval(`#${id} tbody tr:not([hidden])`, (els) =>

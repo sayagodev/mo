@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 // sw13 — mo-resizable: shadcn/ui Resizable (react-resizable-panels) contract.
-const URL = 'file:///tmp/opencode/mo-resizable-harness.html';
+const URL = '/tests/fixtures/resizable.html';
 
 const basis = (page, id) =>
   page.$$eval(`#${id} > [data-resizable-panel]`, (els) =>
@@ -14,7 +14,6 @@ test('auto-inserts handles and starts 50/50 on flex-basis', async ({ page }) => 
   await page.goto(URL);
   const host = page.locator('#basic');
   await expect(host.locator('> [data-resizable-handle]')).toHaveCount(1);
-  await expect(host.locator('> hr[data-resizable-handle]')).toHaveCount(1);
 
   const [a, b] = await basis(page, 'basic');
   expect(parseFloat(a)).toBeCloseTo(50, 1);
@@ -119,8 +118,7 @@ test('data-min clamps dragging', async ({ page }) => {
 test('explicit handles are respected, not duplicated', async ({ page }) => {
   await page.goto(URL);
   const host = page.locator('#clamped');
-  await expect(host.locator('> [data-resizable-handle]')).toHaveCount(1);
-  await expect(host.locator('> hr[data-resizable-handle]')).toHaveCount(0); // author's kept
+  await expect(host.locator('> [data-resizable-handle]')).toHaveCount(1); // author's kept, no duplicate
   await expect(host.locator('[data-resizable-grip]')).toHaveCount(1);
 });
 

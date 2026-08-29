@@ -253,7 +253,7 @@
     }
   },
   "base": {
-    "css": ["00-base.css", "01-theme.css", "animations.css", "shared.css", "utilities.css"],
+    "css": ["00-base.css", "01-theme.css", "variables.css", "animations.css", "shared.css", "utilities.css"],
     "js": ["base.js"]
   }
 }

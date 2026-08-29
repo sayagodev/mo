@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Mo data-table test</title>
+<link rel="stylesheet" href="/dist/mo.min.css" />
+<script src="/dist/mo.min.js"></script>
+<style>body { padding: 2rem } .cells { display: flex; flex-direction: column; gap: 2rem }</style>
+</head>
+<body>
+<script>
+window.events_basic = [];
+window.events_paged = [];
+</script>
+
+<div class="cells">
+
+<!-- basic: sortable name + amount. Original order Dana/alice/Boris.
+     name asc (ci): alice < Boris < Dana. amount asc: Dana($9) < Boris($250) < alice($1200.50). -->
+<mo-data-table id="basic">
+  <table>
+    <thead>
+      <tr>
+        <th data-sortable><button type="button" data-test="sort-name">Name</button></th>
+        <th data-sortable><button type="button" data-test="sort-amount">Amount</button></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Dana</td><td>$9</td></tr>
+      <tr><td>alice</td><td>$1,200.50</td></tr>
+      <tr><td>Boris</td><td>$250</td></tr>
+    </tbody>
+  </table>
+</mo-data-table>
+
+<!-- bare: sortable header with no inner button (keyboard via Enter) -->
+<mo-data-table id="bare">
+  <table>
+    <thead><tr><th data-sortable data-test="bare-header">Email</th></tr></thead>
+    <tbody>
+      <tr><td>z@example.com</td></tr>
+      <tr><td>a@example.com</td></tr>
+    </tbody>
+  </table>
+</mo-data-table>
+
+<!-- select: row + header checkboxes; starts with 1 of 3 selected -->
+<mo-data-table id="select">
+  <table>
+    <thead>
+      <tr>
+        <th data-select-all><input type="checkbox" aria-label="Select all" data-test="select-all" /></th>
+        <th>Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td data-select><input type="checkbox" aria-label="Select row" /></td><td>alice</td></tr>
+      <tr><td data-select><input type="checkbox" aria-label="Select row" /></td><td>Boris</td></tr>
+      <tr data-selected><td data-select><input type="checkbox" aria-label="Select row" checked /></td><td>Dana</td></tr>
+    </tbody>
+  </table>
+  <footer data-table-pagination>
+    <span data-table-info data-test="select-info"></span>
+  </footer>
+</mo-data-table>
+
+<!-- paged: 12 rows, page size 5 -->
+<mo-data-table id="paged" data-page-size="5">
+  <table>
+    <thead><tr><th>Invoice</th></tr></thead>
+    <tbody>
+      <tr><td>INV001</td></tr><tr><td>INV002</td></tr><tr><td>INV003</td></tr>
+      <tr><td>INV004</td></tr><tr><td>INV005</td></tr><tr><td>INV006</td></tr>
+      <tr><td>INV007</td></tr><tr><td>INV008</td></tr><tr><td>INV009</td></tr>
+      <tr><td>INV010</td></tr><tr><td>INV011</td></tr><tr><td>INV012</td></tr>
+    </tbody>
+  </table>
+  <footer data-table-pagination>
+    <span data-table-info data-test="info"></span>
+    <button type="button" data-table-prev data-test="prev">Previous</button>
+    <button type="button" data-table-next data-test="next">Next</button>
+  </footer>
+</mo-data-table>
+
+<!-- filtered: 5 rows + filter input, page size 2.
+     Unfiltered order page 2 = [Paid, Unpaid]; filter "paid" (ci) matches 4 of 5. -->
+<mo-data-table id="filtered" data-page-size="2">
+  <input type="text" data-table-filter data-test="filter" placeholder="Filter…" aria-label="Filter" />
+  <table>
+    <thead><tr><th data-sortable><button type="button" data-test="sort-filter">Status</button></th></tr></thead>
+    <tbody>
+      <tr><td>Paid</td></tr>
+      <tr><td>Pending</td></tr>
+      <tr><td>Paid</td></tr>
+      <tr><td>Unpaid</td></tr>
+      <tr><td>Paid</td></tr>
+    </tbody>
+  </table>
+  <footer data-table-pagination>
+    <span data-table-info data-test="info"></span>
+    <button type="button" data-table-prev data-test="prev">Previous</button>
+    <button type="button" data-table-next data-test="next">Next</button>
+  </footer>
+</mo-data-table>
+
+</div>
+
+<script>
+document.getElementById('basic').addEventListener('mo-table-change', (e) => window.events_basic.push(e.detail));
+document.getElementById('paged').addEventListener('mo-table-change', (e) => window.events_paged.push(e.detail));
+</script>
+</body>
+</html>

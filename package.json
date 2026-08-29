@@ -21,6 +21,7 @@
   "files": [
     "mo.min.css",
     "mo.css",
+    "mo.variables.css",
     "mo.min.js",
     "mo.js",
     "mo.esm.js",
@@ -53,6 +54,7 @@
     },
     "./css": "./mo.css",
     "./css/*": "./css/*",
+    "./variables.css": "./mo.variables.css",
     "./js": "./mo.js",
     "./js/*": "./js/*",
     "./registry.json": "./registry.json"

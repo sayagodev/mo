@@ -83,9 +83,41 @@ order:
 [data-variant="info"] { --variant-color: var(--chart-2); }
 ```
 
+### Global variables file (shadcn-style)
+
+Import the canonical, editable `variables.css` — it declares **every** token Mo
+reads (base theme colors, radius, spacing, type, shadows, transitions) plus all
+the per-component `--mo-*` hooks, so you can see every default and override the
+whole library from one `:root` block. It is unlayered, so it wins the cascade.
+
+```sh
+pnpm dlx @sayagodev/mo init          # copies variables.css into your components dir
+# or import from the package:
+import "@sayagodev/mo/variables.css";
+```
+
+```css
+/* variables.css (edited) */
+:root {
+  --background: oklch(0.97 0 0);
+  --primary: oklch(0.55 0.2 260);
+  --mo-card-radius: 1.25rem;
+  --mo-button-radius: 999px;
+}
+```
+
 Dark mode follows the OS automatically; force it with
 `<html data-theme="dark">`. See `ANALYSIS.md` for the full audit,
 token table and override model.
+
+### TypeScript / JSX
+
+Mo ships `mo.d.ts` declaring every custom element (`mo-tabs`, `mo-dropdown`,
+`mo-carousel`…) and the native HTML attributes it relies on
+(`popovertarget`, `popovertargetaction`, `command`, `commandfor`), so `<button
+popovertarget="x">`, `<menu popover>` and `<mo-*>…` type-check in React and
+React Server Components with **zero** extra config. The JSX augmentation is
+lazy (`import('react')`), so vanilla TypeScript consumers are unaffected.
 
 ## Components
 

@@ -5,9 +5,9 @@
  * plain flex + Pointer Events, no dependencies:
  * - Panels are the host's direct [data-resizable-panel] children; their
  *   flex-basis percentages always sum to 100 (handles cost zero layout).
- * - <hr data-resizable-handle> dividers are inserted automatically between
+ * - <div data-resizable-handle> dividers are inserted automatically between
  *   panels; authored handles are kept as-is and may carry content like a
- *   grip icon (wrap in a div — hr cannot hold children).
+ *   grip icon ([data-resizable-grip]).
  * - Dragging adjusts only the two panels beside the handle; each panel is
  *   clamped to its data-min percentage (default 10%).
  * - Keyboard: handles are focusable separators; Arrow keys resize by 2%
@@ -19,7 +19,7 @@
  * Usage:
  * <mo-resizable style="height: 200px">
  *   <div data-resizable-panel>One</div>
- *   <!-- auto-inserted: <hr data-resizable-handle> -->
+ *   <!-- auto-inserted: <div data-resizable-handle> -->
  *   <div data-resizable-panel>Two</div>
  * </mo-resizable>
  *

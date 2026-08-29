@@ -1,0 +1,377 @@
+/* ============================================================
+ * Mo — Global CSS Variables (canonical, editable)  v0.8
+ * ============================================================
+ * This is the shadcn-style, CONSUMER-FACING override entry point.
+ * It declares EVERY default token Mo reads — the base theme
+ * (colors, radius, spacing, type, shadows, transitions) plus the
+ * per-component `--mo-*` override hooks — in one clearly-labelled
+ * `:root` block.
+ *
+ *   • Default values are byte-identical to src/css/01-theme.css and
+ *     the component files under src/css/*.css — nothing is forked.
+ *   • Import it once (e.g. after mo.css) and EDIT the values to
+ *     restyle the whole library, exactly like shadcn's
+ *     `:root { --background: … }` block.
+ *   • It is self-contained: every value either is a literal or
+ *     references another token declared here, so paste it anywhere
+ *     (a `:root` in your own stylesheet, a CSS entry point, etc.)
+ *     and it will resolve on its own.
+ *
+ * HOW IT CO-EXISTS WITH THE THEME LAYER
+ *   src/css/01-theme.css exposes the same defaults inside @layer theme.
+ *   `variables.css` is intentionally UNLAYERED, so when you import it
+ *   after mo.css your overrides win the cascade over the layered theme
+ *   defaults — no need to raise specificity.
+ *
+ * LIGHT / DARK
+ *   Colors use light-dark(<light>, <dark>) and track the UA `color-scheme`
+ *   (or <html data-theme="light|dark"> / .light/.dark). Keep them as-is
+ *   unless you want a fixed scheme.
+ * ============================================================ */
+
+:root {
+  color-scheme: light dark;
+
+  /* ============================================================
+     COLORS — core palette (shadcn/ui neutral, verbatim)
+     Each: light-dark(<light>, <dark>).
+     ============================================================ */
+  --background: light-dark(oklch(1 0 0), oklch(0.145 0 0));
+  --foreground: light-dark(oklch(0.145 0 0), oklch(0.985 0 0));
+  --card: light-dark(oklch(1 0 0), oklch(0.205 0 0));
+  --card-foreground: light-dark(oklch(0.145 0 0), oklch(0.985 0 0));
+  --popover: light-dark(oklch(1 0 0), oklch(0.205 0 0));
+  --popover-foreground: light-dark(oklch(0.145 0 0), oklch(0.985 0 0));
+  --primary: light-dark(oklch(0.205 0 0), oklch(0.922 0 0));
+  --primary-foreground: light-dark(oklch(0.985 0 0), oklch(0.205 0 0));
+  --secondary: light-dark(oklch(0.97 0 0), oklch(0.269 0 0));
+  --secondary-foreground: light-dark(oklch(0.205 0 0), oklch(0.985 0 0));
+  --muted: light-dark(oklch(0.97 0 0), oklch(0.269 0 0));
+  --muted-foreground: light-dark(oklch(0.556 0 0), oklch(0.708 0 0));
+  --accent: light-dark(oklch(0.97 0 0), oklch(0.269 0 0));
+  --accent-foreground: light-dark(oklch(0.205 0 0), oklch(0.985 0 0));
+  --destructive: light-dark(oklch(0.577 0.245 27.325), oklch(0.704 0.191 22.216));
+  --destructive-foreground: light-dark(#fff, oklch(0.985 0 0));
+  --border: light-dark(oklch(0.922 0 0), oklch(1 0 0 / 10%));
+  --input: light-dark(oklch(0.922 0 0), oklch(1 0 0 / 15%));
+  --ring: light-dark(oklch(0.708 0 0), oklch(0.556 0 0));
+
+  /* Chart palette */
+  --chart-1: light-dark(oklch(0.646 0.222 41.116), oklch(0.488 0.243 264.376));
+  --chart-2: light-dark(oklch(0.6 0.118 184.704), oklch(0.696 0.17 162.48));
+  --chart-3: light-dark(oklch(0.398 0.07 227.392), oklch(0.769 0.188 70.08));
+  --chart-4: light-dark(oklch(0.828 0.189 84.429), oklch(0.627 0.265 303.9));
+  --chart-5: light-dark(oklch(0.769 0.188 70.08), oklch(0.645 0.246 16.439));
+
+  /* ============================================================
+     COLORS — extensions (status colors, subtle surface)
+     ============================================================ */
+  --success: light-dark(oklch(0.44 0.13 152), oklch(0.72 0.16 152));
+  --success-foreground: light-dark(oklch(0.985 0 0), oklch(0.145 0 0));
+  --warning: light-dark(oklch(0.47 0.12 60), oklch(0.79 0.14 72));
+  --warning-foreground: light-dark(oklch(0.985 0 0), oklch(0.145 0 0));
+  --faint: light-dark(oklch(0.985 0 0), oklch(0.205 0 0));
+  --faint-foreground: light-dark(oklch(0.556 0 0), oklch(0.708 0 0));
+
+  /* Backwards-compatible aliases used by existing components. */
+  --danger: var(--destructive);
+  --danger-foreground: var(--destructive-foreground);
+
+  /* ============================================================
+     RADIUS — derived from a single base (sm=6px md=8px lg=10px
+     xl=14px at the default --radius: 0.625rem).
+     ============================================================ */
+  --radius: 0.625rem;
+  --radius-small: calc(var(--radius) * 0.6);
+  --radius-medium: calc(var(--radius) * 0.8);
+  --radius-large: var(--radius);
+  --radius-xlarge: calc(var(--radius) * 1.4);
+  --radius-full: 9999px;
+
+  /* ============================================================
+     SPACING — Tailwind-compatible 0.25rem steps.
+     ============================================================ */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-14: 3.5rem;
+  --space-16: 4rem;
+  --space-18: 4.5rem;
+
+  /* ============================================================
+     TYPOGRAPHY — fixed sizes.
+     ============================================================ */
+  --text-1: 2.25rem;
+  --text-2: 1.875rem;
+  --text-3: 1.5rem;
+  --text-4: 1.25rem;
+  --text-5: 1.125rem;
+  --text-6: 1rem;
+  --text-7: 0.875rem;
+  --text-8: 0.75rem;
+  --text-regular: var(--text-6);
+  --leading-normal: 1.5;
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+  --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  /* ============================================================
+     SHADOWS — exact Tailwind v4 values (+ legacy aliases).
+     ============================================================ */
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-small: var(--shadow-xs);
+  --shadow-medium: var(--shadow-sm);
+  --shadow-large: var(--shadow-lg);
+
+  /* ============================================================
+     MOTION, LAYERS, LAYOUT
+     ============================================================ */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --z-dropdown: 50;
+  --z-modal: 200;
+  --bar-height: 0.5rem;
+
+  /* Grid (grid.css) */
+  --grid-cols: 12;
+  --grid-gap: 1.5rem;
+  --container-max: 1280px;
+  --container-pad: 1rem;
+
+  /* Sidebar (sidebar.css) */
+  --sidebar: var(--faint);
+  --sidebar-foreground: var(--foreground);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: var(--accent);
+  --sidebar-accent-foreground: var(--accent-foreground);
+  --sidebar-border: var(--border);
+  --sidebar-width: 16rem;
+  --sidebar-width-icon: 3rem;
+
+  /* ============================================================
+     PER-COMPONENT OVERRIDE HOOKS (--mo-*)
+     Override any of these to restyle a single component without
+     touching the theme colors. Each default is the value that
+     component's CSS would fall back to if you left it unset.
+     ============================================================ */
+
+  /* Aspect ratio — any CSS ratio ("16/9", "3/2", named). */
+  --mo-aspect-ratio: 16 / 9;
+
+  /* Accordion */
+  --mo-accordion-padding: var(--space-4);
+
+  /* Alert */
+  --mo-alert-padding: var(--space-3) var(--space-4);
+  --mo-alert-radius: var(--radius-large);
+
+  /* Attachment (file chips) */
+  --mo-attachment-gap: var(--space-2);
+  --mo-attachment-group-gap: var(--space-2);
+  --mo-attachment-media-size: 2.5rem;
+  --mo-attachment-media-size-sm: 2rem;
+  --mo-attachment-media-size-xs: 1.75rem;
+  --mo-attachment-media-radius: var(--radius-large);
+  --mo-attachment-radius: var(--radius-medium);
+  --mo-attachment-radius-xs: var(--radius-large);
+  --mo-attachment-width-vertical: 6rem;
+  --mo-attachment-width-vertical-content: 7.5rem;
+
+  /* Avatar */
+  --mo-avatar-size: var(--sz, 2rem); /* local --sz is set by .small/.large */
+
+  /* Badge */
+  --mo-badge-padding-x: var(--space-2);
+  --mo-badge-padding-y: calc(var(--space-1) * 0.5);
+  --mo-badge-radius: var(--radius-large);
+
+  /* Button */
+  --mo-button-height: 2.25rem;
+  --mo-button-height-xs: 1.5rem;
+  --mo-button-height-small: 2rem;
+  --mo-button-height-large: 2.5rem;
+  --mo-button-padding-x: var(--space-4);
+  --mo-button-padding-x-xs: var(--space-2);
+  --mo-button-padding-x-small: var(--space-3);
+  --mo-button-padding-x-large: var(--space-6);
+  --mo-button-padding-y: var(--space-2);
+  --mo-button-radius: var(--radius-large);
+  --mo-button-font-size: var(--text-7);
+
+  /* Button group */
+  --mo-button-group-gap: var(--space-2);
+  --mo-button-group-divider: var(--input);
+  --mo-button-group-text-padding-x: var(--space-4);
+
+  /* Card */
+  --mo-card-bg: var(--card);
+  --mo-card-padding: var(--space-5);
+  --mo-card-radius: var(--radius-large);
+
+  /* Carousel */
+  --mo-carousel-basis: 100%;
+  --mo-carousel-gap: var(--space-4);
+  --mo-carousel-gap-tight: var(--space-2);
+  --mo-carousel-dot: 0.5rem;
+  --mo-carousel-height: 20rem;
+  --mo-carousel-size-sm: 80%;
+  --mo-carousel-size-lg: 50%;
+
+  /* Combobox */
+  --mo-combobox-height: 2.25rem;
+  --mo-combobox-min-width: 8rem;
+  --mo-combobox-max-height: 20rem;
+  --mo-combobox-radius: var(--radius-medium);
+
+  /* Command palette / inline card */
+  --mo-command-width: 24rem; /* command.css palette width; inline card uses --mo-dialog-max-width */
+  --mo-command-list-height: 18.75rem;
+  --mo-command-radius: var(--radius-large);
+
+  /* Context menu */
+  --mo-context-menu-min-width: 8rem;
+  --mo-context-menu-radius: var(--radius-large);
+  --mo-context-menu-outline-width: 1px;
+  --mo-context-menu-outline-color: var(--border);
+
+  /* Dialog */
+  --mo-dialog-max-width: 32rem;
+  --mo-dialog-radius: var(--radius-large);
+
+  /* Dropdown menu surface */
+  --mo-dropdown-min-width: 8rem;
+  --mo-dropdown-radius: var(--radius-large);
+
+  /* Empty state */
+  --mo-empty-padding: var(--space-12);
+  --mo-empty-padding-md: var(--space-12);
+  --mo-empty-radius: var(--radius-large);
+  --mo-empty-gap: var(--space-4);
+  --mo-empty-header-max-width: 24rem;
+  --mo-empty-content-max-width: 24rem;
+  --mo-empty-border-width: 1px;
+  --mo-empty-border-color: currentColor;
+  --mo-empty-media-icon-size: 2.5rem;
+  --mo-empty-media-icon-svg-size: 1.5rem;
+  --mo-empty-media-icon-radius: var(--radius-medium);
+  --mo-empty-media-image-size: 2.5rem;
+
+  /* Form fields */
+  --mo-field-gap: 0.375rem;
+  --mo-input-radius: var(--radius-medium);
+  --mo-input-padding-x: var(--space-3);
+
+  /* Hover card */
+  --mo-hover-card-width: 20rem;
+  --mo-hover-card-radius: var(--radius-large);
+
+  /* Input group */
+  --mo-input-group-height: 2.25rem;
+  --mo-input-group-radius: var(--radius-medium);
+  --mo-input-group-addon-padding-x: var(--space-3);
+  --mo-input-group-divider: var(--input);
+
+  /* Item rows */
+  --mo-item-padding: calc(var(--space-2) * 1.25);
+  --mo-item-padding-sm: var(--space-2);
+  --mo-item-radius: var(--radius-large);
+  --mo-item-gap: var(--space-4);
+  --mo-item-group-gap: var(--space-2);
+  --mo-item-media-icon-size: 2rem;
+  --mo-item-media-image-size: 2.5rem;
+
+  /* Menubar */
+  --mo-menubar-height: 2.25rem;
+  --mo-menubar-min-width: 12rem;
+  --mo-menubar-radius: var(--radius-large);
+  --mo-menubar-gap: var(--space-1);
+
+  /* Navigation menu */
+  --mo-navigation-panel-width: 24rem; /* overridden per data-width: sm 16rem / lg 37.5rem */
+  --mo-navigation-item-height: 2.25rem;
+  --mo-navigation-item-padding-x: var(--space-3);
+  --mo-navigation-gap: var(--space-1);
+  --mo-navigation-columns: 1;
+
+  /* OTP cells */
+  --mo-otp-cell-size: 2.25rem;
+
+  /* Popover */
+  --mo-popover-width: 18rem;
+  --mo-popover-radius: var(--radius-medium);
+
+  /* Resizable handles */
+  --mo-resizable-line: var(--border);
+  --mo-resizable-hit: 4px;
+  --mo-resizable-active: var(--ring);
+
+  /* Scroll area */
+  --mo-scroll-area-height: auto;
+  --mo-scroll-area-width: auto;
+  --mo-scroll-fade-size: min(2.5rem, 12%);
+
+  /* Select */
+  --mo-select-height: 2rem;
+  --mo-select-min-width: 8rem;
+  --mo-select-max-height: 20rem;
+  --mo-select-padding-x: var(--space-3);
+  --mo-select-radius: var(--radius-large);
+
+  /* Sheet */
+  --mo-sheet-max-width: 24rem;
+  --mo-sheet-max-block-size: 50vh;
+  --mo-sheet-handle-width: 6.25rem;
+  --mo-sheet-handle-height: 0.5rem;
+
+  /* Slider */
+  --mo-slider-thumb-bg: #fff;
+  --mo-slider-vertical-height: 12rem;
+
+  /* Switch (form.css) */
+  --mo-switch-width: 2rem;
+  --mo-switch-thumb: 1rem;
+
+  /* Table */
+  --mo-table-cell-padding-x: var(--space-2);
+  --mo-table-cell-padding-y: var(--space-2);
+
+  /* Tabs */
+  --mo-tabs-height: 2rem;
+  --mo-tabs-list-bg: var(--muted);
+  --mo-tabs-active-bg: var(--background); /* dark: light-dark(var(--background), color-mix(in srgb, var(--input) 30%, transparent)) */
+  --mo-tabs-radius: var(--radius-large);
+  --mo-tabs-vertical-gap: var(--space-4);
+
+  /* Tag input */
+  --mo-taginput-padding: var(--space-2) var(--space-3);
+
+  /* Toast */
+  --mo-toast-min-width: 20rem;
+  --mo-toast-max-width: 28rem;
+  --mo-toast-padding: var(--space-4);
+
+  /* Toggle */
+  --mo-toggle-bg: var(--muted);
+
+  /* Toggle group */
+  --mo-toggle-group-gap: var(--space-1);
+
+  /* Tooltip */
+  --mo-tooltip-delay: 700ms;
+
+  /* Variant system extension point — set live by [data-variant] selectors. */
+  --variant-color: var(--success);
+}

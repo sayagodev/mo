@@ -1279,6 +1279,47 @@ declare module 'react' {
   }
 }
 
+/* ============================================================
+ * Native HTML attributes React's types don't model yet
+ * ============================================================
+ * Mo is built on the declarative Popover + Command Web-platform APIs and
+ * relies on their lowercase HTML attribute spellings, which @types/react
+ * (even at v19) still omits. Without this, TS errors in consumer React apps:
+ *   - `popovertarget` / `popovertargetaction` (Popover API invoker) on <button>
+ *   - `command` / `commandfor` (declarative Command API) on <button>
+ *
+ * Declaring them on the `react` module's ButtonHTMLAttributes (not via the
+ * `declare global` JSX block) means:
+ *   - It covers BOTH the legacy global JSX namespace (React <= 18) and the
+ *     React 19 module JSX namespace, because both resolve `button` through
+ *     the same `React.ButtonHTMLAttributes`.
+ *   - Vanilla TS consumers without @types/react are unaffected (this ambient
+ *     module augmentation only merges when the `react` types are present).
+ *   - It extends `HTMLAttributes` only implicitly: same-named interface
+ *     members merge, so we add our props without referencing `HTMLAttributes`
+ *     by name (which would error in a no-@types/react project).
+ *
+ * A note on `popover`: React 19 already types it as
+ * `"" | "auto" | "manual" | "hint"`, so `<menu popover="auto">` and
+ * `<div popover="">` are valid as-is. Widening it to accept bare `popover`
+ * (boolean) is NOT possible via module augmentation — declaration merging
+ * intersects the two `popover` declarations and the narrow string union wins.
+ * Use the explicit spellings (`popover="auto"` / `popover=""`) instead, which
+ * render identically to the bare boolean form.
+ */
+declare module 'react' {
+  interface ButtonHTMLAttributes<T> {
+    /** Popover API invoker: id of the [popover] element this button controls. */
+    popovertarget?: string;
+    /** Popover API invoker action — default is "toggle". */
+    popovertargetaction?: "toggle" | "show" | "hide";
+    /** Declarative Command API: the command to invoke (e.g. "show-modal"). */
+    command?: string;
+    /** Declarative Command API: id of the target element (a <dialog>, etc.). */
+    commandfor?: string;
+  }
+}
+
 // Public types are importable: import type { MoOtpElement } from '@sayagodev/mo'
 export type {
   MoCSSVariables,

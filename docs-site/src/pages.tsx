@@ -78,6 +78,13 @@ export function IntroPage() {
         Components ship fully styled — change them afterwards via tokens,
         <code> --mo-*</code> hooks or your own CSS.
       </p>
+      <p className="lead">
+        For a single editable entry point, import{' '}
+        <code>@sayagodev/mo/variables.css</code>: it declares <em>every</em>{' '}
+        default token (colors, radius, spacing, type, shadows) plus all the
+        per-component <code>--mo-*</code> hooks, so you can see and override the
+        whole library from one <code>:root</code> block.
+      </p>
       <table className="d-token-table">
         <tbody>
           <tr><td>--background / --foreground</td><td>Page surface and default text</td></tr>
@@ -88,6 +95,7 @@ export function IntroPage() {
           <tr><td>--border / --input / --ring</td><td>Hairlines, control borders, focus</td></tr>
           <tr><td>--radius (0.625rem)</td><td>Derives sm/md/lg/xl like shadcn @theme</td></tr>
           <tr><td>--mo-* hooks</td><td>Per-component overrides (e.g. --mo-card-radius)</td></tr>
+          <tr><td>variables.css</td><td>Shadcn-style global override file with every default</td></tr>
         </tbody>
       </table>
 

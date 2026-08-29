@@ -1,21 +1,22 @@
 import { test, expect } from '@playwright/test';
 import { axe } from './axe';
 
-// shadcn Badge: solid destructive (bg-destructive), outline hairline, tinted status extensions.
+// shadcn Badge: translucent destructive (bg-destructive/10), outline hairline, tinted status extensions.
 test('badge variants render distinct surfaces', async ({ page }) => {
   await page.goto('/tests/fixtures/badge.html');
   const bg = (id: string) =>
     page.getByTestId(id).evaluate((el) => getComputedStyle(el).backgroundColor);
+  const color = (id: string) =>
+    page.getByTestId(id).evaluate((el) => getComputedStyle(el).color);
   const def = await bg('default');
   expect(def).not.toBe('rgba(0, 0, 0, 0)');       // primary is solid
   expect(await bg('outline')).toBe('rgba(0, 0, 0, 0)');
   expect(await bg('danger')).not.toBe(def);
 
-  // destructive badge uses white foreground like shadcn
-  const fg = await page
-    .getByTestId('danger')
-    .evaluate((el) => getComputedStyle(el).color);
-  expect(fg).toMatch(/rgb\(255, 255, 255\)|oklch/);
+  // destructive badge: translucent surface with a red foreground (shadcn base style).
+  // Text is a dark mix of --destructive so the small 12px label stays WCAG-AA.
+  expect(await bg('danger')).toMatch(/color-mix|srgb|oklch/); // translucent (alpha < 1), not a solid fill
+  expect(await color('danger')).not.toBe('rgb(255, 255, 255)');
 });
 
 test('badge fixture passes axe', async ({ page }) => {

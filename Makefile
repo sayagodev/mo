@@ -3,6 +3,11 @@
 
 .PHONY: dist css js clean size publish
 
+# The canonical, consumer-facing variables entry point ships as a standalone
+# self-contained file (dist/mo.variables.css) so users can paste + edit it.
+# It is intentionally NOT part of the bundled mo.css — the theme defaults are
+# already served by src/css/01-theme.css inside @layer theme; bundling a second
+# :root copy would only duplicate the same values.
 CSS_FILES = src/css/00-base.css \
             src/css/01-theme.css \
             src/css/animations.css \
@@ -84,6 +89,7 @@ devlink:
 	@ln -sfn src/js js
 	@ln -sf src/mo.d.ts mo.d.ts
 	@ln -sf dist/mo.css mo.css 2>/dev/null || true
+	@ln -sf dist/mo.variables.css mo.variables.css 2>/dev/null || true
 	@ln -sf dist/mo.min.css mo.min.css 2>/dev/null || true
 	@ln -sf dist/mo.js mo.js 2>/dev/null || true
 	@ln -sf dist/mo.min.js mo.min.js 2>/dev/null || true
@@ -95,8 +101,10 @@ css:
 	@cat $(CSS_FILES) > dist/mo.css
 	@esbuild dist/mo.css --minify --outfile=dist/mo.min.css
 	@gzip -9 -k -f dist/mo.min.css
+	@cp src/css/variables.css dist/mo.variables.css
 	@cp dist/mo.min.css docs/static/mo.min.css
 	@echo "CSS: $$(wc -c < dist/mo.min.css | tr -d ' ') bytes (minified)"
+	@echo "Variables: $$(wc -c < dist/mo.variables.css | tr -d ' ') bytes (self-contained)"
 
 js:
 	@mkdir -p dist
