@@ -204,4 +204,8 @@ Requires esbuild. `make dist` emits:
 - `dist/mo.esm.min.js` / `dist/mo.esm.js` (ESM for bundlers)
 - `dist/css/*` + `dist/js/*` (per-component files)
 
-MIT — original oat by Kailash Nadh; Mo by sayagodev.
+## License
+
+MIT — original [oat](https://oat.ink) by Kailash Nadh; Mo fork by
+[sayagodev](https://sayago.dev). Design tokens inspired by shadcn/ui's
+neutral palette. See [LICENSE](./LICENSE).

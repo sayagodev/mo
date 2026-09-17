@@ -71,17 +71,19 @@ types:
 .PHONY: types
 
 dist: css js size
-	@cp -r src/css dist/css 2>/dev/null || true
-	@cp -r src/js dist/js 2>/dev/null || true
+	@mkdir -p dist/css dist/js dist/bin
+	@cp src/css/*.css dist/css/
+	@cp src/js/*.js dist/js/
+	@cp bin/*.js dist/bin/
 	@cp src/mo.d.ts dist/mo.d.ts 2>/dev/null || true
-	@cp registry.json dist/registry.json 2>/dev/null || true
-	@cp -r bin dist/bin 2>/dev/null || true
-	@cp package.json dist/package.json 2>/dev/null || true
+	@cp mo.jsx.d.ts dist/mo.jsx.d.ts 2>/dev/null || true
+	@cp custom-elements.json dist/custom-elements.json 2>/dev/null || true
 	@cp mo.html-data.json dist/mo.html-data.json 2>/dev/null || true
-	@cp mo.vscode.css-data.json dist/mo.vscode.css-data.json 2>/dev/null || true
-	@cp mo.globals.html-data.json dist/mo.globals.html-data.json 2>/dev/null || true
-	@cp README.md dist/README.md 2>/dev/null || true
-	@cp LICENSE dist/LICENSE 2>/dev/null || true
+	@cp vscode.css-custom-data.json dist/vscode.css-custom-data.json 2>/dev/null || true
+	@cp registry.json dist/registry.json
+	@cp package.json dist/package.json
+	@cp README.md dist/README.md
+	@cp LICENSE dist/LICENSE
 	@$(MAKE) devlink --no-print-directory
 
 devlink:
@@ -133,17 +135,14 @@ size:
 	@echo "JS ESM (gzip): $$(wc -c < dist/mo.esm.min.js.gz | tr -d ' ') bytes"
 
 publish: clean dist
-	@cp -r src/css dist/css
-	@cp -r src/js dist/js
-	@cp -r bin dist/bin
-	@cp registry.json dist/registry.json
 	@cp src/mo.d.ts dist/mo.d.ts
-	@cp mo.html-data.json dist/mo.html-data.json
-	@cp mo.vscode.css-data.json dist/mo.vscode.css-data.json
+	@cp mo.jsx.d.ts dist/mo.jsx.d.ts 2>/dev/null || true
+	@cp custom-elements.json dist/custom-elements.json 2>/dev/null || true
+	@cp mo.html-data.json dist/mo.html-data.json 2>/dev/null || true
+	@cp vscode.css-custom-data.json dist/vscode.css-custom-data.json 2>/dev/null || true
+	@cp registry.json dist/registry.json
 	@cp README.md dist/README.md
 	@cp LICENSE dist/LICENSE
-	@VERSION=$$(git describe --tags --abbrev=0 | sed 's/^v//') && \
-		sed 's/"version-0.0.0"/"'"$$VERSION"'"/' package.json > dist/package.json
 	@cd dist && npm publish --access public
 
 test: dist
