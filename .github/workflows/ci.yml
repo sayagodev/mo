@@ -1,0 +1,47 @@
+name: CI
+
+permissions:
+  contents: write
+  issues: write
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run build
+      - name: Verify dist artifacts
+        run: |
+          test -f dist/mo.min.css
+          test -f dist/mo.min.js
+          test -f dist/mo.esm.min.js
+          test -f dist/mo.css
+          test -f dist/mo.js
+          test -f dist/css/button.css
+          test -f dist/js/tooltip.js
+          test -f dist/bin/cli.js
+          test -f dist/package.json
+
+      - name: Semantic Release
+        if: github.event_name == 'push'
+        run: pnpm exec semantic-release
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
