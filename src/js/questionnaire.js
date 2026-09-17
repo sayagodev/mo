@@ -92,9 +92,12 @@ class OtQuestionnaire extends MoBase {
       this.#show(this.#current + 1);
       return;
     }
-    // Clicking a choice card should toggle its input (if click not on input itself)
+    // Clicking a choice card toggles its input — except the input itself,
+    // whose native label-activation already toggles it (a second .click()
+    // here would toggle twice and cancel out). Skip clicks whose target is
+    // or is inside a label, since the label's default action fires the input.
     const choice = e.target.closest('[data-questionnaire-choice]');
-    if (choice && !e.target.closest('input')) {
+    if (choice && !e.target.closest('input, label')) {
       const inp = choice.querySelector('input');
       if (inp && !inp.disabled) {
         inp.click();
@@ -103,9 +106,11 @@ class OtQuestionnaire extends MoBase {
   }
 
   onkeydown(e) {
-    // Space/Enter on a focused choice card activates it
+    // Space/Enter on a focused choice card activates it. Label key handling
+    // already activates the input, so only handle non-label targets here —
+    // otherwise the input gets .click() twice (keydown + label behavior).
     const choice = e.target.closest?.('[data-questionnaire-choice]');
-    if (choice && (e.key === 'Enter' || e.key === ' ')) {
+    if (choice && !e.target.closest?.('label') && (e.key === 'Enter' || e.key === ' ')) {
       e.preventDefault();
       const inp = choice.querySelector('input');
       if (inp) inp.click();

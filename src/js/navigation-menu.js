@@ -141,6 +141,13 @@ class MoNavigationMenu extends MoBase {
     const trigger = this.#triggers.find((t) => this.#popoverFor(t) === panel);
     if (!trigger) return;
 
+    // Clean slate before measuring (see dropdown.js): stale inline top/left
+    // plus the UA inset:0 stretch the surface and poison the flip math.
+    panel.style.top = '0px';
+    panel.style.left = '0px';
+    panel.style.right = 'auto';
+    panel.style.bottom = 'auto';
+
     const r = trigger.getBoundingClientRect();
     const p = panel.getBoundingClientRect();
     const offset = 6; /* mt-1.5 */

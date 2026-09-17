@@ -3,45 +3,76 @@
   [role="tablist"] {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 0;
-    height: var(--mo-tabs-height, 2rem);
+    width: fit-content;
+    height: var(--mo-tabs-height, 2.25rem);
     padding: 3px;
     background-color: var(--mo-tabs-list-bg, var(--muted));
-    color: color-mix(in srgb, var(--foreground) 60%, transparent);
+    color: var(--muted-foreground);
     border-radius: var(--mo-tabs-radius, var(--radius-large));
   }
 
   [role="tab"] {
     display: inline-flex;
-    flex: 1;
+    flex: 1 1 0%;
     align-items: center;
     justify-content: center;
+    gap: var(--space-2);
     height: 100%;
-    padding: calc(var(--space-3) * 0.5) var(--space-1);
+    padding: var(--space-1) var(--space-2);
     font-size: var(--text-7);
     font-weight: var(--font-medium);
     white-space: nowrap;
     background-color: transparent;
     color: inherit;
-    border: none;
+    border: 1px solid transparent;
     border-radius: calc(var(--mo-tabs-radius, var(--radius-large)) - 2px);
     cursor: pointer;
-    transition: color var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
+    transition: color var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast), border-color var(--transition-fast);
 
-    /* shadcn Hover: text-foreground (100%) — not a bg. */
-    &:hover {
+    /* Icon size inside triggers (shadcn [&_svg]:size-4). */
+    & svg {
+      width: var(--space-4);
+      height: var(--space-4);
+      flex-shrink: 0;
+    }
+
+    /* shadcn Hover: brighten the label only (100% foreground) — the pill
+       background is reserved for the selected tab. Must beat the base
+       button :hover:not() wash — its :is() group carries a.button, so it
+       counts (0,3,1). The doubled role reaches (0,4,0): bare <button>
+       tabs would otherwise get the solid-button hover background. */
+    &[role="tab"]:hover:not(:disabled) {
+      background-color: transparent;
       color: var(--foreground);
     }
 
+    /* No press transform on tabs (base buttons translate+scale, (0,4,1)). */
+    &[role="tab"]:active:not([aria-haspopup]):not(:disabled) {
+      transform: none;
+    }
+
+    /* shadcn active: background pill + shadow in light, bordered
+       input-wash pill in dark (border is reserved as transparent).
+       NOTE: light-dark() takes colors only — a shadow list makes the whole
+       declaration invalid — so dark drops the shadow via media query. */
+    &[aria-selected="true"] {
+      background-color: var(--mo-tabs-active-bg, light-dark(var(--background), color-mix(in srgb, var(--input) 30%, transparent)));
+      border-color: light-dark(transparent, var(--input));
+      box-shadow: var(--shadow-sm);
+      color: var(--foreground);
+
+      @media (prefers-color-scheme: dark) {
+        box-shadow: none;
+      }
+    }
+
+    /* Focus ring last: ties with selected (0,2,0) resolve here, so a
+       focused selected tab still shows the ring instead of the pill. */
     &:focus-visible {
       outline: none;
       box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 50%, transparent);
-    }
-
-    &[aria-selected="true"] {
-      background-color: var(--mo-tabs-active-bg, var(--background));
-      background-color: var(--mo-tabs-active-bg, light-dark(var(--background), color-mix(in srgb, var(--input) 30%, transparent)));
-      color: var(--foreground);
     }
 
     &:disabled {
@@ -63,6 +94,7 @@
     & > [role="tab"] {
       position: relative;
       border-radius: 0;
+      border-color: transparent;
 
       &::after {
         content: '';
@@ -75,11 +107,12 @@
         transition: opacity var(--transition-fast);
       }
 
-      /* Active line tab: no pill, just bold text + underline */
+      /* Active line tab: no pill, just bold text + underline.
+         No box-shadow reset here: the :not(:focus-visible) rule below
+         clears it when unfocused, and a focused tab keeps the ring. */
       &[aria-selected="true"] {
         background-color: transparent;
         background-color: transparent !important;
-        box-shadow: none;
         font-weight: var(--font-semibold);
         color: var(--foreground);
 
@@ -128,7 +161,7 @@
   }
 
   [role="tabpanel"] {
-    padding-block-start: var(--space-3);
+    padding-block-start: var(--space-2);
     font-size: var(--text-7);
 
     & > p {

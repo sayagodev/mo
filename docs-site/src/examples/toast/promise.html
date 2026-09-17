@@ -1,7 +1,0 @@
-<div class="hstack gap-2">
-  <button type="button" class="outline"
-    onclick="mo.toast.promise(new Promise(res => setTimeout(() => res({ when: 'Friday at 9:00' }), 1500)), { loading: 'Creating event…', success: (d) => `Event created for ${d.when}.`, error: 'Could not create event.' })">
-    Create Event
-  </button>
-  <button type="button" class="ghost" data-toast='Event "Team Standup" created for Friday at 9:00.' data-toast-title="Promise resolved" data-toast-variant="success">Declarative trigger</button>
-</div>

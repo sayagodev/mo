@@ -28,6 +28,16 @@
       flex: 0 1 auto;
     }
 
+    /* mo-select inside a group plays the same role as a native <select>:
+       keep its intrinsic trigger width so a sibling input keeps its space.
+       Without this the select.css `width: 100%` default makes the select
+       swallow the row and collapses the input to a sliver. */
+    & > mo-select {
+      flex: 0 0 auto;
+      inline-size: auto;
+      min-inline-size: 0;
+    }
+
     & > [data-input-group] {
       flex: 1 1 auto;
       inline-size: auto;

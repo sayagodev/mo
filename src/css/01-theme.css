@@ -109,11 +109,20 @@
 
     /* Radius: sm=6px md=8px lg=10px xl=14px at the default base. */
     --radius: 0.625rem;
-    --radius-small: calc(var(--radius) * 0.6);
-    --radius-medium: calc(var(--radius) * 0.8);
-    --radius-large: var(--radius);
-    --radius-xlarge: calc(var(--radius) * 1.4);
     --radius-full: 9999px;
+
+    /* Derived radius tokens are re-declared on every element so they
+       resolve against the INHERITED --radius, not the :root one. That is
+       what makes scoped re-theming work: a subtree that sets --radius
+       (a docs preview, a themed widget area) re-derives the whole scale
+       without touching :root. Declaring these on :root only would freeze
+       them to the root value for the entire document. */
+    *, ::before, ::after {
+      --radius-small: calc(var(--radius) * 0.6);
+      --radius-medium: calc(var(--radius) * 0.8);
+      --radius-large: var(--radius);
+      --radius-xlarge: calc(var(--radius) * 1.4);
+    }
 
     /* Spacing: Tailwind-compatible 0.25rem steps. */
     --space-1: 0.25rem;

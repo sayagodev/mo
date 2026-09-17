@@ -100,10 +100,6 @@
       opacity: 0.5;
     }
 
-    &:is([aria-invalid=true], :user-invalid) {
-      border-color: var(--danger);
-    }
-
     &:checked {
       background-color: var(--primary);
       border-color: var(--primary);
@@ -124,6 +120,14 @@
     }
   }
 
+  /* Description rows (flex + items-start with a label stack): drop the
+     1rem box onto the optical center of the label's first line. Without
+     this the box hugs the top of the line box and floats ~2px above the
+     glyphs (half-leading). Switches keep their own geometry. */
+  .flex.items-start > input:where([type=checkbox], [type=radio]):not([role=switch]) {
+    margin-block-start: calc((var(--text-7) * var(--leading-normal) - 1rem) / 2);
+  }
+
   input[type=checkbox] {
     border-radius: calc(var(--radius) * 0.4);
 
@@ -140,7 +144,9 @@
       width: var(--switch-w);
       height: 1.15rem;
       padding: 0;
-      border: none;
+      /* Defining border: in light mode the --input track sits on white
+         surfaces and washed out to nothing without it. */
+      border: 1px solid color-mix(in srgb, var(--foreground) 15%, transparent);
       border-radius: var(--radius-full);
       background-color: var(--input);
       background-color: light-dark(var(--input), color-mix(in srgb, var(--input) 80%, transparent));
@@ -221,6 +227,29 @@
   :where(input:where([type=checkbox], [type=radio], [type=range]), select):not(:disabled),
   label:has(input:where([type=checkbox], [type=radio]):not(:disabled)) {
     cursor: pointer;
+  }
+  /* Invalid checkbox/radio: the whole control reads destructive (danger
+     border; danger fill when checked), mirroring invalid text inputs.
+     Placed after the checked/filled chrome so it wins at equal
+     specificity; the dot/check stays light for contrast. */
+  input:where([type=checkbox], [type=radio]):is([aria-invalid="true"], :user-invalid) {
+    border-color: var(--danger);
+
+    &:checked {
+      background-color: var(--danger);
+      border-color: var(--danger);
+    }
+  }
+
+  /* Switches carry extra attribute specificity ([role=switch]:checked is
+     0,3,1), so they need their own invalid overrides to turn destructive. */
+  input[type="checkbox"][role="switch"]:is([aria-invalid="true"], :user-invalid) {
+    border-color: var(--danger);
+
+    &:checked {
+      background-color: var(--danger);
+      border-color: var(--danger);
+    }
   }
 
   /* Native range stays; recolored to tokens — white thumb with primary border like shadcn Slider. */

@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Mo test</title>
+<link rel="stylesheet" href="/dist/mo.min.css" />
+<script src="/dist/mo.min.js"></script>
+<style>
+  body { padding: 0; margin: 0; }
+  #near-right { position: fixed; top: 200px; right: 8px; }
+  #roomy { position: fixed; top: 300px; left: 400px; }
+  #fixed { position: fixed; top: 300px; left: 8px; }
+</style>
+</head>
+<body>
+
+<button id="near-right" data-test="near-right" data-tooltip="Pinned to the right edge" data-tooltip-placement="auto">R</button>
+<button id="roomy" data-test="roomy" data-tooltip="Room everywhere" data-tooltip-placement="auto">C</button>
+<button id="fixed" data-test="fixed" data-tooltip="Stays put" data-tooltip-placement="right">F</button>
+
+</body>
+</html>

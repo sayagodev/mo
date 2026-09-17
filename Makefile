@@ -102,7 +102,6 @@ css:
 	@esbuild dist/mo.css --minify --outfile=dist/mo.min.css
 	@gzip -9 -k -f dist/mo.min.css
 	@cp src/css/variables.css dist/mo.variables.css
-	@cp dist/mo.min.css docs/static/mo.min.css
 	@echo "CSS: $$(wc -c < dist/mo.min.css | tr -d ' ') bytes (minified)"
 	@echo "Variables: $$(wc -c < dist/mo.variables.css | tr -d ' ') bytes (self-contained)"
 
@@ -114,7 +113,6 @@ js:
 	@esbuild src/js/index.js --bundle --format=esm --minify --outfile=dist/mo.esm.min.js
 	@gzip -9 -k -f dist/mo.min.js
 	@gzip -9 -k -f dist/mo.esm.min.js
-	@cp dist/mo.min.js docs/static/mo.min.js
 	@echo "JS: $$(wc -c < dist/mo.min.js | tr -d ' ') bytes (minified, iife)"
 	@echo "JS ESM: $$(wc -c < dist/mo.esm.min.js | tr -d ' ') bytes (minified, esm)"
 
@@ -147,19 +145,6 @@ publish: clean dist
 	@VERSION=$$(git describe --tags --abbrev=0 | sed 's/^v//') && \
 		sed 's/"version-0.0.0"/"'"$$VERSION"'"/' package.json > dist/package.json
 	@cd dist && npm publish --access public
-
-docs: docs-assets
-	cd docs-site && pnpm build
-
-docs-dev: docs-assets
-	cd docs-site && pnpm dev
-
-docs-preview: docs
-	cd docs-site && pnpm preview
-
-docs-assets: dist
-	@cp dist/mo.min.css docs-site/public/mo.min.css
-	@cp dist/mo.min.js docs-site/public/mo.min.js
 
 test: dist
 	pnpm --dir tests test

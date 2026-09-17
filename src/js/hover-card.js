@@ -126,6 +126,13 @@ class OtHoverCard extends MoBase {
   // Placement: supports data-side="top" | "bottom" | "left" | "right".
   // Each prefers that edge and flips on overflow. Bottom is default.
   #place() {
+    // Clean slate before measuring (see dropdown.js): stale inline top/left
+    // plus the UA inset:0 stretch the surface and poison the flip math.
+    this.#card.style.top = '0px';
+    this.#card.style.left = '0px';
+    this.#card.style.right = 'auto';
+    this.#card.style.bottom = 'auto';
+
     const t = this.#trigger.getBoundingClientRect();
     const c = this.#card.getBoundingClientRect();
     const side = this.#card.dataset.side;

@@ -89,6 +89,13 @@
       }
     }
 
+    /* Header-only dialogs (no body/footer after): keep the bottom padding
+       so content never touches the dialog edge. */
+    & > header:last-child,
+    & > form > header:last-child {
+      padding-block-end: var(--space-6);
+    }
+
     :is(&, & > form) > :is(p, div, section) {
       padding: var(--space-6);
       overflow-y: auto;

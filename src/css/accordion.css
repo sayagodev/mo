@@ -98,7 +98,6 @@
     font-size: var(--text-7);
     line-height: 1.5;
     color: var(--muted-foreground);
-
     & p:not(:last-child) {
       margin-block-end: var(--space-4);
     }
@@ -112,6 +111,18 @@
         color: var(--foreground);
       }
     }
+  }
+
+  /* Collapsible in a card (plain details directly in .card, no mo-accordion):
+     tighter shadcn-like rhythm — the accordion row padding stacks too tall
+     next to the card padding. Accordion-in-card (mo-accordion nested) keeps
+     the roomier rows. */
+  .card > details > summary {
+    padding-block: var(--space-3);
+  }
+
+  .card > details > :not(summary) {
+    padding-block-end: var(--space-3);
   }
 
   /* Opt-in boxed variant (the old oat look) */

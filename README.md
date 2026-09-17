@@ -21,7 +21,7 @@ No build step for consumers. No classes required. No CSS that fights yours.
 ```html
 <button>Save</button>          <!-- styled: primary button -->
 <input placeholder="Email" />  <!-- styled: shadcn-like input -->
-<mo-tabs>…</mo-tags>           <!-- behavior via native custom elements -->
+<mo-tabs>…</mo-tabs>           <!-- behavior via native custom elements -->
 ```
 
 **Optimized — pick only what you need (shadcn-like CLI):**
@@ -65,7 +65,62 @@ import "@sayagodev/mo/js/tabs.js";
 import { toast } from "@sayagodev/mo/js/toast.js";
 ```
 
-Package is `type: module` with `exports` (`./css/*`, `./js/*`) and `sideEffects: ["*.css"]` so bundlers keep CSS and tree-shake unused JS. Full bundle is 21kB gz CSS / 20kB gz JS; a 5-component setup is <8kB gz.
+Package is `type: module` with `exports` (`./css/*`, `./js/*`) and `sideEffects: ["*.css"]` so bundlers keep CSS and tree-shake unused JS. Full bundle is 22kB gz CSS / 21kB gz JS; a 5-component setup is <8kB gz.
+
+## Bundle size vs shadcn/ui
+
+The whole library — 52 components plus the base theme — weighs **≈ 43 kB
+gzip** on the wire (22 kB CSS + 21 kB JS). Types (`mo.d.ts`, 47 kB raw) are
+dev-time only and never reach the browser.
+
+Since Mo reimplements shadcn/ui on the web platform, most components need no
+framework code at all. Measured per component (minified + `gzip -9`, React
+treated as external on both sides, Mo numbers include shared CSS/JS deps):
+
+| Component | Mo (gz) | shadcn (gz)¹ | Ratio |
+|---|---|---|---|
+| popover | 0.4 kB | 25.5 kB | 59× |
+| tooltip | 0.9 kB | 20.3 kB | 22× |
+| hover-card | 1.4 kB | 18.6 kB | 14× |
+| separator | 0.2 kB | 2.3 kB | 12× |
+| dropdown-menu | 3.5 kB | 33.3 kB | 9.4× |
+| toggle-group | 1.0 kB | 9.2 kB | 9.2× |
+| progress | 0.3 kB | 3.4 kB | 9.6× |
+| aspect-ratio | 0.2 kB | 2.3 kB | 9.6× |
+| scroll-area | 0.9 kB | 8.0 kB | 9× |
+| alert-dialog | 1.7 kB | 15.2 kB | 8.9× |
+| toggle | 0.4 kB | 3.6 kB | 8.5× |
+| dialog | 1.7 kB | 14.7 kB | 8.7× |
+| menubar | 4.2 kB | 33.9 kB | 8.1× |
+| select | 4.5 kB | 33.0 kB | 7.3× |
+| navigation-menu | 1.9 kB | 13.7 kB | 7.3× |
+| context-menu | 4.8 kB | 33.6 kB | 7× |
+| tabs | 1.8 kB | 9.9 kB | 5.5× |
+| avatar | 0.7 kB | 3.7 kB | 5.1× |
+| toast | 2.6 kB | 12.9 kB | 4.9× |
+| command | 4.0 kB | 18.7 kB | 4.6× |
+| slider | 2.7 kB | 10.4 kB | 3.9× |
+| carousel | 2.2 kB | 8.4 kB | 3.8× |
+| form (checkbox + radio + switch) | 8.1 kB | 23.2 kB | 2.9× |
+| accordion | 3.7 kB | 9.5 kB | 2.6× |
+| input-otp | 2.2 kB | 4.5 kB | 2.1× |
+| collapsible | 2.9 kB | 5.8 kB | 2× |
+| button | 2.9 kB | — (no Radix dep) | — |
+| label | 0 kB (native) | 2.2 kB | — |
+
+¹ What the shadcn column counts — and deliberately doesn't:
+
+- **React is not counted.** A shadcn app ships React + ReactDOM (~69 kB gzip,
+  measured) before any component renders. Mo needs none of it — and the whole
+  Mo library still weighs less than that runtime alone.
+- **Tailwind CSS is not counted.** Each shadcn component's utility classes add
+  roughly 0.5–2 kB (amortized) to the app's CSS build, on top of the JS above.
+- **The copied `.tsx` source is not counted** (~1–2 kB min per component).
+- Radix numbers are the real-app, deduped cost: the 26 packages the shadcn
+  component set depends on, bundled together, are 88 kB gz of JS alone — more
+  than twice Mo's entire CSS+JS budget. (Summing packages individually gives
+  342 kB; the deduped figure is the honest one.)
+- Both sides measured with the same toolchain: esbuild `--minify` + `gzip -9`.
 
 ## Theming (never fights your CSS)
 
@@ -107,8 +162,7 @@ import "@sayagodev/mo/variables.css";
 ```
 
 Dark mode follows the OS automatically; force it with
-`<html data-theme="dark">`. See `ANALYSIS.md` for the full audit,
-token table and override model.
+`<html data-theme="dark">`.
 
 ### TypeScript / JSX
 
@@ -135,18 +189,12 @@ Typography for document content is opt-in: wrap markup in `.prose`.
 |---------|-------------|
 | `mo init [--path <dir>] [--yes] [--force]` | Copy base styles (`00-base.css`, `01-theme.css`, `shared.css`, `animations.css`, `utilities.css`) + `base.js` and create `mo.json` |
 | `mo add [components...] [--all] [--yes] [--overwrite] [--dry-run]` | Add components (interactive multi-select if no args). Copies `src/css/*.css` + `src/js/*.js` and regenerates `index.css` / `index.js` |
-| `mo list` | List all 46 available components |
+| `mo list` | List all 52 available components |
 | `mo view <name>` | Show component meta (files, description) |
 
 `mo.json` tracks `{ path, installed, moVersion }`. Override path per-call with `--path` / `--cwd`.
 
 Registry: `registry.json` (also published as `@sayagodev/mo/registry.json`) maps component names to `css`/`js` files — similar to shadcn registry.
-
-## Preview
-
-```sh
-make preview   # builds dist, serves http://localhost:4173/preview/
-```
 
 ## Build
 

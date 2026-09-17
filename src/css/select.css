@@ -63,6 +63,18 @@
     &:active {
       transform: none;
     }
+
+    /* Invalid: destructive border + ring, mirroring the native select
+       (form.css) and the combobox frame. Placed last so it wins over
+       the :hover/:focus-visible chrome above at equal specificity. */
+    &:is([aria-invalid="true"]) {
+      border-color: var(--danger);
+
+      &:focus-visible {
+        border-color: var(--danger);
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--danger) 20%, transparent);
+      }
+    }
   }
 
   /* Value label: truncate long selections; flex to fill trigger. */

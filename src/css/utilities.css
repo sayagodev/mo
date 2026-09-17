@@ -10,6 +10,7 @@
   .flex-wrap { flex-wrap: wrap; }
   .flex-nowrap { flex-wrap: nowrap; }
   .items-center { align-items: center; }
+  .items-start { align-items: flex-start; }
   .justify-center { justify-content: center; }
   .justify-between { justify-content: space-between; }
   .justify-end { justify-content: flex-end; }

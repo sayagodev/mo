@@ -17,13 +17,17 @@
  *   text, dimmed via [data-empty].
  *
  * Usage:
- * <mo-select data-placeholder="Select a fruit">
+ * <mo-select data-placeholder="Select a fruit" name="fruit" required>
  *   <button type="button" popovertarget="s1" data-select-trigger aria-label="Fruit"></button>
  *   <ul popover id="s1" class="popover" role="listbox" aria-label="Fruits">
  *     <li><button type="button" role="option" value="apple">Apple</button></li>
  *     <li role="group"><div data-label>Citrus</div><button type="button" role="option">Lemon</button></li>
  *   </ul>
  * </mo-select>
+ *
+ * Form participation: mo-select is not a form-associated custom element, so
+ * name/required mirror onto a hidden input it manages — the value (and the
+ * required gate) flows through FormData and reportValidity() natively.
  */
 
 import { MoBase } from './base.js';
@@ -33,6 +37,8 @@ import { MoBase } from './base.js';
  *
  * @tag mo-select
  * @attr {string} data-placeholder - Placeholder shown on the trigger when nothing is picked.
+ * @attr {string} name - Mirrored onto a managed hidden input so the value submits with forms.
+ * @attr {boolean} required - Mirrored onto the hidden input so reportValidity() gates empty picks.
  * @prop {string | null} value - The picked value (read-only; null when empty).
  * @fires {CustomEvent<{ value: string }>} mo-select-change - An option was picked.
  */
@@ -41,6 +47,7 @@ class OtSelect extends MoBase {
   #list;
   #label;
   #selected;
+  #hidden;
   #pressedWhileOpen = false;
   #typeBuffer = '';
   #typeUntil = 0;
@@ -59,6 +66,18 @@ class OtSelect extends MoBase {
       // Roving is virtual ([aria-selected]); items never take Tab focus.
       option.tabIndex = -1;
     });
+
+    // Hidden input mirror: mo-select is not form-associated, so a plain
+    // <input type="hidden" name> carries the value into FormData and native
+    // validation (required). Kept in sync on every commit/placeholder.
+    const name = this.getAttribute('name');
+    if (name) {
+      this.#hidden = document.createElement('input');
+      this.#hidden.type = 'hidden';
+      this.#hidden.name = name;
+      if (this.hasAttribute('required')) this.#hidden.required = true;
+      this.appendChild(this.#hidden);
+    }
 
     // Trigger label: an explicit [data-select-value] span wins, else one is
     // created ahead of any author content (the chevron is CSS ::after).
@@ -294,6 +313,7 @@ class OtSelect extends MoBase {
   #commit(option) {
     this.#mark(option);
     this.#label.textContent = option.textContent.trim();
+    if (this.#hidden) this.#hidden.value = this.#valueOf(option);
     this.removeAttribute('data-empty');
     this.removeAttribute('data-select-empty');
   }
@@ -301,6 +321,7 @@ class OtSelect extends MoBase {
   #showPlaceholder() {
     this.#selected?.removeAttribute('aria-selected');
     this.#label.textContent = this.getAttribute('data-placeholder') ?? '';
+    if (this.#hidden) this.#hidden.value = '';
     this.setAttribute('data-select-empty', '');
     // keep legacy data-empty for backward compat, but empty.css now excludes mo-select
     this.setAttribute('data-empty', '');
@@ -317,6 +338,13 @@ class OtSelect extends MoBase {
   // Below the trigger by default; flipped above on viewport overflow, clamped
   // to the viewport like dropdown.js. Width matches the trigger frame.
   #place() {
+    // Same clean-slate rule as dropdown.js: stale inline top/left plus the
+    // UA inset:0 stretch the list box and break the flip math.
+    this.#list.style.top = '0px';
+    this.#list.style.left = '0px';
+    this.#list.style.right = 'auto';
+    this.#list.style.bottom = 'auto';
+
     const r = this.#trigger.getBoundingClientRect();
     const p = this.#list.getBoundingClientRect();
 

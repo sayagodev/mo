@@ -373,6 +373,13 @@ class OtMenubar extends MoBase {
     const ctrl = this.#controlFor(popup);
     if (!ctrl) return;
 
+    // Clean slate before measuring (see dropdown.js): stale inline top/left
+    // plus the UA inset:0 stretch the surface and poison the flip math.
+    popup.style.top = '0px';
+    popup.style.left = '0px';
+    popup.style.right = 'auto';
+    popup.style.bottom = 'auto';
+
     const r = ctrl.getBoundingClientRect();
     const p = popup.getBoundingClientRect();
     const nested = ctrl.closest('[popover]') !== null;

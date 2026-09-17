@@ -760,6 +760,8 @@ interface MoComboboxEventMap extends HTMLElementEventMap {
  * data-empty until a pick). Anatomy: button[data-select-trigger][popovertarget] +
  * ul[popover][role="listbox"] with button[role="option"][value] options;
  * li[role="group"] > div[data-label] groups options.
+ * Form participation: name/required mirror onto a managed hidden input, so
+ * the value submits with forms and reportValidity() gates empty picks.
  */
 interface MoSelectElement extends HTMLElement {
   /** The selected option's value (or text); null while unset */
@@ -1280,13 +1282,16 @@ declare module 'react' {
 }
 
 /* ============================================================
- * Native HTML attributes React's types don't model yet
+ * Native HTML attributes React's types don't fully model yet
  * ============================================================
- * Mo is built on the declarative Popover + Command Web-platform APIs and
- * relies on their lowercase HTML attribute spellings, which @types/react
- * (even at v19) still omits. Without this, TS errors in consumer React apps:
- *   - `popovertarget` / `popovertargetaction` (Popover API invoker) on <button>
- *   - `command` / `commandfor` (declarative Command API) on <button>
+ * Mo is built on the declarative Popover + Command Web-platform APIs.
+ * React 19 already ships camelCase `popoverTarget` / `popoverTargetAction`
+ * (and renders them as lowercase), so no augmentation is needed for those.
+ * The Command API (`command` / `commandfor`) is NOT in @types/react yet:
+ * the lowercase spelling below types it AND renders verbatim to the DOM —
+ * exactly what the platform API reads. (React's own camelCase convention
+ * would be `commandFor`, but react-dom doesn't map it, so it leaks as an
+ * unknown prop instead of the real attribute.)
  *
  * Declaring them on the `react` module's ButtonHTMLAttributes (not via the
  * `declare global` JSX block) means:
@@ -1309,14 +1314,12 @@ declare module 'react' {
  */
 declare module 'react' {
   interface ButtonHTMLAttributes<T> {
-    /** Popover API invoker: id of the [popover] element this button controls. */
-    popovertarget?: string;
-    /** Popover API invoker action — default is "toggle". */
-    popovertargetaction?: "toggle" | "show" | "hide";
     /** Declarative Command API: the command to invoke (e.g. "show-modal"). */
     command?: string;
-    /** Declarative Command API: id of the target element (a <dialog>, etc.). */
-    commandfor?: string;
+    /** Declarative Command API: id of the target element (a <dialog>, etc.).
+        Lowercase is intentional — it is the real HTML attribute name. */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    commandfor?: any;
   }
 }
 

@@ -270,6 +270,16 @@ class OtDropdown extends MoBase {
     const ctrl = this.#controlFor(popup);
     if (!ctrl) return;
 
+    // Measure from a clean slate. A previous open leaves inline top/left
+    // behind, and the UA [popover] rule pins inset:0 (bottom: 0) — together
+    // they stretch the fixed box from the stale top to the viewport floor,
+    // the flip math reads that inflated height and slams the menu against
+    // the top edge, detached from its trigger. Pin to the corner first.
+    popup.style.top = '0px';
+    popup.style.left = '0px';
+    popup.style.right = 'auto';
+    popup.style.bottom = 'auto';
+
     const r = ctrl.getBoundingClientRect();
     const p = popup.getBoundingClientRect();
     const nested = ctrl.closest('[popover]') !== null;

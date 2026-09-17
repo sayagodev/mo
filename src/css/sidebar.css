@@ -566,7 +566,10 @@
         }
 
         /* identity rows collapse to just the media box / avatar,
-           centered in a 2rem square at the panel padding edge */
+           centered in a 2rem square at the panel padding edge.
+           Geometry snaps: animating width/padding here slides the media
+           box back and forth while the track moves (nav icons stay put
+           because their padding is identical both states). */
         &[data-size="lg"] {
           display: flex;
           height: 2rem;
@@ -575,6 +578,7 @@
           min-width: 2rem;
           padding-inline: 0;
           justify-content: center;
+          transition: background-color var(--transition-fast), color var(--transition-fast);
 
           & > [data-sidebar-media],
           & > figure[data-variant="avatar"] {

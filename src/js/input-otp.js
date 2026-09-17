@@ -3,7 +3,8 @@
  *
  * One-time-password field: <mo-otp> renders N joined single-character inputs
  * (shadcn/ui InputOTP behavior, natively — no external lib):
- * - Auto-advance on entry; Backspace on an empty cell steps back;
+ * - Auto-advance on entry; Backspace on an empty cell steps back —
+ *   including into the previous linked <mo-otp> (3+3 separator case);
  *   ArrowLeft/Right move between cells.
  * - Paste distributes the clipboard characters across cells from the caret,
  *   as does autofill that drops a full code into one cell.
@@ -166,6 +167,16 @@ class OtOtp extends MoBase {
         e.preventDefault();
         const prev = this.#cells[i - 1];
         if (prev) { prev.value = ''; prev.focus(); this.#sync(); }
+        else {
+          // First cell of a linked group: step back into the previous
+          // mo-otp, clearing its last cell like the intra-group case.
+          const prevOtp = this.#findPrevOtp();
+          if (prevOtp) {
+            const cells = prevOtp.#cells;
+            const last = cells[cells.length - 1];
+            if (last) { last.value = ''; last.focus(); prevOtp.#sync(); }
+          }
+        }
       } else {
         // Filled cell: allow browser to clear, but select ensures next type replaces.
         // If user holds backspace, clear and move left on next empty.
@@ -185,12 +196,22 @@ class OtOtp extends MoBase {
 
     if (e.key === 'ArrowLeft') {
       e.preventDefault();
-      this.#cells[i - 1]?.focus();
+      const prev = this.#cells[i - 1];
+      if (prev) prev.focus();
+      else {
+        const prevOtp = this.#findPrevOtp();
+        if (prevOtp) {
+          const cells = prevOtp.#cells;
+          cells[cells.length - 1]?.focus();
+        }
+      }
       return;
     }
     if (e.key === 'ArrowRight') {
       e.preventDefault();
-      this.#cells[i + 1]?.focus();
+      const next = this.#cells[i + 1];
+      if (next) next.focus();
+      else this.#findNextOtp()?.querySelector('input')?.focus();
       return;
     }
     if (e.key === 'Home') {
@@ -233,8 +254,25 @@ class OtOtp extends MoBase {
     this.#cells.find(c => !c.value)?.focus();
   }
 
-  #findNextOtp() {
-    // Find the next <mo-otp> after this one within the same parent (used for the two-component separator demo)
+  #findPrevOtp() {
+    // Find the previous <mo-otp> before this one within the same parent
+    // (used for backspace/arrow-left across the two-component separator demo)
+    let el = this.previousElementSibling;
+    while (el) {
+      if (el.tagName?.toLowerCase() === 'mo-otp') return el;
+      const inners = el.querySelectorAll?.('mo-otp');
+      if (inners?.length) return inners[inners.length - 1];
+      el = el.previousElementSibling;
+    }
+    // Fallback: previous mo-otp in parent scope
+    const parent = this.parentElement;
+    if (!parent) return null;
+    const otps = [...parent.querySelectorAll('mo-otp')];
+    const idx = otps.indexOf(this);
+    return idx > 0 ? otps[idx - 1] : null;
+  }
+
+  #findNextOtp() {    // Find the next <mo-otp> after this one within the same parent (used for the two-component separator demo)
     let el = this.nextElementSibling;
     while (el) {
       if (el.tagName?.toLowerCase() === 'mo-otp') return el;

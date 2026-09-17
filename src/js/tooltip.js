@@ -3,7 +3,9 @@
  * Converts title attributes to data-tooltip for custom styling.
  */
 
-document.addEventListener('DOMContentLoaded', () => {
+// Boot immediately if the DOM is already parsed (SPAs load mo.min.js after
+// DOMContentLoaded — waiting for the event there meant zero tooltips ever).
+const boot = () => {
   const _attrib = 'title', _sel = '[title]';
   const apply = el => {
     const t = el.getAttribute(_attrib);
@@ -32,4 +34,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }).observe(document.body, {
     childList: true, subtree: true, attributes: true, attributeFilter: [_attrib]
   });
-});
+};
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', boot, { once: true });
+} else {
+  boot();
+}

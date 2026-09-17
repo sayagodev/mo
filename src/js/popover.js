@@ -28,6 +28,13 @@ function place(popup) {
   const ctrl = invokerFor(popup);
   if (!ctrl) return;
 
+  // Clean slate before measuring — see dropdown.js: stale inline top/left
+  // plus the UA inset:0 stretch the box and poison the flip math.
+  popup.style.top = '0px';
+  popup.style.left = '0px';
+  popup.style.right = 'auto';
+  popup.style.bottom = 'auto';
+
   const r = ctrl.getBoundingClientRect();
   const p = popup.getBoundingClientRect();
   const side = popup.dataset.side || 'bottom';

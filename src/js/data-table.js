@@ -22,6 +22,8 @@
  *   slice at data-page-size (default 10); [data-table-info] shows
  *   "N of M row(s) selected" (or "M row(s)" without a select column)
  *   and [data-table-prev]/[data-table-next] disable at the ends.
+ *   A <mo-select> inside the footer drives data-page-size via its
+ *   'mo-select-change' event (rows-per-page pattern).
  *
  * Emits 'mo-table-change' { sort, page, selected } on every change —
  * sort is { index, dir } | null, selected is the array of selected <tr>.
@@ -93,6 +95,7 @@ class OtDataTable extends MoBase {
     this.addEventListener('click', this);
     this.addEventListener('keydown', this);
     this.addEventListener('input', this);
+    this.addEventListener('mo-select-change', this);
 
     // Rows per page is live: changing data-page-size re-renders from page 1
     // (drives the Rows per page select in the pagination footer).
@@ -156,6 +159,15 @@ class OtDataTable extends MoBase {
     this.#page = 1;
     this.#render();
     this.#emit();
+  }
+
+  // Rows per page: a mo-select in the pagination footer writes its value
+  // back to data-page-size; the MutationObserver above re-renders.
+  ['onmo-select-change'](e) {
+    const select = e.target.closest?.('mo-select');
+    const footer = this.querySelector('[data-table-pagination]');
+    if (!select || !footer || !footer.contains(select)) return;
+    this.setAttribute('data-page-size', e.detail?.value ?? select.getAttribute('data-value') ?? '');
   }
 
   // -- rendering pipeline: filter → paginate → sync chrome ----------------

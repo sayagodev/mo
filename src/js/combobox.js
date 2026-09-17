@@ -289,6 +289,13 @@ class OtCombobox extends MoBase {
   // Below the trigger by default; flipped above on viewport overflow, clamped
   // to the viewport like dropdown.js. Width matches the trigger frame.
   #place() {
+    // Clean slate before measuring (see dropdown.js): stale inline top/left
+    // plus the UA inset:0 stretch the surface and poison the flip math.
+    this.#list.style.top = '0px';
+    this.#list.style.left = '0px';
+    this.#list.style.right = 'auto';
+    this.#list.style.bottom = 'auto';
+
     const r = this.#frame.getBoundingClientRect();
     const p = this.#list.getBoundingClientRect();
 

@@ -13,6 +13,11 @@
       "css": ["alert.css"],
       "js": []
     },
+    "alert-dialog": {
+      "description": "Alert Dialog — <dialog role=alertdialog> + commandfor",
+      "css": ["dialog.css"],
+      "js": ["base.js"]
+    },
     "aspect-ratio": {
       "description": "Aspect Ratio — data-aspect-ratio pure CSS",
       "css": ["aspect-ratio.css"],
@@ -58,6 +63,12 @@
       "css": ["carousel.css"],
       "js": ["carousel.js"]
     },
+    "collapsible": {
+      "description": "Collapsible — native details/summary, zero JS",
+      "css": ["accordion.css"],
+      "js": [],
+      "deps": ["shared.css"]
+    },
     "combobox": {
       "description": "Combobox — mo-combobox filterable listbox",
       "css": ["combobox.css"],
@@ -80,6 +91,11 @@
       "description": "Dialog — <dialog> + commandfor polyfill",
       "css": ["dialog.css"],
       "js": ["base.js"]
+    },
+    "drawer": {
+      "description": "Drawer — dialog.sheet[data-side=bottom] drag handle",
+      "css": ["sheet.css"],
+      "js": ["base.js", "sheet.js"]
     },
     "dropdown": {
       "description": "Dropdown — mo-dropdown full keyboard model",
@@ -139,7 +155,7 @@
     "navigation-menu": {
       "description": "Navigation Menu — [data-navigation-menu] popovers",
       "css": ["navigation-menu.css"],
-      "js": []
+      "js": ["navigation-menu.js"]
     },
     "pagination": {
       "description": "Pagination — .pagination + aria-current",
@@ -154,11 +170,6 @@
     "progress": {
       "description": "Progress — <progress> + meter",
       "css": ["progress.css"],
-      "js": []
-    },
-    "prose": {
-      "description": "Prose — .prose opt-in typography",
-      "css": ["prose.css"],
       "js": []
     },
     "questionnaire": {
@@ -189,7 +200,7 @@
     "sheet": {
       "description": "Sheet — dialog.sheet[data-side] drawer",
       "css": ["sheet.css"],
-      "js": ["sheet.js"]
+      "js": ["base.js", "sheet.js"]
     },
     "sidebar": {
       "description": "Sidebar — aside[data-sidebar] layout",
@@ -242,9 +253,14 @@
       "js": ["toggle-group.js"]
     },
     "tooltip": {
-      "description": "Tooltip — title → data-tooltip auto-convert",
+      "description": "Tooltip — title auto-convert + auto placement",
       "css": ["tooltip.css"],
       "js": ["tooltip.js"]
+    },
+    "typography": {
+      "description": "Typography — .prose opt-in document typography",
+      "css": ["prose.css"],
+      "js": []
     },
     "upload": {
       "description": "Upload — mo-upload drag + preview",

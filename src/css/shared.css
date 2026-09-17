@@ -118,11 +118,17 @@
     mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");
   }
 
-  /* Radio item indicator: filled dot (CircleIcon size-2 fill-current) */
+  /* Radio item indicator: filled dot (shadcn Circle size-2 fill-current).
+     Own 8px box — reusing the checkbox check mask here rendered a tiny
+     check fragment. mask-image:none leaves a pure currentColor dot. */
   menu[popover] [role="menuitemradio"][aria-checked="true"]::before {
     inline-size: 0.5rem;
+    block-size: 0.5rem;
     inset-inline-start: 0.75rem;
+    inset-block-start: 50%;
+    transform: translateY(-50%);
     border-radius: var(--radius-full);
+    mask-image: none;
   }
 
   /* Group label: px-2 py-1.5 font-medium — always start-aligned so menu
