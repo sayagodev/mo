@@ -1,8 +1,10 @@
-# Mo UI 墨
+# Mò UI 墨
+
+[![CI](https://github.com/sayagodev/mo/actions/workflows/ci.yml/badge.svg)](https://github.com/sayagodev/mo/actions/workflows/ci.yml)
 
 > Semantic HTML components, shadcn-neutral tokens, zero dependencies.
 
-Mo (墨, "ink") is a fork of [oat](https://oat.ink) rebuilt around the
+Mò (墨, "ink") is a fork of [oat](https://oat.ink) rebuilt around the
 [shadcn/ui](https://ui.shadcn.com) design language — its exact **neutral**
 palette in oklch, radius scale and shadows — using only modern CSS
 (cascade layers, `light-dark()`, `color-mix()`, popovers) and a little vanilla JS.
@@ -11,12 +13,23 @@ No build step for consumers. No classes required. No CSS that fights yours.
 
 ## Quick start
 
-**CDN (zero build):**
+**CDN (zero build, live on unpkg):**
 
 ```html
-<link rel="stylesheet" href="mo.min.css" />
-<script src="mo.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/@sayagodev/mo@latest/mo.min.css" />
+<script src="https://unpkg.com/@sayagodev/mo@latest/mo.min.js"></script>
 ```
+
+For production, pin a version (check [npm](https://www.npmjs.com/package/@sayagodev/mo) for the latest):
+
+```html
+<link rel="stylesheet" href="https://unpkg.com/@sayagodev/mo@1.0.1/mo.min.css" />
+<script src="https://unpkg.com/@sayagodev/mo@1.0.1/mo.min.js"></script>
+```
+
+`@latest` always resolves to the newest release — pinning avoids surprise
+upgrades. (jsDelivr mirrors work too: swap `unpkg.com` for
+`cdn.jsdelivr.net/npm`.)
 
 ```html
 <button>Save</button>          <!-- styled: primary button -->
@@ -28,6 +41,7 @@ No build step for consumers. No classes required. No CSS that fights yours.
 
 ```sh
 # 1. Initialize once (copies base theme + shared deps)
+# Requires the package on disk first: npm i -D @sayagodev/mo
 pnpm dlx @sayagodev/mo@latest init
 
 # 2. Add components interactively (multi-select like shadcn)
@@ -73,11 +87,11 @@ The whole library — 52 components plus the base theme — weighs **≈ 43 kB
 gzip** on the wire (22 kB CSS + 21 kB JS). Types (`mo.d.ts`, 47 kB raw) are
 dev-time only and never reach the browser.
 
-Since Mo reimplements shadcn/ui on the web platform, most components need no
+Since Mò reimplements shadcn/ui on the web platform, most components need no
 framework code at all. Measured per component (minified + `gzip -9`, React
-treated as external on both sides, Mo numbers include shared CSS/JS deps):
+treated as external on both sides, Mò numbers include shared CSS/JS deps):
 
-| Component | Mo (gz) | shadcn (gz)¹ | Ratio |
+| Component | Mò (gz) | shadcn (gz)¹ | Ratio |
 |---|---|---|---|
 | popover | 0.4 kB | 25.5 kB | 59× |
 | tooltip | 0.9 kB | 20.3 kB | 22× |
@@ -111,14 +125,14 @@ treated as external on both sides, Mo numbers include shared CSS/JS deps):
 ¹ What the shadcn column counts — and deliberately doesn't:
 
 - **React is not counted.** A shadcn app ships React + ReactDOM (~69 kB gzip,
-  measured) before any component renders. Mo needs none of it — and the whole
-  Mo library still weighs less than that runtime alone.
+  measured) before any component renders. Mò needs none of it — and the whole
+  Mò library still weighs less than that runtime alone.
 - **Tailwind CSS is not counted.** Each shadcn component's utility classes add
   roughly 0.5–2 kB (amortized) to the app's CSS build, on top of the JS above.
 - **The copied `.tsx` source is not counted** (~1–2 kB min per component).
 - Radix numbers are the real-app, deduped cost: the 26 packages the shadcn
   component set depends on, bundled together, are 88 kB gz of JS alone — more
-  than twice Mo's entire CSS+JS budget. (Summing packages individually gives
+  than twice Mò's entire CSS+JS budget. (Summing packages individually gives
   342 kB; the deduped figure is the honest one.)
 - Both sides measured with the same toolchain: esbuild `--minify` + `gzip -9`.
 
@@ -140,7 +154,7 @@ order:
 
 ### Global variables file (shadcn-style)
 
-Import the canonical, editable `variables.css` — it declares **every** token Mo
+Import the canonical, editable `variables.css` — it declares **every** token Mò
 reads (base theme colors, radius, spacing, type, shadows, transitions) plus all
 the per-component `--mo-*` hooks, so you can see every default and override the
 whole library from one `:root` block. It is unlayered, so it wins the cascade.
@@ -166,7 +180,7 @@ Dark mode follows the OS automatically; force it with
 
 ### TypeScript / JSX
 
-Mo ships `mo.d.ts` declaring every custom element (`mo-tabs`, `mo-dropdown`,
+Mò ships `mo.d.ts` declaring every custom element (`mo-tabs`, `mo-dropdown`,
 `mo-carousel`…) and the native HTML attributes it relies on
 (`popovertarget`, `popovertargetaction`, `command`, `commandfor`), so `<button
 popovertarget="x">`, `<menu popover>` and `<mo-*>…` type-check in React and
@@ -187,8 +201,8 @@ Typography for document content is opt-in: wrap markup in `.prose`.
 
 | Command | Description |
 |---------|-------------|
-| `mo init [--path <dir>] [--yes] [--force]` | Copy base styles (`00-base.css`, `01-theme.css`, `shared.css`, `animations.css`, `utilities.css`) + `base.js` and create `mo.json` |
-| `mo add [components...] [--all] [--yes] [--overwrite] [--dry-run]` | Add components (interactive multi-select if no args). Copies `src/css/*.css` + `src/js/*.js` and regenerates `index.css` / `index.js` |
+| `mo init [--path <dir>] [--yes] [--force]` | Copy base styles (`00-base.css`, `01-theme.css`, `variables.css`, `animations.css`, `shared.css`, `utilities.css`) + `base.js` and create `mo.json` |
+| `mo add [components...] [--all] [--yes] [--overwrite] [--dry-run]` | Add components (interactive multi-select if no args). Copies `css/*.css` + `js/*.js` from the installed package and regenerates `index.css` / `index.js` |
 | `mo list` | List all 52 available components |
 | `mo view <name>` | Show component meta (files, description) |
 
@@ -206,6 +220,6 @@ Requires esbuild. `make dist` emits:
 
 ## License
 
-MIT — original [oat](https://oat.ink) by Kailash Nadh; Mo fork by
+MIT — original [oat](https://oat.ink) by Kailash Nadh; Mò fork by
 [sayagodev](https://sayago.dev). Design tokens inspired by shadcn/ui's
 neutral palette. See [LICENSE](./LICENSE).

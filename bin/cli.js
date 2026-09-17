@@ -11,6 +11,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PKG_ROOT = path.resolve(__dirname, '..');
 const REGISTRY_PATH = path.join(PKG_ROOT, 'registry.json');
 const PKG_JSON_PATH = path.join(PKG_ROOT, 'package.json');
+// dist/ ships flat css/ + js/ (no src/); fall back to src/ for repo checkouts.
+const CSS_SRC_DIR = existsSync(path.join(PKG_ROOT, 'css')) ? 'css' : path.join('src', 'css');
+const JS_SRC_DIR = existsSync(path.join(PKG_ROOT, 'js')) ? 'js' : path.join('src', 'js');
 
 async function loadRegistry() {
   const raw = await fs.readFile(REGISTRY_PATH, 'utf-8');
@@ -130,8 +133,8 @@ cli.command('init', 'Initialize Mo in your project').option('-y, --yes', 'Skip c
     try { await fs.access(targetPath); const hasFiles = (await fs.readdir(targetPath)).length > 0; if (hasFiles) { const ans = await p.confirm({ message: `Directory ${relTarget} not empty. Overwrite base files?` }); if (p.isCancel(ans)) { p.cancel('Cancelled'); process.exit(0); } overwrite = !!ans; } } catch {}
   }
 
-  const srcCssDir = path.join(PKG_ROOT, 'src/css');
-  const srcJsDir = path.join(PKG_ROOT, 'src/js');
+  const srcCssDir = path.join(PKG_ROOT, CSS_SRC_DIR);
+  const srcJsDir = path.join(PKG_ROOT, JS_SRC_DIR);
 
   const { copied: cssCopied, skipped: cssSkipped } = await copyFiles(baseCss, srcCssDir, targetPath, { overwrite, dryRun: false });
   const { copied: jsCopied } = await copyFiles(baseJs, srcJsDir, targetPath, { overwrite, dryRun: false });
@@ -179,16 +182,16 @@ cli.command('add [...components]', 'Add components to your project').option('-y,
       const ans = await p.confirm({ message: `Target ${c.cyan(relTarget)} does not exist. Create it and install base?` });
       if (p.isCancel(ans)) { p.cancel('Cancelled'); process.exit(0); }
       if (ans) {
-        const srcCssDir = path.join(PKG_ROOT, 'src/css');
-        const srcJsDir = path.join(PKG_ROOT, 'src/js');
+        const srcCssDir = path.join(PKG_ROOT, CSS_SRC_DIR);
+        const srcJsDir = path.join(PKG_ROOT, JS_SRC_DIR);
         await fs.mkdir(targetPath, { recursive: true });
         await copyFiles(registry.base.css, srcCssDir, targetPath, { overwrite: !!opts.overwrite });
         await copyFiles(registry.base.js, srcJsDir, targetPath, { overwrite: !!opts.overwrite });
       }
     } else if (!opts.dryRun) {
       await fs.mkdir(targetPath, { recursive: true });
-      const srcCssDir = path.join(PKG_ROOT, 'src/css');
-      const srcJsDir = path.join(PKG_ROOT, 'src/js');
+      const srcCssDir = path.join(PKG_ROOT, CSS_SRC_DIR);
+      const srcJsDir = path.join(PKG_ROOT, JS_SRC_DIR);
       await copyFiles(registry.base.css, srcCssDir, targetPath, { overwrite: !!opts.overwrite });
       await copyFiles(registry.base.js, srcJsDir, targetPath, { overwrite: !!opts.overwrite });
     }
@@ -236,8 +239,8 @@ cli.command('add [...components]', 'Add components to your project').option('-y,
     for (const d of meta.deps || []) neededCss.add(d);
   }
   // If base already installed, we don't re-copy unnecessarily unless overwrite
-  const srcCssDir = path.join(PKG_ROOT, 'src/css');
-  const srcJsDir = path.join(PKG_ROOT, 'src/js');
+  const srcCssDir = path.join(PKG_ROOT, CSS_SRC_DIR);
+  const srcJsDir = path.join(PKG_ROOT, JS_SRC_DIR);
 
   // But for add we only copy selected + deps, not whole base again unless missing
   const cssToCopy = [];
