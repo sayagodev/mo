@@ -23,8 +23,8 @@ No build step for consumers. No classes required. No CSS that fights yours.
 For production, pin a version (check [npm](https://www.npmjs.com/package/@sayagodev/mo) for the latest):
 
 ```html
-<link rel="stylesheet" href="https://unpkg.com/@sayagodev/mo@1.0.1/mo.min.css" />
-<script src="https://unpkg.com/@sayagodev/mo@1.0.1/mo.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/@sayagodev/mo@1.0.2/mo.min.css" />
+<script src="https://unpkg.com/@sayagodev/mo@1.0.2/mo.min.js"></script>
 ```
 
 `@latest` always resolves to the newest release — pinning avoids surprise
