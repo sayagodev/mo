@@ -23,13 +23,4 @@ import './data-table.js';
 import './questionnaire.js';
 import './scroll-area.js';
 import './slider.js';
-import { toast, toastEl, toastClear, toastPromise } from './toast.js';
-
-// Register the global window.mo.* APIs (keep ot alias for backward compat).
-const mo = window.mo || (window.mo = {});
-const ot = window.ot || (window.ot = mo);
-mo.toast = ot.toast = toast;
-mo.toast.el = ot.toast.el = toastEl;
-mo.toast.clear = ot.toast.clear = toastClear;
-mo.toast.dismiss = ot.toast.dismiss = toastClear;
-mo.toast.promise = ot.toast.promise = toastPromise;
+import './toast.js';

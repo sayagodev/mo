@@ -40,21 +40,45 @@ upgrades. (jsDelivr mirrors work too: swap `unpkg.com` for
 **Optimized — pick only what you need (shadcn-like CLI):**
 
 ```sh
-# 1. Initialize once (copies base theme + shared deps)
-# Requires the package on disk first: npm i -D @sayagodev/mo
+# 1. Initialize once (copies base theme + shared deps + types)
 pnpm dlx @sayagodev/mo@latest init
 
 # 2. Add components interactively (multi-select like shadcn)
 pnpm dlx @sayagodev/mo@latest add
 # or directly: pnpm dlx @sayagodev/mo add button card dialog dropdown
 
-# 3. Import the generated bundle in your app
+# 3. Import the generated files in your app
 import "mo/index.css";
 import "mo/index.js";
-# or granular: import "mo/button.css"; import "mo/dropdown.js";
+# or granular: import "mo/css/button.css"; import "mo/js/dropdown.js";
 ```
 
-Interactive `mo add` shows a searchable checklist (space to select, enter to confirm), identical to `shadcn add`. Supports `--all`, `--dry-run`, `--overwrite`, `--path`.
+Installed layout is organized in subfolders (mirrors the package):
+
+```
+mo/
+  css/  00-base.css 01-theme.css variables.css animations.css shared.css utilities.css button.css …
+        index.css        # aggregates css/ in layer-correct order
+  js/   base.js dropdown.js tabs.js toast.js …
+        index.js         # aggregates js/
+  index.css              # re-exports css/index.css
+  index.js               # re-exports js/index.js
+  mo.d.ts                # custom-element + window.mo types (add a /// <reference>)
+mo.json                  # tracks { path, mode, installed, moVersion }
+```
+
+Interactive `mo add` shows a searchable checklist (space to select, enter to confirm), identical to `shadcn add`. Supports `--all`, `--dry-run`, `--overwrite`, `--path`, `--bundle`.
+
+Want everything without picking components? Install the prebuilt bundle instead
+of sources — the whole library (~43 kB gzip) as two files:
+
+```sh
+pnpm dlx @sayagodev/mo init --bundle    # copies mo.min.css + mo.min.js + mo.d.ts
+```
+```html
+<link rel="stylesheet" href="mo/mo.min.css" />
+<script src="mo/mo.min.js"></script>
+```
 
 Non-interactive / CI:
 
@@ -181,11 +205,16 @@ Dark mode follows the OS automatically; force it with
 ### TypeScript / JSX
 
 Mò ships `mo.d.ts` declaring every custom element (`mo-tabs`, `mo-dropdown`,
-`mo-carousel`…) and the native HTML attributes it relies on
-(`popovertarget`, `popovertargetaction`, `command`, `commandfor`), so `<button
-popovertarget="x">`, `<menu popover>` and `<mo-*>…` type-check in React and
-React Server Components with **zero** extra config. The JSX augmentation is
-lazy (`import('react')`), so vanilla TypeScript consumers are unaffected.
+`mo-carousel`…), the `window.mo` API (`mo.toast()` and friends) and the native
+HTML attributes it relies on (`popovertarget`, `popovertargetaction`, `command`,
+`commandfor`), so `<button popovertarget="x">`, `<menu popover>` and `<mo-*>…`
+type-check in React and React Server Components. The JSX augmentation is lazy
+(`import('react')`), so vanilla TypeScript consumers are unaffected.
+
+- From the package: zero config — the `types` field points at `mo.d.ts`.
+- From CLI-installed sources: `mo init` / `mo add` copy `mo.d.ts` next to your
+  components. Reference it once:
+  `/// <reference path="mo/mo.d.ts" />` (adjust the path to your install dir).
 
 ## Components
 
@@ -201,12 +230,12 @@ Typography for document content is opt-in: wrap markup in `.prose`.
 
 | Command | Description |
 |---------|-------------|
-| `mo init [--path <dir>] [--yes] [--force]` | Copy base styles (`00-base.css`, `01-theme.css`, `variables.css`, `animations.css`, `shared.css`, `utilities.css`) + `base.js` and create `mo.json` |
-| `mo add [components...] [--all] [--yes] [--overwrite] [--dry-run]` | Add components (interactive multi-select if no args). Copies `css/*.css` + `js/*.js` from the installed package and regenerates `index.css` / `index.js` |
+| `mo init [--path <dir>] [--yes] [--force] [--bundle]` | Copy base styles into `css/` (`00-base.css`, `01-theme.css`, `variables.css`, `animations.css`, `shared.css`, `utilities.css`) + `js/base.js` + `mo.d.ts`, write `css/index.css` / `js/index.js` / root `index.css` / `index.js`, and create `mo.json`. `--bundle` installs only `mo.min.css` + `mo.min.js` + `mo.d.ts` instead |
+| `mo add [components...] [--all] [--yes] [--overwrite] [--dry-run] [--bundle]` | Add components (interactive multi-select if no args). Copies `css/*.css` + `js/*.js` from the installed package and regenerates all indexes |
 | `mo list` | List all 52 available components |
 | `mo view <name>` | Show component meta (files, description) |
 
-`mo.json` tracks `{ path, installed, moVersion }`. Override path per-call with `--path` / `--cwd`.
+`mo.json` tracks `{ path, mode, installed, moVersion }`. Override path per-call with `--path` / `--cwd`. Installs made before the `css/`+`js/` layout are migrated automatically.
 
 Registry: `registry.json` (also published as `@sayagodev/mo/registry.json`) maps component names to `css`/`js` files — similar to shadcn registry.
 

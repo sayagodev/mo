@@ -31,7 +31,15 @@
 
 :root {
   color-scheme: light dark;
+}
 
+/* Manual theme override: light-dark() follows the used color-scheme, so the
+   override must travel with this file (it is unlayered and imported last by
+   the CLI, where it would otherwise shadow 01-theme.css's own override). */
+:root[data-theme="light"], :root.light { color-scheme: light; }
+:root[data-theme="dark"], :root.dark { color-scheme: dark; }
+
+:root {
   /* ============================================================
      COLORS — core palette (shadcn/ui neutral, verbatim)
      Each: light-dark(<light>, <dark>).

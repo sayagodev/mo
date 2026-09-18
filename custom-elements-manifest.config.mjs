@@ -13,6 +13,10 @@ export default {
     jsxTypesPlugin({
       outdir: '.',
       fileName: 'mo.jsx.d.ts',
+      // The published package ships ./js/* (not ./src/js/*), so generated
+      // type imports must resolve from the consumer's node_modules root.
+      componentTypePath: (name, tagName, modulePath) =>
+        `@sayagodev/mo/${modulePath.replace(/^src\//, '')}`,
     }),
   ],
 }

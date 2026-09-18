@@ -171,6 +171,21 @@ export function toastClear(placement) {
   });
 }
 
+// Convenience aliases mirroring the window.mo.toast API surface.
+toast.el = toastEl;
+toast.clear = toastClear;
+toast.dismiss = toastClear;
+toast.promise = toastPromise;
+
+// Self-register on window.mo so CLI-installed copies (which import toast.js
+// directly, without the src/js/index.js barrel) expose the same imperative
+// API as the CDN bundle. The barrel in index.js reuses this object.
+if (typeof window !== 'undefined') {
+  const mo = window.mo || (window.mo = {});
+  const ot = window.ot || (window.ot = mo);
+  mo.toast = ot.toast = toast;
+}
+
 document.addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
   if (document.querySelector('dialog[open]')) return;

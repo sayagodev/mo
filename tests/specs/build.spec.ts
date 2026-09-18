@@ -84,25 +84,53 @@ test.describe('Mo build — ESM + granular exports', () => {
   test('CLI add --dry-run does not write files', async () => {
     const tmp = await fs.mkdtemp(path.join('/tmp', 'mo-build-test-'));
     execSync(`node ${path.join(ROOT, 'bin/cli.js')} init --cwd ${tmp} --yes --silent`, { encoding: 'utf-8' });
-    expect(existsSync(path.join(tmp, 'mo/00-base.css'))).toBeTruthy();
-    const before = await fs.readdir(path.join(tmp, 'mo'));
+    expect(existsSync(path.join(tmp, 'mo/css/00-base.css'))).toBeTruthy();
+    expect(existsSync(path.join(tmp, 'mo/js/base.js'))).toBeTruthy();
+    expect(existsSync(path.join(tmp, 'mo/mo.d.ts'))).toBeTruthy();
+    const before = await fs.readdir(path.join(tmp, 'mo/css'));
     execSync(`node ${path.join(ROOT, 'bin/cli.js')} add button --cwd ${tmp} --dry-run --yes`, { encoding: 'utf-8' });
-    const after = await fs.readdir(path.join(tmp, 'mo'));
+    const after = await fs.readdir(path.join(tmp, 'mo/css'));
     expect(after).toEqual(before); // dry-run unchanged
     execSync(`node ${path.join(ROOT, 'bin/cli.js')} add button --cwd ${tmp} --yes --silent`, { encoding: 'utf-8' });
-    expect(existsSync(path.join(tmp, 'mo/button.css'))).toBeTruthy();
-    const idx = await fs.readFile(path.join(tmp, 'mo/index.css'), 'utf-8');
+    expect(existsSync(path.join(tmp, 'mo/css/button.css'))).toBeTruthy();
+    const idx = await fs.readFile(path.join(tmp, 'mo/css/index.css'), 'utf-8');
     expect(idx).toContain('button.css');
+    const rootIdx = await fs.readFile(path.join(tmp, 'mo/index.css'), 'utf-8');
+    expect(rootIdx).toContain('css/index.css');
   });
 
   test('CLI add --all installs all components', async () => {
     const tmp = await fs.mkdtemp(path.join('/tmp', 'mo-all-'));
     execSync(`node ${path.join(ROOT, 'bin/cli.js')} init --cwd ${tmp} --yes --silent`, { encoding: 'utf-8' });
     execSync(`node ${path.join(ROOT, 'bin/cli.js')} add --all --cwd ${tmp} --yes --silent`, { encoding: 'utf-8' });
-    const files = await fs.readdir(path.join(tmp, 'mo'));
+    const css = await fs.readdir(path.join(tmp, 'mo/css'));
+    const js = await fs.readdir(path.join(tmp, 'mo/js'));
     // should have many css files
-    expect(files.filter(f => f.endsWith('.css')).length).toBeGreaterThan(40);
-    expect(files.filter(f => f.endsWith('.js')).length).toBeGreaterThan(15);
+    expect(css.filter(f => f.endsWith('.css')).length).toBeGreaterThan(40);
+    expect(js.filter(f => f.endsWith('.js')).length).toBeGreaterThan(15);
+  });
+
+  test('CLI migrates flat installs to css/ + js/', async () => {
+    const tmp = await fs.mkdtemp(path.join('/tmp', 'mo-migrate-'));
+    await fs.mkdir(path.join(tmp, 'mo'), { recursive: true });
+    await fs.writeFile(path.join(tmp, 'mo', 'button.css'), 'x');
+    await fs.writeFile(path.join(tmp, 'mo', 'base.js'), 'y');
+    await fs.writeFile(path.join(tmp, 'mo.json'), JSON.stringify({ path: 'mo', installed: ['button'] }));
+    execSync(`node ${path.join(ROOT, 'bin/cli.js')} add tabs --cwd ${tmp} --yes --silent`, { encoding: 'utf-8' });
+    expect(existsSync(path.join(tmp, 'mo/css/button.css'))).toBeTruthy();
+    expect(existsSync(path.join(tmp, 'mo/js/base.js'))).toBeTruthy();
+    expect(existsSync(path.join(tmp, 'mo/css/tabs.css'))).toBeTruthy();
+    expect(existsSync(path.join(tmp, 'mo/button.css'))).toBe(false);
+  });
+
+  test('CLI --bundle installs only the prebuilt bundle', async () => {
+    const tmp = await fs.mkdtemp(path.join('/tmp', 'mo-bundle-'));
+    execSync(`node ${path.join(ROOT, 'bin/cli.js')} init --bundle --cwd ${tmp} --yes --silent`, { encoding: 'utf-8' });
+    expect(existsSync(path.join(tmp, 'mo/mo.min.css'))).toBeTruthy();
+    expect(existsSync(path.join(tmp, 'mo/mo.min.js'))).toBeTruthy();
+    expect(existsSync(path.join(tmp, 'mo/css/button.css'))).toBe(false);
+    const cfg = JSON.parse(await fs.readFile(path.join(tmp, 'mo.json'), 'utf-8'));
+    expect(cfg.mode).toBe('bundle');
   });
 
   test('ESM bundle is valid ESM (has import/export)', async () => {
