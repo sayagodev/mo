@@ -37,6 +37,29 @@ upgrades. (jsDelivr mirrors work too: swap `unpkg.com` for
 <mo-tabs>…</mo-tabs>           <!-- behavior via native custom elements -->
 ```
 
+**Package install — import from node_modules (simplest with a bundler):**
+
+```sh
+pnpm add @sayagodev/mo
+```
+
+```js
+// Everything (CSS + JS, ~43 kB gzip)
+import "@sayagodev/mo/css";
+import "@sayagodev/mo/js";
+
+// Or granular — only what you use (a 5-component setup is <8kB gz)
+import "@sayagodev/mo/css/00-base.css";   // reset (required once)
+import "@sayagodev/mo/css/01-theme.css";  // tokens (required once)
+import "@sayagodev/mo/css/button.css";
+import "@sayagodev/mo/css/dialog.css";
+
+import "@sayagodev/mo/js/tabs.js";        // behavior — button needs none
+import { toast } from "@sayagodev/mo/js/toast.js";
+```
+
+Types (`mo.d.ts`) resolve with zero config via the package `types` field.
+
 **Optimized — pick only what you need (shadcn-like CLI):**
 
 ```sh
@@ -85,22 +108,6 @@ Non-interactive / CI:
 ```sh
 pnpm dlx @sayagodev/mo add button card --yes
 pnpm dlx @sayagodev/mo add --all --yes
-```
-
-**Granular ESM + CSS imports (Vite / Next / Astro, tree-shakable):**
-
-```js
-// CSS — import only what you use (saves ~75% vs full bundle)
-import "@sayagodev/mo/css/00-base.css";
-import "@sayagodev/mo/css/01-theme.css";
-import "@sayagodev/mo/css/button.css";
-import "@sayagodev/mo/css/dialog.css";
-
-// JS — per-component ESM (side-effect import registers the element)
-import "@sayagodev/mo/js/dropdown.js";
-import "@sayagodev/mo/js/tabs.js";
-// or via mo.esm.js barrel (still ESM, but full bundle — prefer per-file for smallest)
-import { toast } from "@sayagodev/mo/js/toast.js";
 ```
 
 Package is `type: module` with `exports` (`./css/*`, `./js/*`) and `sideEffects: ["*.css"]` so bundlers keep CSS and tree-shake unused JS. Full bundle is 22kB gz CSS / 21kB gz JS; a 5-component setup is <8kB gz.
