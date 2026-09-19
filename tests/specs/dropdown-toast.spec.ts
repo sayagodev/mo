@@ -38,6 +38,39 @@ test('dropdown fixture passes axe when open', async ({ page }) => {
   expect(await axe(page)).toEqual([]);
 });
 
+// Forced side placement (sidebar pickers). On a phone-width panel the menu
+// fits on neither side of the trigger: it must hug the viewport edge the
+// author asked for, never be clamped back over the panel's own rows.
+test('side dropdown hugs the requested edge when neither side fits', async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 640 });
+  await page.goto('/tests/fixtures/dropdown-side.html');
+  await page.getByTestId('side-trigger').click();
+
+  const menu = page.locator('#side-menu');
+  await expect(menu).toBeVisible();
+  const trigger = await page.getByTestId('side-trigger').boundingBox();
+  const box = await menu.boundingBox();
+  expect(box).not.toBeNull();
+  // inside the viewport…
+  expect(box!.x).toBeGreaterThanOrEqual(4);
+  expect(box!.x + box!.width).toBeLessThanOrEqual(356);
+  // …and on the side it was asked for: past the trigger, not pinned over the
+  // panel at the viewport's left edge
+  expect(box!.x).toBeGreaterThan(trigger!.x + 1);
+  expect(box!.x + box!.width).toBeGreaterThan(340);
+});
+
+test('side dropdown flips to the left of a trigger at the right edge', async ({ page }) => {
+  await page.goto('/tests/fixtures/dropdown-side.html');
+  await page.getByTestId('flip-trigger').click();
+
+  const menu = page.locator('#flip-menu');
+  await expect(menu).toBeVisible();
+  const trigger = await page.getByTestId('flip-trigger').boundingBox();
+  const box = await menu.boundingBox();
+  expect(box!.x + box!.width).toBeLessThanOrEqual(trigger!.x + 1);
+});
+
 // Sonner-style toast API.
 test('toast appears and auto-dismisses', async ({ page }) => {
   test.setTimeout(8000);

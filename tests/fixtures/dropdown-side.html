@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Mo test</title>
+<link rel="stylesheet" href="/dist/mo.min.css" />
+<script src="/dist/mo.min.js"></script>
+<style>body { padding: 2rem }</style>
+</head>
+<body>
+
+<!-- Sidebar-style picker: the trigger lives inside a 16rem panel at the left
+     edge, so on a phone-width viewport there is no room beside it. -->
+<aside style="width: 16rem; border: 1px solid #ccc">
+  <mo-dropdown id="side-dd">
+    <button popovertarget="side-menu" data-dropdown-side="right" data-test="side-trigger">Acme Inc</button>
+    <menu popover id="side-menu" style="--mo-dropdown-min-width: 15rem">
+      <button role="menuitem" type="button">Acme Inc</button>
+      <button role="menuitem" type="button">Acme Corp</button>
+    </menu>
+  </mo-dropdown>
+</aside>
+
+<!-- Trigger hugging the right edge: the forced right side has to flip. -->
+<div style="position: fixed; right: 4px; bottom: 4px">
+  <mo-dropdown id="flip-dd">
+    <button popovertarget="flip-menu" data-dropdown-side="right" data-test="flip-trigger">Status</button>
+    <menu popover id="flip-menu">
+      <button role="menuitem" type="button">Backlog</button>
+      <button role="menuitem" type="button">Done</button>
+    </menu>
+  </mo-dropdown>
+</div>
+
+</body>
+</html>

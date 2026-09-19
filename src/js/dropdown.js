@@ -292,8 +292,18 @@ class OtDropdown extends MoBase {
       // Author-forced side placement (sidebar pickers open to the side so
       // they do not cover the panel's own rows).
       left = side === 'right' ? r.right + 4 : r.left - p.width - 4;
-      if (left + p.width > window.innerWidth) left = r.left - p.width - 4;
-      if (left + p.width > window.innerWidth) left = Math.max(4, window.innerWidth - p.width - 4);
+      // Flip to the other side when this one leaves the viewport. Both edges
+      // are tested: for a trigger hugging the left edge the flipped value is
+      // negative, which the old right-edge-only test never caught.
+      if (left < 4 || left + p.width > window.innerWidth - 4) {
+        left = side === 'right' ? r.left - p.width - 4 : r.right + 4;
+      }
+      // Neither side fits (phone-width panel): hug the viewport edge the
+      // author asked for, so the menu lands beside the trigger instead of
+      // being clamped back over the panel's own rows.
+      if (left < 4 || left + p.width > window.innerWidth - 4) {
+        left = side === 'right' ? Math.max(4, window.innerWidth - p.width - 4) : 4;
+      }
       top = r.top;
     } else if (nested) {
       // Side placement: flush against the trigger's far edge, like Radix
