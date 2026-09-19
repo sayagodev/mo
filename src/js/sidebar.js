@@ -20,7 +20,13 @@ document.addEventListener('click', (e) => {
   if (subTrigger) {
     // Collapsed icon mode: sub menus are hidden so nothing can open.
     // Freeze the details state instead of letting it flip invisibly.
-    if (subTrigger.closest('[data-sidebar-layout="always"][data-collapsible="icon"][data-sidebar-open]')) {
+    // Desktop-only: the icon rail's CSS lives above 769px, and on mobile the
+    // panel is a visible overlay whose submenus must open normally — without
+    // the breakpoint this froze every trigger on a phone.
+    if (
+      window.matchMedia('(min-width: 769px)').matches &&
+      subTrigger.closest('[data-sidebar-layout="always"][data-collapsible="icon"][data-sidebar-open]')
+    ) {
       e.preventDefault();
       return;
     }

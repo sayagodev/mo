@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Mo test</title>
+<link rel="stylesheet" href="/dist/mo.min.css" />
+<script src="/dist/mo.min.js"></script>
+</head>
+<body>
+
+<!-- Collapsible-to-icon shell with one submenu, like the docs' sidebar demo.
+     The icon-rail freeze must apply to the rail only, never to the mobile
+     overlay panel. -->
+<div data-sidebar-layout="always" data-collapsible="icon" data-test="layout">
+  <aside data-sidebar>
+    <nav>
+      <section data-sidebar-group>
+        <ul data-sidebar-menu>
+          <li>
+            <details>
+              <summary data-sidebar-item data-sidebar-sub-trigger data-test="sub-trigger">
+                <span>Playground</span>
+              </summary>
+              <ul data-sidebar-sub>
+                <li><a href="#" data-sidebar-sub-item><span>History</span></a></li>
+                <li><a href="#" data-sidebar-sub-item><span>Starred</span></a></li>
+              </ul>
+            </details>
+          </li>
+        </ul>
+      </section>
+    </nav>
+  </aside>
+  <main>
+    <header>
+      <button type="button" data-sidebar-toggle data-test="toggle" aria-label="Toggle Sidebar">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/></svg>
+      </button>
+    </header>
+  </main>
+</div>
+
+</body>
+</html>
