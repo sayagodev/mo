@@ -152,7 +152,12 @@ class OtOtp extends MoBase {
     const cell = e.target;
     if (!(cell instanceof HTMLInputElement) || !this.#cells.includes(cell)) return;
     // Select existing digit so typing overwrites it (shadcn behavior).
+    // Deferred to the next frame because the caret lands after focus; but
+    // select() also focuses its element (Blink), so bail out when the caret
+    // already moved on (auto-advance) — otherwise it steals focus back and
+    // the two cells ping-pong focus forever through focusin/rAF.
     requestAnimationFrame(() => {
+      if (document.activeElement !== cell) return;
       try { cell.select(); } catch {}
     });
   }
